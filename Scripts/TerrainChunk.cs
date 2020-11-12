@@ -29,7 +29,6 @@ public class TerrainChunk : MonoBehaviour
         meshFilter.mesh = mesh;
         meshFilter.mesh.RecalculateNormals();
 
-        vertices = new Vector3[(MeshGenerator.CHUNK_SIZE+1) * (MeshGenerator.CHUNK_SIZE+1)];
         indices = new List<int>();
     }
 

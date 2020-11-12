@@ -29,15 +29,15 @@ namespace SpaceCraft
             this.hasChildren = false;
         }
 
-        protected bool canSplit() {
+        protected bool cannotSplit() {
             return this.level >= this.maxLevel || hasChildren;
         }
         
         protected abstract T initialize(int id, T parent);
 
-        protected virtual void split()
+        protected void split()
         {
-            if (this.level >= this.maxLevel || hasChildren) return; // TODO: prevent update function from calling into split()
+            if (cannotSplit()) return; // TODO: prevent update function from calling into split()
 
             this.hasChildren = true;
             for (int i = 0; i < this.children.Length; i++)
@@ -47,7 +47,7 @@ namespace SpaceCraft
             onSplit();
         }
 
-        protected virtual void merge()
+        protected void merge()
         {
             if (!hasChildren) return;
 

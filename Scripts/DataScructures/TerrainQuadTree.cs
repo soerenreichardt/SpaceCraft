@@ -12,6 +12,8 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
     private Vector3 planetPosition;
     public TerrainChunk terrainComponent;
 
+    private readonly Camera camera;
+
     public TerrainQuadTree(
         Vector3 planetPosition,
         float length,
@@ -42,6 +44,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         this.material = material;
         this.planetPosition = planetPosition;
         this.terrain = new GameObject(level.ToString());
+        this.camera = Camera.main;
 
         if (!hasChildren)
         {
@@ -71,8 +74,12 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
 
     protected override float distance()
     {
+        if (terrainComponent.vertices == null)
+        {
+            return float.MaxValue;
+        }
         // TODO: consider Vector3.SqrtMagnitude to avoid sqrt computation
-        return Mathf.Abs(Vector3.Distance(Camera.main.transform.position, terrainComponent.vertices[8 * (MeshGenerator.CHUNK_SIZE+1) + 8]));
+        return Mathf.Abs(Vector3.Distance(camera.transform.position, terrainComponent.vertices[8 * (MeshGenerator.CHUNK_SIZE+1) + 8]));
     }
 
     private int computeBorder(int id, TerrainQuadTree parent) {
