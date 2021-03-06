@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using SpaceCraft;
 using UnityEngine;
 
-public abstract class AdaptiveSpatialQuadTree<T> : SpaceCraft.QuadTree<T> 
+public abstract class AdaptiveSpatialQuadTree<T> : QuadTree<T> 
 where T : AdaptiveSpatialQuadTree<T>
 {
 
@@ -37,7 +36,7 @@ where T : AdaptiveSpatialQuadTree<T>
     {
         this.center = center;
         this.length = length;
-        this.threshold = threshold * Mathf.Pow(2, -level) + length + length;
+        this.threshold = threshold * Mathf.Pow(2, -level) + (4 * length);
         this.border = border;
     }
 

@@ -12,7 +12,11 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
     private Vector3 planetPosition;
     public TerrainChunk terrainComponent;
 
-    private readonly Camera camera;
+    private static readonly Camera camera = Camera.main;
+    static TerrainQuadTree()
+    {
+        camera.nearClipPlane *= Planet.SCALE;
+    }
 
     public TerrainQuadTree(
         Vector3 planetPosition,
@@ -44,7 +48,6 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         this.material = material;
         this.planetPosition = planetPosition;
         this.terrain = new GameObject(level.ToString());
-        this.camera = Camera.main;
 
         if (!hasChildren)
         {
@@ -52,9 +55,9 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
             this.terrainComponent.center = this.center;
             this.terrainComponent.tree = this;
             this.terrainComponent.border = border;
+            this.terrainComponent.material = material;
             if (parent != null) {
                 this.terrainComponent.parentMeshRenderer = parent.terrainComponent.meshRenderer;
-                this.terrainComponent.material = material;
             }
         }
 

@@ -19,7 +19,7 @@ public class Planet : MonoBehaviour
         for (int i=0; i<6; i++) 
         {
             TerrainQuadTree planetSide = planetSides[i];
-            planetSide = new TerrainQuadTree(transform.position, Mathf.Pow(2, PLANET_SIZE) * SCALE, directions[i], 4.0f,
+            planetSide = new TerrainQuadTree(transform.position, Mathf.Pow(2, PLANET_SIZE) * SCALE, directions[i], 3.0f,
                 PLANET_SIZE, material);
             planetSide.terrain.transform.parent = transform;
             planetSide.terrain.name = directionNames[i];
