@@ -27,14 +27,14 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         Material material
     ) : this(face * length, planetPosition, length, face, threshold, maxLevel, 0, null, 0xF, material)
     {
-        MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, length);
+        MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, length, level == maxLevel - 1);
         MeshGenerator.pushData(data);
     }
 
     public TerrainQuadTree(
         Vector3 center, 
         Vector3 planetPosition,
-        float length, 
+        float chunkLength, 
         Vector3 face, 
         float threshold, 
         int maxLevel,
@@ -42,7 +42,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         TerrainQuadTree parent,
         int border,
         Material material
-    ) : base(center, length, threshold, maxLevel, level, parent, border)
+    ) : base(center, chunkLength, threshold, maxLevel, level, parent, border)
     {
         this.face = face;
         this.material = material;
@@ -71,7 +71,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
     {
         Vector3 newCenter = computeCenter(face, position[id]);
         int newBorder = computeBorder(position[id], parent);
-        return new TerrainQuadTree(newCenter, parent.planetPosition, length / 2, face, threshold, maxLevel, level + 1,
+        return new TerrainQuadTree(newCenter, parent.planetPosition, chunkLength / 2, face, threshold, maxLevel, level + 1,
             parent, newBorder, parent.material);
     }
 
@@ -105,7 +105,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
     private Vector2 compute2DCenter(float anchorX, float anchorY, int id)
     {
         Vector2 result;
-        float halfLength = (length / 2);
+        float halfLength = (chunkLength / 2);
         switch (id)
         {
             case TOP_LEFT:
@@ -162,7 +162,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
     protected override void onSplit()
     {
         foreach (TerrainQuadTree child in children) {
-            MeshGenerator.Data childData = new MeshGenerator.Data(child.terrainComponent, child.center, child.face, child.length);
+            MeshGenerator.Data childData = new MeshGenerator.Data(child.terrainComponent, child.center, child.face, child.chunkLength, level == maxLevel - 1);
             MeshGenerator.pushData(childData);
         }
     }
