@@ -1,4 +1,5 @@
 using System;
+using Terrain;
 using UnityEngine;
 
 public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
