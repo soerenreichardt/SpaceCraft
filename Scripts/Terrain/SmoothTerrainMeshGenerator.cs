@@ -6,16 +6,20 @@ namespace Terrain
 {
     public class SmoothTerrainMeshGenerator : MeshGeneratorStrategy
     {
-        public VerticesGenerator verticesGenerator()
+        public MeshComputer meshComputer()
         {
-            return smoothTerrainVertices;
+            return smoothTerrainMesh;
         }
 
-        public IndicesGenerator indicesGenerator()
+        private static Mesh smoothTerrainMesh(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
         {
-            return smoothTerrainIndices;
+            return new Mesh()
+            {
+                vertices = smoothTerrainVertices(data, axisA, axisB),
+                indices = smoothTerrainIndices()
+            };
         }
-        
+
         private static Vector3[] smoothTerrainVertices(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
         {
             Vector3[] vertices = new Vector3[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
@@ -37,21 +41,23 @@ namespace Terrain
             return vertices;
         }
         
-        private static List<int> smoothTerrainIndices() {
-            List<int> indices = new List<int>();
+        private static int[] smoothTerrainIndices()
+        {
+            int[] indices = new int[MeshGenerator.CHUNK_SIZE * MeshGenerator.CHUNK_SIZE * 6];
             for (int y = 0; y < MeshGenerator.CHUNK_SIZE; y++)
             {
                 for (int x = 0; x < MeshGenerator.CHUNK_SIZE; x++)
                 {
-                    indices.Add(x + 0 + 17 * (y + 0));
-                    indices.Add(x + 0 + 17 * (y + 1));
-                    indices.Add(x + 1 + 17 * (y + 0));
+                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 0] = x + 0 + 17 * (y + 0);
+                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 1] = x + 0 + 17 * (y + 1);
+                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 2] = x + 1 + 17 * (y + 0);
 
-                    indices.Add(x + 1 + 17 * (y + 0));
-                    indices.Add(x + 0 + 17 * (y + 1));
-                    indices.Add(x + 1 + 17 * (y + 1));
+                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 3] = x + 1 + 17 * (y + 0);
+                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 4] = x + 0 + 17 * (y + 1);
+                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 5] = x + 1 + 17 * (y + 1);
                 }
             }
+
             return indices;
         }
     }

@@ -21,14 +21,14 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
 
     public TerrainQuadTree(
         Vector3 planetPosition,
-        float length,
+        float chunkLength,
         Vector3 face,
         float threshold,
         int maxLevel,
         Material material
-    ) : this(face * length, planetPosition, length, face, threshold, maxLevel, 0, null, 0xF, material)
+    ) : this(face * chunkLength, planetPosition, chunkLength, face, threshold, maxLevel, 0, null, 0xF, material)
     {
-        MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, length, level == maxLevel - 1);
+        MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, level == maxLevel - 1);
         MeshGenerator.pushData(data);
     }
 

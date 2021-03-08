@@ -58,8 +58,10 @@ namespace Terrain
                         ? (MeshGeneratorStrategy) BlockTerrainMeshGenerator 
                         : SmoothTerrainMeshGenerator;
 
-                data.terrainChunk.vertices = meshGeneratorStrategy.verticesGenerator()(data, axisA, axisB);
-                data.terrainChunk.indices = meshGeneratorStrategy.indicesGenerator()();
+
+                var mesh = meshGeneratorStrategy.meshComputer()(data, axisA, axisB);
+                data.terrainChunk.vertices = mesh.vertices;
+                data.terrainChunk.indices = mesh.indices;
                 data.terrainChunk.updatedMesh = true;
             }
         }
