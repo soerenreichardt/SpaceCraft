@@ -68,7 +68,7 @@ namespace Terrain
 
         public static float elevation(Vector3 pointOnSphere)
         {
-            return Mathf.PerlinNoise(pointOnSphere.x, pointOnSphere.y);
+            return Mathf.PerlinNoise(pointOnSphere.x, pointOnSphere.y) * 3;
         }
 
         private static Vector3 computePointOnSphere(Vector3 vertex) {
