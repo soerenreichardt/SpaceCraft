@@ -20,13 +20,13 @@ where T : AdaptiveSpatialQuadTree<T>
     public int border;
 
     public Vector3 center { get; }
-    public float length { get; }
+    public float chunkLength { get; }
 
     public float threshold { get; }
 
     public AdaptiveSpatialQuadTree(
         Vector3 center, 
-        float length, 
+        float chunkLength, 
         float threshold, 
         int maxLevel,
         int level,
@@ -35,8 +35,8 @@ where T : AdaptiveSpatialQuadTree<T>
     ) : base(level, maxLevel, parent)
     {
         this.center = center;
-        this.length = length;
-        this.threshold = threshold * Mathf.Pow(2, -level) + (4 * length);
+        this.chunkLength = chunkLength;
+        this.threshold = threshold * Mathf.Pow(2, -level) + (4 * chunkLength);
         this.border = border;
     }
 

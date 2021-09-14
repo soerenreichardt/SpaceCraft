@@ -13,7 +13,7 @@ public class TerrainChunk : MonoBehaviour
     public TerrainQuadTree tree;
 
     public Vector3[] vertices { get; set; }
-    public List<int> indices { get; set; }
+    public int[] indices { get; set; }
 
     public bool updatedMesh { get; set; }
 
@@ -27,9 +27,7 @@ public class TerrainChunk : MonoBehaviour
         meshRenderer.material = material;
         MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
         meshFilter.mesh = mesh;
-        meshFilter.mesh.RecalculateNormals();
-
-        indices = new List<int>();
+        // meshFilter.mesh.RecalculateNormals();
     }
 
     public void destroy() {
@@ -42,7 +40,7 @@ public class TerrainChunk : MonoBehaviour
             updatedMesh = false;
             mesh.Clear();
             mesh.vertices = vertices;
-            mesh.triangles = indices.ToArray();
+            mesh.triangles = indices;
             if (parentMeshRenderer != null) {
                 parentMeshRenderer.enabled = false;
             } 
