@@ -5,18 +5,11 @@ public abstract class AdaptiveSpatialQuadTree<T> : QuadTree<T>
 where T : AdaptiveSpatialQuadTree<T>
 {
 
-    public const int TOP = 1 << 0;
-    public const int LEFT = 1 << 1;
-    public const int RIGHT = 1 << 2;
-    public const int BOTTOM = 1 << 3;
-
-    public const int TOP_LEFT = TOP | LEFT;
-    public const int TOP_RIGHT = TOP | RIGHT;
-    public const int BOTTOM_LEFT = BOTTOM | LEFT;
-    public const int BOTTOM_RIGHT = BOTTOM | RIGHT;
-
-    public static int[] position = { TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT };
-
+    public const int TOP_LEFT = 0;
+    public const int TOP_RIGHT = 1;
+    public const int BOTTOM_LEFT = 2;
+    public const int BOTTOM_RIGHT = 3;
+    
     public long treeLocation;
 
     public Vector3 center { get; }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TerrainChunk : MonoBehaviour
 {
@@ -22,7 +21,6 @@ public class TerrainChunk : MonoBehaviour
         meshRenderer.material = material;
         MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
         meshFilter.mesh = mesh;
-        // meshFilter.mesh.RecalculateNormals();
     }
 
     public void destroy() {
