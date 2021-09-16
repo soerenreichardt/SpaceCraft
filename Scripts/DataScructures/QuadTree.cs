@@ -33,16 +33,16 @@ namespace SpaceCraft
             return this.level >= this.maxLevel || hasChildren;
         }
         
-        protected abstract T initialize(int id, T parent);
+        protected abstract T initialize(int quadrant);
 
         protected void split()
         {
             if (cannotSplit()) return; // TODO: prevent update function from calling into split()
 
             this.hasChildren = true;
-            for (int i = 0; i < this.children.Length; i++)
+            for (int quadrant = 0; quadrant < this.children.Length; quadrant++)
             {
-                this.children[i] = initialize(i, (T)this);
+                this.children[quadrant] = initialize(quadrant);
             }
             onSplit();
         }

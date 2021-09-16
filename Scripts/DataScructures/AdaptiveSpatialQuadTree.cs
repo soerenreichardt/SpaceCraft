@@ -17,27 +17,27 @@ where T : AdaptiveSpatialQuadTree<T>
 
     public static int[] position = { TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT };
 
-    public int border;
+    public long treeLocation;
 
     public Vector3 center { get; }
     public float chunkLength { get; }
 
-    public float threshold { get; }
+    public float viewDistance { get; }
 
     public AdaptiveSpatialQuadTree(
         Vector3 center, 
         float chunkLength, 
-        float threshold, 
+        float viewDistance, 
         int maxLevel,
         int level,
         T parent,
-        int border
+        long treeLocation
     ) : base(level, maxLevel, parent)
     {
         this.center = center;
         this.chunkLength = chunkLength;
-        this.threshold = threshold * Mathf.Pow(2, -level) + (4 * chunkLength);
-        this.border = border;
+        this.viewDistance = viewDistance * Mathf.Pow(2, -level) + (4 * chunkLength);
+        this.treeLocation = treeLocation;
     }
 
     protected abstract float distance();
@@ -45,7 +45,7 @@ where T : AdaptiveSpatialQuadTree<T>
     public void update()
     {
         if (hasChildren) {
-            if (distance() > threshold) {
+            if (distance() > viewDistance) {
                 merge();
                 return;
             }
@@ -54,10 +54,9 @@ where T : AdaptiveSpatialQuadTree<T>
                 child.update();
             }
         } else {
-            if (distance() <= threshold) {
+            if (distance() <= viewDistance) {
                 split();
             }
         }
-        
     }
 }

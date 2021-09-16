@@ -8,17 +8,12 @@ public class TerrainChunk : MonoBehaviour
     public MeshRenderer meshRenderer;
     public MeshRenderer parentMeshRenderer;
     public Material material;
-
-    public Vector3 center;
-    public TerrainQuadTree tree;
-
+    
     public Vector3[] vertices { get; set; }
     public int[] indices { get; set; }
 
     public bool updatedMesh { get; set; }
-
-    public int border;
-
+    
     void Start()
     {
         mesh = new Mesh();
