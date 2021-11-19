@@ -12,6 +12,11 @@ public class TerrainChunk : MonoBehaviour
     public int[] indices { get; set; }
 
     public bool updatedMesh { get; set; }
+
+    public TerrainChunk leftNeighbor;
+    public TerrainChunk topNeighbor;
+    public TerrainChunk rightNeighbor;
+    public TerrainChunk bottomNeighbor;
     
     void Start()
     {

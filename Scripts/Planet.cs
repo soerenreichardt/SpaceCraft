@@ -18,13 +18,19 @@ public class Planet : MonoBehaviour
     {
         for (int i=0; i<6; i++) 
         {
-            TerrainQuadTree planetSide = planetSides[i];
-            planetSide = new TerrainQuadTree(transform.position, Mathf.Pow(2, PLANET_SIZE) * SCALE, directions[i], 3.0f,
+            var planetSide = new TerrainQuadTree(transform.position, Mathf.Pow(2, PLANET_SIZE) * SCALE, directions[i], 3.0f,
                 PLANET_SIZE, material);
             planetSide.terrain.transform.parent = transform;
             planetSide.terrain.name = directionNames[i];
             planetSides[i] = planetSide;
         }
+
+        planetSides[0].neighbors = new[] {planetSides[2], planetSides[4], planetSides[3], planetSides[5]};
+        planetSides[1].neighbors = new[] {planetSides[3], planetSides[4], planetSides[2], planetSides[5]};
+        planetSides[2].neighbors = new[] {planetSides[4], planetSides[0], planetSides[5], planetSides[1]};
+        planetSides[3].neighbors = new[] {planetSides[5], planetSides[0], planetSides[4], planetSides[1]};
+        planetSides[4].neighbors = new[] {planetSides[3], planetSides[0], planetSides[2], planetSides[1]};
+        planetSides[5].neighbors = new[] {planetSides[2], planetSides[0], planetSides[3], planetSides[1]};
     }
 
     // Update is called once per frame
