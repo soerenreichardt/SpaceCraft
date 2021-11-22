@@ -1,4 +1,5 @@
 using System;
+using DataStructures;
 using Terrain;
 using UnityEngine;
 
@@ -26,14 +27,15 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         Vector3 face,
         float viewDistance,
         int maxLevel,
-        Material material
-    ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material)
+        Material material,
+        long treeLocation
+    ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, treeLocation)
     {
         MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, level == maxLevel - 1);
         MeshGenerator.pushData(data);
     }
 
-    public TerrainQuadTree(
+    private TerrainQuadTree(
         Vector3 center, 
         Vector3 planetPosition,
         float chunkLength, 
@@ -42,8 +44,9 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         int maxLevel,
         int level,
         TerrainQuadTree parent,
-        Material material
-    ) : base(center, chunkLength, viewDistance, maxLevel, level, parent, face)
+        Material material,
+        long treeLocation
+    ) : base(center, chunkLength, viewDistance, maxLevel, level, parent, face, treeLocation)
     {
         this.material = material;
         this.planetPosition = planetPosition;
@@ -76,7 +79,8 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
             maxLevel, 
             level + 1,
             this, 
-            material
+            material,
+            TreeLocationHelper.childTreeLocation(treeLocation, quadrant)
         );
     }
 
@@ -143,14 +147,6 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         foreach (TerrainQuadTree child in children) {
             MeshGenerator.Data childData = new MeshGenerator.Data(child.terrainComponent, child.center, child.face, child.chunkLength, level == maxLevel - 1);
             MeshGenerator.pushData(childData);
-            var leftNeighbor = child.neighbors[LEFT];
-            if (leftNeighbor != null) child.terrainComponent.leftNeighbor = leftNeighbor.terrainComponent;
-            var topNeighbor = child.neighbors[TOP];
-            if (topNeighbor != null) child.terrainComponent.topNeighbor = topNeighbor.terrainComponent;
-            var rightNeighbor = child.neighbors[RIGHT];
-            if (rightNeighbor != null) child.terrainComponent.rightNeighbor = rightNeighbor.terrainComponent;
-            var bottomNeighbor = child.neighbors[BOTTOM];
-            if (bottomNeighbor != null) child.terrainComponent.bottomNeighbor = bottomNeighbor.terrainComponent;
         }
     }
 

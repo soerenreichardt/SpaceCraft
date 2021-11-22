@@ -1,34 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace SpaceCraft
+﻿namespace SpaceCraft
 {
 
     public abstract class QuadTree<T> where T : QuadTree<T>
     {
+        private T parent { get; }
 
-        protected T parent { get; }
+        protected int level { get; }
+        protected readonly int maxLevel;
+        protected readonly long treeLocation;
 
-        public int level { get; }
-        protected int maxLevel;
+        protected T[] children { get; }
+        protected bool hasChildren { get; private set; }
 
-        public T[] children { get; }
-        public bool hasChildren { get; private set; }
-
-        public QuadTree(int level, int maxLevel, T parent)
+        protected QuadTree(int level, int maxLevel, T parent, long treeLocation)
         {
             this.parent = parent;
             this.children = new T[4];
             this.level = level;
             this.maxLevel = maxLevel;
+            this.treeLocation = treeLocation;
             this.hasChildren = false;
         }
 
-        protected bool cannotSplit() {
-            return this.level >= this.maxLevel || hasChildren;
-        }
-        
         protected abstract T initialize(int quadrant);
 
         protected void split()
@@ -58,5 +51,9 @@ namespace SpaceCraft
 
         protected abstract void onSplit();
         protected abstract void onMerge();
+        
+        private bool cannotSplit() {
+            return this.level >= this.maxLevel || hasChildren;
+        }
     }
 }
