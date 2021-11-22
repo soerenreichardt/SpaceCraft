@@ -70,6 +70,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
     protected override TerrainQuadTree initialize(int quadrant)
     {
         Vector3 newCenter = computeCenter(quadrant);
+        var nextLevel = level + 1;
         return new TerrainQuadTree(
             newCenter, 
             planetPosition, 
@@ -77,10 +78,10 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
             face, 
             viewDistance, 
             maxLevel, 
-            level + 1,
+            nextLevel,
             this, 
             material,
-            TreeLocationHelper.childTreeLocation(treeLocation, quadrant)
+            TreeLocationHelper.childTreeLocation(treeLocation, quadrant, nextLevel, maxLevel)
         );
     }
 

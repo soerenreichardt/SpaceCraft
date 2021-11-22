@@ -5,9 +5,10 @@ namespace DataStructures
         public const long NO_NEIGHBOR_FOUND = -1;
         private const byte LEVEL_MASK = 0b11;
         
-        public static long childTreeLocation(long currentTreeLocation, int quadrant)
+        public static long childTreeLocation(long currentTreeLocation, int quadrant, int currentLevel, int maxLevel)
         {
-            return currentTreeLocation << 2 | quadrant;
+            var level = maxLevel - currentLevel;
+            return currentTreeLocation | quadrant << (2 * level);
         }
 
         public static long computeCommonAncestor(long treeLocation1, long treeLocation2)

@@ -8,9 +8,9 @@ namespace Tests
         [Test]
         public void ShouldComputeCorrectChildTreeLocation()
         {
-            Assert.That(TreeLocationHelper.childTreeLocation(0, 1), Is.EqualTo(0b01));
-            Assert.That(TreeLocationHelper.childTreeLocation(TreeLocationHelper.childTreeLocation(0, 1), 3), Is.EqualTo(0b0111));
-            Assert.That(TreeLocationHelper.childTreeLocation(0b0111, 2), Is.EqualTo(0b011110));
+            Assert.That(TreeLocationHelper.childTreeLocation(0, 1, 0, 2), Is.EqualTo(0b010000));
+            Assert.That(TreeLocationHelper.childTreeLocation(0b010000, 3, 1, 2), Is.EqualTo(0b011100));
+            Assert.That(TreeLocationHelper.childTreeLocation(0b011100, 2, 2, 2), Is.EqualTo(0b011110));
         }
 
         [Test]
