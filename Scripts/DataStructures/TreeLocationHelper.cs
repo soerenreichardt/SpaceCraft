@@ -10,6 +10,25 @@ namespace DataStructures
             return currentTreeLocation << 2 | quadrant;
         }
 
+        public static long computeCommonAncestor(long treeLocation1, long treeLocation2)
+        {
+            var highestSetBitPosition = computeHighestSetBitPosition(treeLocation1, treeLocation2);
+            // align to blocks of 2 bits
+            if (highestSetBitPosition % 2 == 1) highestSetBitPosition++;
+
+            long commonAncestorMask = 0;
+            for (int level = highestSetBitPosition; level > 0; level -= 2)
+            {
+                long levelMask = LEVEL_MASK << level;
+                if ((treeLocation1 & levelMask) == (treeLocation2 & levelMask))
+                {
+                    commonAncestorMask |= levelMask;
+                }
+            }
+
+            return treeLocation1 & commonAncestorMask;
+        }
+
         public static long leftNeighborLocation(long currentTreeLocation, int currentLevel, int maxLevel)
         {
             return neighborPosition(currentTreeLocation, currentLevel, maxLevel,
@@ -21,7 +40,7 @@ namespace DataStructures
             return neighborPosition(currentTreeLocation, currentLevel, maxLevel,
                 new[] {Directions.TOP_LEFT, Directions.BOTTOM_LEFT}, -1);
         }
-        
+
         public static long topNeighborLocation(long currentTreeLocation, int currentLevel, int maxLevel)
         {
             return neighborPosition(currentTreeLocation, currentLevel, maxLevel,
@@ -33,7 +52,7 @@ namespace DataStructures
             return neighborPosition(currentTreeLocation, currentLevel, maxLevel,
                 new[] {Directions.TOP_LEFT, Directions.TOP_RIGHT}, -2);
         }
-        
+
         private static long neighborPosition(long currentTreeLocation, int currentLevel, int maxLevel,
             int[] directNeighbors, int offsetToNeighborLocation)
         {
@@ -56,6 +75,21 @@ namespace DataStructures
         private static long setLocationOnLevel(long treeLocation, long newLocation, long mask, int level)
         {
             return (treeLocation & ~mask) | (newLocation << level);
+        }
+
+        private static int computeHighestSetBitPosition(long treeLocation1, long treeLocation2)
+        {
+            var temp1 = treeLocation1;
+            var temp2 = treeLocation2;
+            var highestSetBitPosition = 0;
+            while (temp1 > 0 || temp2 > 0)
+            {
+                temp1 >>= 1;
+                temp2 >>= 1;
+                highestSetBitPosition++;
+            }
+
+            return highestSetBitPosition;
         }
     }
 }

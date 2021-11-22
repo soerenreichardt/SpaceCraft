@@ -5,7 +5,6 @@ namespace Tests
 {
     public class TreeLocationHelperTest
     {
-        // A Test behaves as an ordinary method
         [Test]
         public void ShouldComputeCorrectChildTreeLocation()
         {
@@ -20,6 +19,12 @@ namespace Tests
             Assert.That(TreeLocationHelper.leftNeighborLocation(0b000011, 2, 2), Is.EqualTo(0b10));
             Assert.That(TreeLocationHelper.leftNeighborLocation(0b010010, 2, 2), Is.EqualTo(0b000111));
             Assert.That(TreeLocationHelper.leftNeighborLocation(0b100010, 2, 2), Is.EqualTo(TreeLocationHelper.NO_NEIGHBOR_FOUND));
+        }
+
+        [Test]
+        public void ShouldComputeCommonAncestors()
+        {
+            Assert.That(TreeLocationHelper.computeCommonAncestor(0b11001100, 0b11010101), Is.EqualTo(0b11000000));
         }
     }
 }

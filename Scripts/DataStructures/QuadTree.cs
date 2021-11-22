@@ -5,9 +5,10 @@
     {
         private T parent { get; }
 
+        public readonly long treeLocation;
+        
         protected int level { get; }
         protected readonly int maxLevel;
-        protected readonly long treeLocation;
 
         protected T[] children { get; }
         protected bool hasChildren { get; private set; }
