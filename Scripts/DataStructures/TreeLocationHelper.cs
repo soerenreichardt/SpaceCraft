@@ -5,13 +5,19 @@ namespace DataStructures
         public const long NO_NEIGHBOR_FOUND = -1;
         private const byte LEVEL_MASK = 0b11;
         
-        public static long childTreeLocation(long currentTreeLocation, int quadrant, int currentLevel, int maxLevel)
+        public static long childTreeLocation(long currentTreeLocation, int quadrant, int quadTreeLevel, int maxLevel)
         {
-            var level = maxLevel - currentLevel;
+            var level = maxLevel - quadTreeLevel;
             return currentTreeLocation | quadrant << (2 * level);
         }
 
-        public static long computeCommonAncestor(long treeLocation1, long treeLocation2)
+        public static long quadrantForLevel(long treeLocation, int treeLocationLevel)
+        {
+            var levelShift = 2 * treeLocationLevel;
+            return (treeLocation & (LEVEL_MASK << levelShift)) >> levelShift;
+        }
+        
+        public static (int, long) computeCommonAncestor(long treeLocation1, long treeLocation2)
         {
             var highestSetBitPosition = computeHighestSetBitPosition(treeLocation1, treeLocation2);
             // align to blocks of 2 bits
@@ -25,9 +31,13 @@ namespace DataStructures
                 {
                     commonAncestorMask |= levelMask;
                 }
+                else
+                {
+                    return (level / 2, treeLocation1 & commonAncestorMask);
+                }
             }
 
-            return treeLocation1 & commonAncestorMask;
+            return (0, treeLocation1 & commonAncestorMask);
         }
 
         public static long leftNeighborLocation(long currentTreeLocation, int currentLevel, int maxLevel)

@@ -22,6 +22,15 @@ namespace Tests
         }
 
         [Test]
+        public void ShouldComputeQuadrantForLevel()
+        {
+            var treeLocation = 0b011100;
+            Assert.That(TreeLocationHelper.quadrantForLevel(treeLocation, 0), Is.EqualTo(0b0));
+            Assert.That(TreeLocationHelper.quadrantForLevel(treeLocation, 1), Is.EqualTo(0b11));
+            Assert.That(TreeLocationHelper.quadrantForLevel(treeLocation, 2), Is.EqualTo(0b01));
+        }
+        
+        [Test]
         public void ShouldComputeCommonAncestors()
         {
             Assert.That(TreeLocationHelper.computeCommonAncestor(0b11001100, 0b11010101), Is.EqualTo(0b11000000));
