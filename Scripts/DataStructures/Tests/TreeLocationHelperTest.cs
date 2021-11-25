@@ -33,7 +33,13 @@ namespace Tests
         [Test]
         public void ShouldComputeCommonAncestors()
         {
-            Assert.That(TreeLocationHelper.computeCommonAncestor(0b11001100, 0b11010101), Is.EqualTo(0b11000000));
+            var commonAncestor = TreeLocationHelper.computeCommonAncestor(0b11001100, 0b11010101);
+            Assert.That(commonAncestor.Item1, Is.EqualTo(2));
+            Assert.That(commonAncestor.Item2, Is.EqualTo(0b11000000));
+            
+            var commonAncestor2 = TreeLocationHelper.computeCommonAncestor(0b11011100, 0b11010101);
+            Assert.That(commonAncestor2.Item1, Is.EqualTo(1));
+            Assert.That(commonAncestor2.Item2, Is.EqualTo(0b010000));
         }
     }
 }

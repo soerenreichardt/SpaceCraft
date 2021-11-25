@@ -3,15 +3,14 @@
 
     public abstract class QuadTree<T> where T : QuadTree<T>
     {
-        private T parent { get; }
+        public T parent { get; }
+        public T[] children { get; }
 
         public readonly long treeLocation;
-        
-        protected int level { get; }
-        protected readonly int maxLevel;
+        public readonly int maxLevel;
+        public readonly int level;
 
-        protected T[] children { get; }
-        protected bool hasChildren { get; private set; }
+        public bool hasChildren { get; private set; }
 
         protected QuadTree(int level, int maxLevel, T parent, long treeLocation)
         {

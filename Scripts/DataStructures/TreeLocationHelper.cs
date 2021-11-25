@@ -40,38 +40,38 @@ namespace DataStructures
             return (0, treeLocation1 & commonAncestorMask);
         }
 
-        public static long leftNeighborLocation(long currentTreeLocation, int currentLevel, int maxLevel)
+        public static long leftNeighborLocation(long currentTreeLocation, int quadTreeLevel, int maxLevel)
         {
-            return neighborPosition(currentTreeLocation, currentLevel, maxLevel,
+            return neighborPosition(currentTreeLocation, quadTreeLevel, maxLevel,
                 new[] {Directions.TOP_RIGHT, Directions.BOTTOM_RIGHT}, 1);
         }
 
-        public static long rightNeighborLocation(long currentTreeLocation, int currentLevel, int maxLevel)
+        public static long rightNeighborLocation(long currentTreeLocation, int quadTreeLevel, int maxLevel)
         {
-            return neighborPosition(currentTreeLocation, currentLevel, maxLevel,
+            return neighborPosition(currentTreeLocation, quadTreeLevel, maxLevel,
                 new[] {Directions.TOP_LEFT, Directions.BOTTOM_LEFT}, -1);
         }
 
-        public static long topNeighborLocation(long currentTreeLocation, int currentLevel, int maxLevel)
+        public static long topNeighborLocation(long currentTreeLocation, int quadTreeLevel, int maxLevel)
         {
-            return neighborPosition(currentTreeLocation, currentLevel, maxLevel,
+            return neighborPosition(currentTreeLocation, quadTreeLevel, maxLevel,
                 new[] {Directions.BOTTOM_LEFT, Directions.BOTTOM_RIGHT}, 2);
         }
 
-        public static long bottomNeighborLocation(long currentTreeLocation, int currentLevel, int maxLevel)
+        public static long bottomNeighborLocation(long currentTreeLocation, int quadTreeLevel, int maxLevel)
         {
-            return neighborPosition(currentTreeLocation, currentLevel, maxLevel,
+            return neighborPosition(currentTreeLocation, quadTreeLevel, maxLevel,
                 new[] {Directions.TOP_LEFT, Directions.TOP_RIGHT}, -2);
         }
 
-        private static long neighborPosition(long currentTreeLocation, int currentLevel, int maxLevel,
+        private static long neighborPosition(long currentTreeLocation, int quadTreeLevel, int maxLevel,
             int[] directNeighbors, int offsetToNeighborLocation)
         {
-            if (currentLevel < 0)
+            if (quadTreeLevel < 0)
             {
                 return NO_NEIGHBOR_FOUND;
             }
-            var level = (maxLevel - currentLevel) * 2;
+            var level = (maxLevel - quadTreeLevel) * 2;
             long mask = LEVEL_MASK << level;
             var quadrant = (currentTreeLocation & mask) >> level;
             if (quadrant == directNeighbors[0] || quadrant == directNeighbors[1])
@@ -80,7 +80,7 @@ namespace DataStructures
             }
 
             var reflectedPosition = setLocationOnLevel(currentTreeLocation, quadrant + 1, mask, level);
-            return neighborPosition(reflectedPosition, currentLevel - offsetToNeighborLocation, maxLevel, directNeighbors, offsetToNeighborLocation);
+            return neighborPosition(reflectedPosition, quadTreeLevel - offsetToNeighborLocation, maxLevel, directNeighbors, offsetToNeighborLocation);
         }
 
         private static long setLocationOnLevel(long treeLocation, long newLocation, long mask, int level)
