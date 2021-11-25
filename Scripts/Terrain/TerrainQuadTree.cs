@@ -81,7 +81,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
             nextLevel,
             this, 
             material,
-            TreeLocationHelper.childTreeLocation(treeLocation, quadrant, nextLevel, maxLevel)
+            TreeLocationHelper.childTreeLocation(treeLocation, quadrant, nextLevel)
         );
     }
 

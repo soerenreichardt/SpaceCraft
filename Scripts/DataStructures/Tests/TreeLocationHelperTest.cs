@@ -8,16 +8,16 @@ namespace Tests
         [Test]
         public void ShouldComputeCorrectChildTreeLocation()
         {
-            Assert.That(TreeLocationHelper.childTreeLocation(0, 1, 0, 2), Is.EqualTo(0b010000));
-            Assert.That(TreeLocationHelper.childTreeLocation(0b010000, 3, 1, 2), Is.EqualTo(0b011100));
-            Assert.That(TreeLocationHelper.childTreeLocation(0b011100, 2, 2, 2), Is.EqualTo(0b011110));
+            Assert.That(TreeLocationHelper.childTreeLocation(0, 1, 0), Is.EqualTo(0b01));
+            Assert.That(TreeLocationHelper.childTreeLocation(0b01, 3, 1), Is.EqualTo(0b1101));
+            Assert.That(TreeLocationHelper.childTreeLocation(0b1101, 2, 2), Is.EqualTo(0b101101));
         }
 
         [Test]
         public void ShouldComputeCorrectLeftNeighbor()
         {
-            Assert.That(TreeLocationHelper.leftNeighborLocation(0b000011, 2, 2), Is.EqualTo(0b10));
-            Assert.That(TreeLocationHelper.leftNeighborLocation(0b010010, 2, 2), Is.EqualTo(0b000111));
+            Assert.That(TreeLocationHelper.leftNeighborLocation(0b110000, 2, 2), Is.EqualTo(0b100000));
+            Assert.That(TreeLocationHelper.leftNeighborLocation(0b100001, 2, 2), Is.EqualTo(0b110100));
             Assert.That(TreeLocationHelper.leftNeighborLocation(0b100010, 2, 2), Is.EqualTo(TreeLocationHelper.NO_NEIGHBOR_FOUND));
         }
 
@@ -31,15 +31,13 @@ namespace Tests
         }
         
         [Test]
-        public void ShouldComputeCommonAncestors()
+        public void ShouldComputeCommonPathLength()
         {
-            var commonAncestor = TreeLocationHelper.computeCommonAncestor(0b11001100, 0b11010101);
-            Assert.That(commonAncestor.Item1, Is.EqualTo(2));
-            Assert.That(commonAncestor.Item2, Is.EqualTo(0b11000000));
+            var commonPathLength = TreeLocationHelper.commonPathLength(0b0011001100, 0b11011100, 3);
+            Assert.That(commonPathLength, Is.EqualTo(2));
             
-            var commonAncestor2 = TreeLocationHelper.computeCommonAncestor(0b11011100, 0b11010101);
-            Assert.That(commonAncestor2.Item1, Is.EqualTo(1));
-            Assert.That(commonAncestor2.Item2, Is.EqualTo(0b010000));
+            var commonPathLength2 = TreeLocationHelper.commonPathLength(0b11011100, 0b11010100, 3);
+            Assert.That(commonPathLength2, Is.EqualTo(1));
         }
     }
 }
