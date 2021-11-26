@@ -79,7 +79,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
             viewDistance, 
             maxLevel, 
             nextLevel,
-            this, 
+            this,
             material,
             TreeLocationHelper.childTreeLocation(treeLocation, quadrant, nextLevel)
         );

@@ -16,11 +16,21 @@ namespace Tests
         [Test]
         public void ShouldComputeCorrectLeftNeighbor()
         {
-            Assert.That(TreeLocationHelper.leftNeighborLocation(0b110000, 2, 2), Is.EqualTo(0b100000));
-            Assert.That(TreeLocationHelper.leftNeighborLocation(0b100001, 2, 2), Is.EqualTo(0b110100));
-            Assert.That(TreeLocationHelper.leftNeighborLocation(0b100010, 2, 2), Is.EqualTo(TreeLocationHelper.NO_NEIGHBOR_FOUND));
+            Assert.That(TreeLocationHelper.leftNeighborLocation(0b110000, 2), Is.EqualTo(0b100000));
+            Assert.That(TreeLocationHelper.leftNeighborLocation(0b100001, 2), Is.EqualTo(0b110100));
+            Assert.That(TreeLocationHelper.leftNeighborLocation(0b100010, 2), Is.EqualTo(TreeLocationHelper.NO_NEIGHBOR_FOUND));
         }
 
+        [Test]
+        public void ShouldComputeCorrectRightNeighbor()
+        {
+            Assert.That(TreeLocationHelper.rightNeighborLocation(0b100001, 2), Is.EqualTo(0b110001));
+            Assert.That(TreeLocationHelper.rightNeighborLocation(0b110100, 2), Is.EqualTo(0b100001));
+            Assert.That(TreeLocationHelper.rightNeighborLocation(0b110101, 2), Is.EqualTo(TreeLocationHelper.NO_NEIGHBOR_FOUND));
+            Assert.That(TreeLocationHelper.rightNeighborLocation(0b0, 2), Is.EqualTo(0b010000));
+            Assert.That(TreeLocationHelper.rightNeighborLocation(0b1010100, 3), Is.EqualTo(0b0000001));
+        }
+        
         [Test]
         public void ShouldComputeQuadrantForLevel()
         {
@@ -33,11 +43,14 @@ namespace Tests
         [Test]
         public void ShouldComputeCommonPathLength()
         {
-            var commonPathLength = TreeLocationHelper.commonPathLength(0b0011001100, 0b11011100, 3);
+            var commonPathLength = TreeLocationHelper.commonPathLength(0b11001100, 0b11011100, 3);
             Assert.That(commonPathLength, Is.EqualTo(2));
             
             var commonPathLength2 = TreeLocationHelper.commonPathLength(0b11011100, 0b11010100, 3);
             Assert.That(commonPathLength2, Is.EqualTo(1));
+            
+            var commonPathLength3 = TreeLocationHelper.commonPathLength(0b1111111110000, 0b100111111110000, 6);
+            Assert.That(commonPathLength3, Is.EqualTo(6));
         }
     }
 }
