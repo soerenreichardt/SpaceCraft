@@ -18,7 +18,7 @@ namespace Tests
         {
             Assert.That(TreeLocationHelper.leftNeighborLocation(0b110000, 2), Is.EqualTo(0b100000));
             Assert.That(TreeLocationHelper.leftNeighborLocation(0b100001, 2), Is.EqualTo(0b110100));
-            Assert.That(TreeLocationHelper.leftNeighborLocation(0b100010, 2), Is.EqualTo(TreeLocationHelper.NO_NEIGHBOR_FOUND));
+            Assert.That(TreeLocationHelper.leftNeighborLocation(0b100010, 2), Is.EqualTo(0b110100 | TreeLocationHelper.SWITCH_PLANET_FACE_MASK));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace Tests
         {
             Assert.That(TreeLocationHelper.rightNeighborLocation(0b100001, 2), Is.EqualTo(0b110001));
             Assert.That(TreeLocationHelper.rightNeighborLocation(0b110100, 2), Is.EqualTo(0b100001));
-            Assert.That(TreeLocationHelper.rightNeighborLocation(0b110101, 2), Is.EqualTo(TreeLocationHelper.NO_NEIGHBOR_FOUND));
+            Assert.That(TreeLocationHelper.rightNeighborLocation(0b110101, 2), Is.EqualTo(0b100010 | TreeLocationHelper.SWITCH_PLANET_FACE_MASK));
             Assert.That(TreeLocationHelper.rightNeighborLocation(0b0, 2), Is.EqualTo(0b010000));
             Assert.That(TreeLocationHelper.rightNeighborLocation(0b1010100, 3), Is.EqualTo(0b0000001));
         }
@@ -39,7 +39,7 @@ namespace Tests
             Assert.That(TreeLocationHelper.quadrantForLevel(treeLocation, 1), Is.EqualTo(0b11));
             Assert.That(TreeLocationHelper.quadrantForLevel(treeLocation, 2), Is.EqualTo(0b01));
         }
-        
+
         [Test]
         public void ShouldComputeCommonPathLength()
         {
