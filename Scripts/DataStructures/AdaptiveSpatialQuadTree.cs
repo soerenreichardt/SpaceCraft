@@ -12,6 +12,8 @@ where T : AdaptiveSpatialQuadTree<T>
 
     protected readonly Vector3 face;
 
+    public T[] neighbors;
+
     protected AdaptiveSpatialQuadTree(
         Vector3 center, 
         float chunkLength, 
@@ -27,6 +29,7 @@ where T : AdaptiveSpatialQuadTree<T>
         this.chunkLength = chunkLength;
         this.viewDistance = viewDistance * Mathf.Pow(2, -level) + (4 * chunkLength);
         this.face = face;
+        this.neighbors = new T[4];
     }
 
     protected abstract float distance();
@@ -49,6 +52,12 @@ where T : AdaptiveSpatialQuadTree<T>
         }
     }
 
+    public void setNeighbor(int direction, T neighbor)
+    {
+        neighbors[direction] = neighbor;
+        onNeighborSet();
+    }
+    
     protected override void onSplit()
     {
         adaptiveTreeOnSplit();
@@ -62,4 +71,25 @@ where T : AdaptiveSpatialQuadTree<T>
     protected abstract void adaptiveTreeOnSplit();
     
     protected abstract void adaptiveTreeOnMerge();
+
+    protected abstract void onNeighborSet();
+    
+    protected void computeNeighbors()
+    {
+        var leftNeighbor = TreeLocationNodeLookup.findLeftNeighbor((T) this);
+        setNeighbor(Directions.LEFT, leftNeighbor);
+        leftNeighbor?.setNeighbor(Directions.RIGHT, (T) this);
+        
+        var rightNeighbor = TreeLocationNodeLookup.findRightNeighbor((T) this);
+        setNeighbor(Directions.RIGHT, rightNeighbor);
+        rightNeighbor?.setNeighbor(Directions.LEFT, (T) this);
+        
+        var topNeighbor = TreeLocationNodeLookup.findTopNeighbor((T) this);
+        setNeighbor(Directions.TOP, topNeighbor);
+        topNeighbor?.setNeighbor(Directions.BOTTOM, (T) this);
+        
+        var bottomNeighbor = TreeLocationNodeLookup.findBottomNeighbor((T) this);
+        setNeighbor(Directions.BOTTOM, bottomNeighbor);
+        bottomNeighbor?.setNeighbor(Directions.TOP, (T) this);
+    }
 }

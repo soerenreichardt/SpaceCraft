@@ -18,7 +18,6 @@ namespace DataStructures
         public static T findRightNeighbor<T>(T currentNode) where T : QuadTree<T>
         {
             var rightNeighborLocation = TreeLocationHelper.rightNeighborLocation(currentNode.treeLocation, currentNode.level);
-            Debug.Log("" + Convert.ToString(currentNode.treeLocation, 2) + " | " + Convert.ToString(rightNeighborLocation, 2));
             return findNode(currentNode, rightNeighborLocation);
         }
         

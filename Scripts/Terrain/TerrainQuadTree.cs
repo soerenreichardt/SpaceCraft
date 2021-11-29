@@ -148,15 +148,20 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         foreach (TerrainQuadTree child in children) {
             MeshGenerator.Data childData = new MeshGenerator.Data(child.terrainComponent, child.center, child.face, child.chunkLength, level == maxLevel - 1);
             MeshGenerator.pushData(childData);
-            var leftNeighbor = TreeLocationNodeLookup.findLeftNeighbor(child);
-            child.terrainComponent.leftNeighbor = leftNeighbor?.terrainComponent;
-            var rightNeighbor = TreeLocationNodeLookup.findRightNeighbor(child);
-            child.terrainComponent.rightNeighbor = rightNeighbor?.terrainComponent;
-            var topNeighbor = TreeLocationNodeLookup.findTopNeighbor(child);
-            child.terrainComponent.topNeighbor = topNeighbor?.terrainComponent;
-            var bottomNeighbor = TreeLocationNodeLookup.findBottomNeighbor(child);
-            child.terrainComponent.bottomNeighbor = bottomNeighbor?.terrainComponent;
+            child.computeNeighbors();
         }
+    }
+
+    protected override void onNeighborSet()
+    {
+        var leftNeighbor = neighbors[LEFT];
+        terrainComponent.leftNeighbor = leftNeighbor?.terrainComponent;
+        var rightNeighbor = neighbors[RIGHT];
+        terrainComponent.rightNeighbor = rightNeighbor?.terrainComponent;
+        var topNeighbor = neighbors[TOP];
+        terrainComponent.topNeighbor = topNeighbor?.terrainComponent;
+        var bottomNeighbor = neighbors[BOTTOM];
+        terrainComponent.bottomNeighbor = bottomNeighbor?.terrainComponent;
     }
 
     protected override void adaptiveTreeOnMerge()
