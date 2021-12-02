@@ -1,3 +1,6 @@
+using System.Globalization;
+using static DataStructures.Directions;
+
 namespace DataStructures
 {
     public static class TreeLocationHelper
@@ -14,6 +17,24 @@ namespace DataStructures
         {
             var levelShift = 2 * level;
             return (treeLocation & (LEVEL_MASK << levelShift)) >> levelShift;
+        }
+
+        public static long applyRotationOnQuadrant(long quadrant, int rotation)
+        {
+            rotation = rotation < 0
+                ? 4 + rotation
+                : rotation;
+
+            var rotatedQuadrant = quadrant;
+            for (int i = 0; i < rotation; i++)
+            {
+                if (rotatedQuadrant == TOP_LEFT) rotatedQuadrant = BOTTOM_LEFT;
+                if (rotatedQuadrant == TOP_RIGHT) rotatedQuadrant = TOP_LEFT;
+                if (rotatedQuadrant == BOTTOM_LEFT) rotatedQuadrant = BOTTOM_RIGHT;
+                if (rotatedQuadrant == BOTTOM_RIGHT) rotatedQuadrant = TOP_RIGHT;
+            }
+
+            return rotatedQuadrant;
         }
         
         public static int commonPathLength(long treeLocation1, long treeLocation2, int nodeLevel)
@@ -34,25 +55,25 @@ namespace DataStructures
         public static long leftNeighborLocation(long currentTreeLocation, int quadTreeLevel)
         {
             return neighborPosition(currentTreeLocation, quadTreeLevel,
-                new[] {Directions.TOP_RIGHT, Directions.BOTTOM_RIGHT}, 1, Directions.LEFT);
+                new[] {TOP_RIGHT, BOTTOM_RIGHT}, 1, LEFT);
         }
 
         public static long rightNeighborLocation(long currentTreeLocation, int quadTreeLevel)
         {
             return neighborPosition(currentTreeLocation, quadTreeLevel,
-                new[] {Directions.TOP_LEFT, Directions.BOTTOM_LEFT}, -1, Directions.RIGHT);
+                new[] {TOP_LEFT, BOTTOM_LEFT}, -1, RIGHT);
         }
 
         public static long topNeighborLocation(long currentTreeLocation, int quadTreeLevel)
         {
             return neighborPosition(currentTreeLocation, quadTreeLevel,
-                new[] {Directions.BOTTOM_LEFT, Directions.BOTTOM_RIGHT}, 2, Directions.TOP);
+                new[] {BOTTOM_LEFT, BOTTOM_RIGHT}, 2, TOP);
         }
 
         public static long bottomNeighborLocation(long currentTreeLocation, int quadTreeLevel)
         {
             return neighborPosition(currentTreeLocation, quadTreeLevel,
-                new[] {Directions.TOP_LEFT, Directions.TOP_RIGHT}, -2, Directions.BOTTOM);
+                new[] {TOP_LEFT, TOP_RIGHT}, -2, BOTTOM);
         }
 
         public static bool switchPlanetFace(long treeLocation)

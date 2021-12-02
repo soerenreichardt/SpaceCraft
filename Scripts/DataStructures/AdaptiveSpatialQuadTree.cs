@@ -10,7 +10,7 @@ where T : AdaptiveSpatialQuadTree<T>
 
     protected float viewDistance { get; }
 
-    protected readonly Vector3 face;
+    public readonly Vector3 face;
 
     public T[] neighbors;
 
