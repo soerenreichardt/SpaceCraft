@@ -31,15 +31,10 @@ namespace DataStructures
 
         private static T findNode<T>(T currentNode, long targetTreeLocation) where T : AdaptiveSpatialQuadTree<T>
         {
-            var ancestorNode = (targetTreeLocation & TreeLocationHelper.SWITCH_PLANET_FACE_MASK) != 0
+            var ancestorNode = TreeLocationHelper.switchPlanetFace(targetTreeLocation)
                 ? findTreeRootNeighbor(currentNode, targetTreeLocation)
                 : findFirstCommonAncestor(currentNode, targetTreeLocation);
 
-            if (TreeLocationHelper.quadrantForLevel(targetTreeLocation, 0) != 0)
-            {
-                Assert.IsTrue((targetTreeLocation & TreeLocationHelper.SWITCH_PLANET_FACE_MASK) != 0);                
-            }
-            
             var currentNodeLevel = currentNode.level;
             T node = ancestorNode;
             for (int level = ancestorNode.level; level < currentNodeLevel; level++)

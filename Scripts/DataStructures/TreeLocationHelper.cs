@@ -55,6 +55,11 @@ namespace DataStructures
                 new[] {Directions.TOP_LEFT, Directions.TOP_RIGHT}, -2, Directions.BOTTOM);
         }
 
+        public static bool switchPlanetFace(long treeLocation)
+        {
+            return (treeLocation & SWITCH_PLANET_FACE_MASK) != 0;
+        }
+        
         private static long neighborPosition(long currentTreeLocation, int level, int[] directNeighbors, int offsetToNeighborLocation, int neighborDirection)
         {
             if (level == 0)
