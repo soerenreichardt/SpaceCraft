@@ -76,20 +76,20 @@ where T : AdaptiveSpatialQuadTree<T>
     
     protected void computeNeighbors()
     {
-        var leftNeighbor = TreeLocationNodeLookup.findLeftNeighbor((T) this);
+        var (leftNeighbor, rotationLN) = TreeLocationNodeLookup.findLeftNeighbor((T) this);
         setNeighbor(Directions.LEFT, leftNeighbor);
-        leftNeighbor?.setNeighbor(Directions.RIGHT, (T) this);
+        leftNeighbor?.setNeighbor((int) TreeLocationHelper.applyRotationOnQuadrant(Directions.RIGHT, -rotationLN), (T) this);
         
-        var rightNeighbor = TreeLocationNodeLookup.findRightNeighbor((T) this);
+        var (rightNeighbor, rotationRN) = TreeLocationNodeLookup.findRightNeighbor((T) this);
         setNeighbor(Directions.RIGHT, rightNeighbor);
-        rightNeighbor?.setNeighbor(Directions.LEFT, (T) this);
+        rightNeighbor?.setNeighbor((int) TreeLocationHelper.applyRotationOnQuadrant(Directions.LEFT, -rotationRN), (T) this);
         
-        var topNeighbor = TreeLocationNodeLookup.findTopNeighbor((T) this);
+        var (topNeighbor, rotationTN) = TreeLocationNodeLookup.findTopNeighbor((T) this);
         setNeighbor(Directions.TOP, topNeighbor);
-        topNeighbor?.setNeighbor(Directions.BOTTOM, (T) this);
+        topNeighbor?.setNeighbor((int) TreeLocationHelper.applyRotationOnQuadrant(Directions.BOTTOM, -rotationTN), (T) this);
         
-        var bottomNeighbor = TreeLocationNodeLookup.findBottomNeighbor((T) this);
+        var (bottomNeighbor, rotationBN) = TreeLocationNodeLookup.findBottomNeighbor((T) this);
         setNeighbor(Directions.BOTTOM, bottomNeighbor);
-        bottomNeighbor?.setNeighbor(Directions.TOP, (T) this);
+        bottomNeighbor?.setNeighbor((int) TreeLocationHelper.applyRotationOnQuadrant(Directions.TOP, -rotationBN), (T) this);
     }
 }
