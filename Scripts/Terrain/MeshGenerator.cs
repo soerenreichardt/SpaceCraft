@@ -5,10 +5,10 @@ using UnityEngine;
 namespace Terrain
 {
     public class MeshGenerator : MonoBehaviour {
+        public const int CHUNK_SIZE = 16;
+        private const int BATCH_SIZE = 64;
 
-        public static readonly int BATCH_SIZE = 64;
-        public static readonly int CHUNK_SIZE = 16;
-        public static int dataSize;
+        private static int dataSize;
 
         private static readonly SmoothTerrainMeshGenerator SmoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator();
         private static readonly BlockTerrainMeshGenerator BlockTerrainMeshGenerator = new BlockTerrainMeshGenerator();
@@ -36,7 +36,7 @@ namespace Terrain
             Interlocked.Increment(ref dataSize);
         }
 
-        public static void consume() {
+        private static void consume() {
             int batchCounter = 0;
             ThreadPool.SetMaxThreads(4, 4);
             while(batchCounter < BATCH_SIZE || !Queue.IsEmpty) {
@@ -68,7 +68,7 @@ namespace Terrain
 
         public static float elevation(Vector3 pointOnSphere)
         {
-            return Mathf.PerlinNoise(pointOnSphere.x, pointOnSphere.y) * 3;
+            return Mathf.PerlinNoise(pointOnSphere.x, pointOnSphere.y);
         }
 
         private static Vector3 computePointOnSphere(Vector3 vertex) {
@@ -84,7 +84,7 @@ namespace Terrain
             return sphereVertex;
         }
 
-        void LateUpdate() {
+        private void LateUpdate() {
             consume();
         }
     }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Terrain
@@ -43,22 +42,7 @@ namespace Terrain
         
         private static int[] smoothTerrainIndices()
         {
-            int[] indices = new int[MeshGenerator.CHUNK_SIZE * MeshGenerator.CHUNK_SIZE * 6];
-            for (int y = 0; y < MeshGenerator.CHUNK_SIZE; y++)
-            {
-                for (int x = 0; x < MeshGenerator.CHUNK_SIZE; x++)
-                {
-                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 0] = x + 0 + 17 * (y + 0);
-                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 1] = x + 0 + 17 * (y + 1);
-                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 2] = x + 1 + 17 * (y + 0);
-
-                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 3] = x + 1 + 17 * (y + 0);
-                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 4] = x + 0 + 17 * (y + 1);
-                    indices[(x + MeshGenerator.CHUNK_SIZE * y) * 6 + 5] = x + 1 + 17 * (y + 1);
-                }
-            }
-
-            return indices;
+            return IndicesLookup.indices;
         }
     }
 }
