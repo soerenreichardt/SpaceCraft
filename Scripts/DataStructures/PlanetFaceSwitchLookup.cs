@@ -8,10 +8,10 @@ namespace DataStructures
 
         public static int rotationForNeighborOfFace(Vector3 face, int neighborDirection)
         {
-            return rootNeighborRotationLookup[face][neighborDirection];
+            return RootNeighborRotationLookup[face][neighborDirection];
         }
         
-        private static readonly Dictionary<Vector3, Dictionary<int, int>> rootNeighborRotationLookup =
+        private static readonly Dictionary<Vector3, Dictionary<int, int>> RootNeighborRotationLookup =
             new Dictionary<Vector3, Dictionary<int, int>>
             {
                 {

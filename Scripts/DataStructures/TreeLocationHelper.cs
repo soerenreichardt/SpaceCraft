@@ -1,4 +1,3 @@
-using System.Globalization;
 using static DataStructures.Directions;
 
 namespace DataStructures
@@ -19,24 +18,6 @@ namespace DataStructures
             return (treeLocation & (LEVEL_MASK << levelShift)) >> levelShift;
         }
 
-        public static long applyRotationOnQuadrant(long quadrant, int rotation)
-        {
-            rotation = rotation < 0
-                ? 4 + rotation
-                : rotation;
-
-            var rotatedQuadrant = quadrant;
-            for (int i = 0; i < rotation; i++)
-            {
-                if (rotatedQuadrant == TOP_LEFT) rotatedQuadrant = BOTTOM_LEFT;
-                if (rotatedQuadrant == TOP_RIGHT) rotatedQuadrant = TOP_LEFT;
-                if (rotatedQuadrant == BOTTOM_LEFT) rotatedQuadrant = BOTTOM_RIGHT;
-                if (rotatedQuadrant == BOTTOM_RIGHT) rotatedQuadrant = TOP_RIGHT;
-            }
-
-            return rotatedQuadrant;
-        }
-        
         public static int commonPathLength(long treeLocation1, long treeLocation2, int nodeLevel)
         {
             for (int level = 0; level <= nodeLevel; level++)

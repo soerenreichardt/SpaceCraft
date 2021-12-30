@@ -47,7 +47,7 @@ namespace DataStructures
             for (int level = ancestorNode.level; level < currentNodeLevel; level++)
             {
                 if (!node.hasChildren) return (null, 0);
-                var quadrantForNextLevel = TreeLocationHelper.applyRotationOnQuadrant(TreeLocationHelper.quadrantForLevel(targetTreeLocation, level + 1), rotation);
+                var quadrantForNextLevel = Directions.rotateQuadrant(TreeLocationHelper.quadrantForLevel(targetTreeLocation, level + 1), rotation);
                 node = node.children[quadrantForNextLevel];
             }
 
