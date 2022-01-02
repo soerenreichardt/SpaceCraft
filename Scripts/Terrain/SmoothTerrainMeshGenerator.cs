@@ -42,7 +42,7 @@ namespace Terrain
         
         private static int[] smoothTerrainIndices()
         {
-            return IndicesLookup.indices;
+            return IndicesLookup.Indices;
         }
     }
 }
