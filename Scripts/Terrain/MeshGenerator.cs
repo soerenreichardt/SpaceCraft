@@ -50,8 +50,7 @@ namespace Terrain
             if (Queue.TryDequeue(out var data)) {
                 Interlocked.Decrement(ref dataSize);
 
-                var axisA = new Vector3(data.face.y, data.face.z, data.face.x);
-                var axisB = Vector3.Cross(data.face, axisA);
+                var (axisA, axisB) = AxisLookup.getAxisForFace(data.face);
 
                 MeshGeneratorStrategy meshGeneratorStrategy =
                     data.blockLevel 
