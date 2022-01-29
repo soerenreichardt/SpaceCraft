@@ -7,7 +7,6 @@ where T : AdaptiveSpatialQuadTree<T>
 {
     protected Vector3 center { get; }
     protected float chunkLength { get; }
-
     protected float viewDistance { get; }
 
     public readonly Vector3 face;
@@ -57,6 +56,12 @@ where T : AdaptiveSpatialQuadTree<T>
         neighbors[direction] = neighbor;
         onNeighborSet();
     }
+
+    private void removeNeighbor(int direction)
+    {
+        neighbors[direction] = null;
+        onNeighborRemoved();
+    }
     
     protected override void onSplit()
     {
@@ -73,6 +78,8 @@ where T : AdaptiveSpatialQuadTree<T>
     protected abstract void adaptiveTreeOnMerge();
 
     protected abstract void onNeighborSet();
+
+    protected abstract void onNeighborRemoved();
     
     protected void computeNeighbors()
     {
@@ -91,5 +98,20 @@ where T : AdaptiveSpatialQuadTree<T>
         var (bottomNeighbor, rotationBN) = TreeLocationNodeLookup.findBottomNeighbor((T) this);
         setNeighbor(Directions.BOTTOM, bottomNeighbor);
         bottomNeighbor?.setNeighbor(Directions.rotateDirection(Directions.TOP, rotationBN), (T) this);
+    }
+
+    protected void removeNeighbors()
+    {
+        var (leftNeighbor, rotationLN) = TreeLocationNodeLookup.findLeftNeighbor((T) this);
+        leftNeighbor?.removeNeighbor(Directions.rotateDirection(Directions.RIGHT, rotationLN));
+        
+        var (rightNeighbor, rotationRN) = TreeLocationNodeLookup.findRightNeighbor((T) this);
+        rightNeighbor?.removeNeighbor(Directions.rotateDirection(Directions.LEFT, rotationRN));
+        
+        var (topNeighbor, rotationTN) = TreeLocationNodeLookup.findTopNeighbor((T) this);
+        topNeighbor?.removeNeighbor(Directions.rotateDirection(Directions.BOTTOM, rotationTN));
+        
+        var (bottomNeighbor, rotationBN) = TreeLocationNodeLookup.findBottomNeighbor((T) this);
+        bottomNeighbor?.removeNeighbor(Directions.rotateDirection(Directions.TOP, rotationBN));
     }
 }

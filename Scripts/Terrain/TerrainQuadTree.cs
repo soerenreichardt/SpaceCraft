@@ -31,7 +31,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         long treeLocation
     ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, treeLocation)
     {
-        MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, level == maxLevel - 1);
+        MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, isBlockLevel());
         MeshGenerator.pushData(data);
     }
 
@@ -152,6 +152,15 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         }
     }
 
+    protected override void adaptiveTreeOnMerge()
+    {
+        terrainComponent.meshRenderer.enabled = true;
+        foreach (TerrainQuadTree child in children) {
+            child.terrainComponent.destroy();
+            child.removeNeighbors();
+        }
+    }
+
     protected override void onNeighborSet()
     {
         var leftNeighbor = neighbors[LEFT];
@@ -162,13 +171,25 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         terrainComponent.topNeighbor = topNeighbor?.terrainComponent;
         var bottomNeighbor = neighbors[BOTTOM];
         terrainComponent.bottomNeighbor = bottomNeighbor?.terrainComponent;
+
+        updateMeshIndices();
     }
 
-    protected override void adaptiveTreeOnMerge()
+    protected override void onNeighborRemoved()
+    {
+        updateMeshIndices();
+    }
+
+    private void updateMeshIndices()
     {
         terrainComponent.meshRenderer.enabled = true;
         foreach (TerrainQuadTree child in children) {
             child.terrainComponent.destroy();
         }
+    }
+
+    private bool isBlockLevel()
+    {
+        return level == maxLevel - 1;
     }
 }
