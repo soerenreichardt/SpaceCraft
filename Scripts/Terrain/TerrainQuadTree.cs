@@ -163,15 +163,6 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
 
     protected override void onNeighborSet()
     {
-        var leftNeighbor = neighbors[LEFT];
-        terrainComponent.leftNeighbor = leftNeighbor?.terrainComponent;
-        var rightNeighbor = neighbors[RIGHT];
-        terrainComponent.rightNeighbor = rightNeighbor?.terrainComponent;
-        var topNeighbor = neighbors[TOP];
-        terrainComponent.topNeighbor = topNeighbor?.terrainComponent;
-        var bottomNeighbor = neighbors[BOTTOM];
-        terrainComponent.bottomNeighbor = bottomNeighbor?.terrainComponent;
-
         updateMeshIndices();
     }
 
