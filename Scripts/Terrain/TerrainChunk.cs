@@ -3,6 +3,8 @@
 public class TerrainChunk : MonoBehaviour
 {
 
+    public delegate int[] IndicesFunction(int[] currentIndices);
+    
     public Mesh mesh;
     public MeshRenderer meshRenderer;
     public MeshRenderer parentMeshRenderer;
@@ -10,14 +12,10 @@ public class TerrainChunk : MonoBehaviour
     
     public Vector3[] vertices { get; set; }
     public int[] indices { get; set; }
+    public IndicesFunction indicesFunction { get; set; }
 
     public bool updatedMesh { get; set; }
 
-    public TerrainChunk leftNeighbor;
-    public TerrainChunk topNeighbor;
-    public TerrainChunk rightNeighbor;
-    public TerrainChunk bottomNeighbor;
-    
     void Start()
     {
         mesh = new Mesh();
@@ -38,7 +36,7 @@ public class TerrainChunk : MonoBehaviour
             updatedMesh = false;
             mesh.Clear();
             mesh.vertices = vertices;
-            mesh.triangles = indices;
+            mesh.triangles = indicesFunction(indices);
             if (parentMeshRenderer != null) {
                 parentMeshRenderer.enabled = false;
             } 

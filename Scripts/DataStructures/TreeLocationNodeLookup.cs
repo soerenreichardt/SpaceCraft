@@ -46,7 +46,9 @@ namespace DataStructures
             T node = ancestorNode;
             for (int level = ancestorNode.level; level < currentNodeLevel; level++)
             {
-                if (!node.hasChildren) return (null, 0);
+                // This code can get executed while unity is in the process of deleting
+                // the `node` object. This is why I need to check for null here.
+                if (node == null || !node.hasChildren) return (null, 0);
                 var quadrantForNextLevel = Directions.rotateQuadrant(TreeLocationHelper.quadrantForLevel(targetTreeLocation, level + 1), rotation);
                 node = node.children[quadrantForNextLevel];
             }

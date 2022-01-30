@@ -2,7 +2,6 @@ using System;
 using DataStructures;
 using Terrain;
 using UnityEngine;
-
 using static DataStructures.Directions;
 
 public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
@@ -31,7 +30,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         long treeLocation
     ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, treeLocation)
     {
-        MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, level == maxLevel - 1);
+        MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, isBlockLevel());
         MeshGenerator.pushData(data);
     }
 
@@ -56,6 +55,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         {
             this.terrainComponent = this.terrain.AddComponent<TerrainChunk>();
             this.terrainComponent.material = material;
+            this.terrainComponent.indicesFunction = getIndicesFunction();
             if (parent != null) {
                 this.terrainComponent.parentMeshRenderer = parent.terrainComponent.meshRenderer;
             }
@@ -152,23 +152,45 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         }
     }
 
-    protected override void onNeighborSet()
-    {
-        var leftNeighbor = neighbors[LEFT];
-        terrainComponent.leftNeighbor = leftNeighbor?.terrainComponent;
-        var rightNeighbor = neighbors[RIGHT];
-        terrainComponent.rightNeighbor = rightNeighbor?.terrainComponent;
-        var topNeighbor = neighbors[TOP];
-        terrainComponent.topNeighbor = topNeighbor?.terrainComponent;
-        var bottomNeighbor = neighbors[BOTTOM];
-        terrainComponent.bottomNeighbor = bottomNeighbor?.terrainComponent;
-    }
-
     protected override void adaptiveTreeOnMerge()
     {
         terrainComponent.meshRenderer.enabled = true;
         foreach (TerrainQuadTree child in children) {
             child.terrainComponent.destroy();
+            child.removeNeighbors();
         }
+    }
+
+    protected override void onNeighborSet()
+    {
+        updateMeshIndices();
+    }
+
+    protected override void onNeighborRemoved()
+    {
+        updateMeshIndices();
+    }
+
+    private void updateMeshIndices()
+    {
+        if (!isBlockLevel())
+        {
+            terrainComponent.updatedMesh = true;
+        }
+    }
+
+    private bool isBlockLevel()
+    {
+        return level == maxLevel;
+    }
+    
+    private TerrainChunk.IndicesFunction getIndicesFunction()
+    {
+        if (isBlockLevel())
+        {
+            return indices => indices;
+        }
+
+        return _ => IndicesLookup.get(neighbors);
     }
 }

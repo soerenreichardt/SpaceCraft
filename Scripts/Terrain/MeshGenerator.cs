@@ -31,6 +31,11 @@ namespace Terrain
 
         private static readonly ConcurrentQueue<Data> Queue = new ConcurrentQueue<Data>();
 
+        void Start()
+        {
+            ThreadPool.SetMaxThreads(4, 4);
+        }
+
         public static void pushData(Data data) {
             Queue.Enqueue(data);
             Interlocked.Increment(ref dataSize);
@@ -38,7 +43,6 @@ namespace Terrain
 
         private static void consume() {
             int batchCounter = 0;
-            ThreadPool.SetMaxThreads(4, 4);
             while(batchCounter < BATCH_SIZE || !Queue.IsEmpty) {
                 ThreadPool.QueueUserWorkItem(computeMesh);
                 batchCounter++;
@@ -60,7 +64,7 @@ namespace Terrain
 
                 var mesh = meshGeneratorStrategy.meshComputer()(data, axisA, axisB);
                 data.terrainChunk.vertices = mesh.vertices;
-                data.terrainChunk.indices = mesh.indices;
+                if (data.blockLevel) data.terrainChunk.indices = mesh.indices;
                 data.terrainChunk.updatedMesh = true;
             }
         }
