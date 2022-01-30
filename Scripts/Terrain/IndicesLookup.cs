@@ -1,9 +1,21 @@
 using System.Collections.Generic;
+using DataStructures;
 
 namespace Terrain
 {
     public class IndicesLookup
     {
+        public static int[] get<T>(T[] neighbors) where T : AdaptiveSpatialQuadTree<T>
+        {
+            var lookupKey = 0;
+            lookupKey |= neighbors[Directions.LEFT] == null ? 1 : 0;
+            lookupKey |= neighbors[Directions.RIGHT] == null ? 2 : 0;
+            lookupKey |= neighbors[Directions.TOP] == null ? 4 : 0;
+            lookupKey |= neighbors[Directions.BOTTOM] == null ? 8 : 0;
+
+            return stitchIndicesLookup[lookupKey];
+        }
+
         public static readonly int[] Indices =
         {
             0, 17, 1, 1, 17, 18, 1, 18, 2, 2, 18, 19, 2, 19, 3, 3, 19, 20, 3, 20, 4, 4, 20, 21, 4, 21, 5, 5, 21, 22,
@@ -1122,6 +1134,26 @@ namespace Terrain
             260, 260, 276, 278, 261, 260, 278, 261, 278, 262, 262, 278, 280, 263, 262, 280, 263, 280, 264, 264, 280,
             282, 265, 264, 282, 265, 282, 266, 266, 282, 284, 267, 266, 284, 267, 284, 268, 268, 284, 286, 269, 268,
             286, 269, 286, 270, 270, 286, 288
+        };
+
+        private static readonly Dictionary<int, int[]> stitchIndicesLookup = new Dictionary<int, int[]>
+        {
+            {0, Indices},
+            {1, Top},
+            {2, Bottom},
+            {4, Left},
+            {8, Right},
+            {1 | 2, TopBottom},
+            {4 | 8, LeftRight},
+            {1 | 4, TopLeft},
+            {1 | 8, TopRight},
+            {2 | 4, BottomLeft},
+            {2 | 8, BottomRight},
+            {1 | 2 | 4, LeftTopBottom},
+            {1 | 2 | 8, RightTopBottom},
+            {1 | 4 | 8, TopLeftRight},
+            {2 | 4 | 8, BottomLeftRight},
+            {1 | 2 | 4 | 8, All}
         };
 
         public static int[] generateIndices()

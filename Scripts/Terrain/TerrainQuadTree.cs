@@ -2,7 +2,6 @@ using System;
 using DataStructures;
 using Terrain;
 using UnityEngine;
-
 using static DataStructures.Directions;
 
 public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
@@ -56,6 +55,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         {
             this.terrainComponent = this.terrain.AddComponent<TerrainChunk>();
             this.terrainComponent.material = material;
+            this.terrainComponent.indicesFunction = getIndicesFunction();
             if (parent != null) {
                 this.terrainComponent.parentMeshRenderer = parent.terrainComponent.meshRenderer;
             }
@@ -182,14 +182,24 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
 
     private void updateMeshIndices()
     {
-        terrainComponent.meshRenderer.enabled = true;
-        foreach (TerrainQuadTree child in children) {
-            child.terrainComponent.destroy();
+        if (!isBlockLevel())
+        {
+            terrainComponent.updatedMesh = true;
         }
     }
 
     private bool isBlockLevel()
     {
-        return level == maxLevel - 1;
+        return level == maxLevel;
+    }
+    
+    private TerrainChunk.IndicesFunction getIndicesFunction()
+    {
+        if (isBlockLevel())
+        {
+            return indices => indices;
+        }
+
+        return _ => IndicesLookup.get(neighbors);
     }
 }
