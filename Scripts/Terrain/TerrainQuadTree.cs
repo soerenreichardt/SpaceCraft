@@ -64,6 +64,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         if (parent != null)
         {
             this.terrain.transform.parent = parent.terrain.transform;
+            this.terrain.transform.localPosition = Vector3.zero;
         }
     }
 
@@ -92,7 +93,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
             return float.MaxValue;
         }
         // TODO: consider Vector3.SqrtMagnitude to avoid sqrt computation
-        return Mathf.Abs(Vector3.Distance(camera.transform.position, terrainComponent.vertices[8 * (MeshGenerator.CHUNK_SIZE+1) + 8]));
+        return Mathf.Abs(Vector3.Distance(camera.transform.position, terrainComponent.vertices[8 * (MeshGenerator.CHUNK_SIZE+1) + 8] + terrainComponent.transform.position));
     }
     
     private Vector2 compute2DCenter(float anchorX, float anchorY, int quadrant, float sign)
