@@ -37,6 +37,7 @@ public class TerrainChunk : MonoBehaviour
             mesh.Clear();
             mesh.vertices = vertices;
             mesh.triangles = indicesFunction(indices);
+            mesh.RecalculateNormals();
             if (parentMeshRenderer != null) {
                 parentMeshRenderer.enabled = false;
             } 

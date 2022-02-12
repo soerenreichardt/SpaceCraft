@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Threading;
+using Noise;
 using UnityEngine;
 
 namespace Terrain
@@ -12,7 +13,11 @@ namespace Terrain
 
         private static readonly SmoothTerrainMeshGenerator SmoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator();
         private static readonly BlockTerrainMeshGenerator BlockTerrainMeshGenerator = new BlockTerrainMeshGenerator();
-    
+
+        private static INoiseFilter noiseFilter;
+        
+        public NoiseSettings noiseSettings;
+        
         public struct Data {
             public readonly TerrainChunk terrainChunk;
             public Vector3 center;
@@ -34,6 +39,7 @@ namespace Terrain
         void Start()
         {
             ThreadPool.SetMaxThreads(4, 4);
+            noiseFilter = NoiseFilterFactory.CreateNoiseFilter(noiseSettings);
         }
 
         public static void pushData(Data data) {
@@ -71,7 +77,7 @@ namespace Terrain
 
         public static float elevation(Vector3 pointOnSphere)
         {
-            return Mathf.PerlinNoise(pointOnSphere.x, pointOnSphere.y);
+            return noiseFilter.Evaluate(pointOnSphere);
         }
 
         private static Vector3 computePointOnSphere(Vector3 vertex) {
