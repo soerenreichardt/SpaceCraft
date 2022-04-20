@@ -13,5 +13,6 @@ namespace Terrain
     {
         public Vector3[] vertices;
         public int[] indices;
+        public Vector3[] normals;
     }
 }

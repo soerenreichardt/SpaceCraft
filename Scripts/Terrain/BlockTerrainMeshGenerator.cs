@@ -46,11 +46,11 @@ namespace Terrain
                     var scaledBottomLeftPointOnSphere = bottomLeftPointOnSphere * PLANET_RADIUS;
                     var scaledBottomRightPointOnSphere = bottomRightPointOnSphere * PLANET_RADIUS;
 
-                    var elevation = BlockTerrainMeshGenerator.elevation(x, y, axisA, axisB, axisAOffset, axisBOffset, data.center);
-                    var elevatedTopLeft = scaledTopLeftPointOnSphere + topLeftPointOnSphere * elevation;
-                    var elevatedTopRight = scaledTopRightPointOnSphere + topRightPointOnSphere * elevation;
-                    var elevatedBottomLeft = scaledBottomLeftPointOnSphere + bottomLeftPointOnSphere * elevation;
-                    var elevatedBottomRight = scaledBottomRightPointOnSphere + bottomRightPointOnSphere * elevation;
+                    var elevation = 1.0f + BlockTerrainMeshGenerator.elevation(x, y, axisA, axisB, axisAOffset, axisBOffset, data.center) * Planet.SCALE;
+                    var elevatedTopLeft = scaledTopLeftPointOnSphere * elevation;
+                    var elevatedTopRight = scaledTopRightPointOnSphere * elevation;
+                    var elevatedBottomLeft = scaledBottomLeftPointOnSphere * elevation;
+                    var elevatedBottomRight = scaledBottomRightPointOnSphere * elevation;
 
                     vertices.Add(elevatedTopLeft);
                     vertices.Add(elevatedTopRight);
