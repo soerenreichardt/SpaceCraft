@@ -11,6 +11,7 @@ public class TerrainChunk : MonoBehaviour
     public Material material;
     
     public Vector3[] vertices { get; set; }
+    public Vector3[] normals { get; set; }
     public int[] indices { get; set; }
     public IndicesFunction indicesFunction { get; set; }
 
@@ -37,7 +38,7 @@ public class TerrainChunk : MonoBehaviour
             mesh.Clear();
             mesh.vertices = vertices;
             mesh.triangles = indicesFunction(indices);
-            mesh.RecalculateNormals();
+            mesh.normals = normals;
             if (parentMeshRenderer != null) {
                 parentMeshRenderer.enabled = false;
             } 

@@ -70,6 +70,7 @@ namespace Terrain
 
                 var mesh = meshGeneratorStrategy.meshComputer()(data, axisA, axisB);
                 data.terrainChunk.vertices = mesh.vertices;
+                data.terrainChunk.normals = mesh.normals;
                 if (data.blockLevel) data.terrainChunk.indices = mesh.indices;
                 data.terrainChunk.updatedMesh = true;
             }
