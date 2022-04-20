@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Noise;
 using UnityEngine;
 
 namespace Terrain
@@ -9,12 +10,19 @@ namespace Terrain
         private static readonly float PLANET_RADIUS = (float) (Math.Pow(2, Planet.PLANET_SIZE) * Planet.SCALE);
         private static readonly float BLOCK_HEIGHT = Planet.SCALE * (2.0f / MeshGenerator.CHUNK_SIZE);
 
+        private readonly INoiseFilter noiseFilter;
+
+        public BlockTerrainMeshGenerator(INoiseFilter noiseFilter)
+        {
+            this.noiseFilter = noiseFilter;
+        }
+
         public MeshComputer meshComputer()
         {
             return blockTerrainMesh;
         }
 
-        private static Mesh blockTerrainMesh(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
+        private Mesh blockTerrainMesh(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
         {
             List<Vector3> vertices = new List<Vector3>();
             List<int> indices = new List<int>();
@@ -46,7 +54,7 @@ namespace Terrain
                     var scaledBottomLeftPointOnSphere = bottomLeftPointOnSphere * PLANET_RADIUS;
                     var scaledBottomRightPointOnSphere = bottomRightPointOnSphere * PLANET_RADIUS;
 
-                    var elevation = 1.0f + BlockTerrainMeshGenerator.elevation(x, y, axisA, axisB, axisAOffset, axisBOffset, data.center) * Planet.SCALE;
+                    var elevation = 1.0f + this.elevation(x, y, axisA, axisB, axisAOffset, axisBOffset, data.center) * Planet.SCALE;
                     var elevatedTopLeft = scaledTopLeftPointOnSphere * elevation;
                     var elevatedTopRight = scaledTopRightPointOnSphere * elevation;
                     var elevatedBottomLeft = scaledBottomLeftPointOnSphere * elevation;
@@ -120,6 +128,15 @@ namespace Terrain
             };
         }
 
+        private float elevation(int x, int y, Vector3 axisA, Vector3 axisB, Vector3 axisAOffset, Vector3 axisBOffset, Vector3 center)
+        {
+            var middlePointOnCube = axisA * ((y + 0.5f) * BLOCK_HEIGHT) + axisB * ((x + 0.5f) * BLOCK_HEIGHT) + center - axisAOffset - axisBOffset;
+            var middlePointOnSphere = Vector3.Normalize(middlePointOnCube) * PLANET_RADIUS;
+            var elevatedMiddlePointOnSphere = noiseFilter.Evaluate(middlePointOnSphere);
+            int numBlocks = (int) (elevatedMiddlePointOnSphere / BLOCK_HEIGHT) + 1;
+            return BLOCK_HEIGHT * numBlocks;
+        }
+        
         private static int computeVerticalCubeFaces(
             int vertexIdBlockStart, 
             int neighborVertexIdBlockStart,
@@ -174,15 +191,6 @@ namespace Terrain
             }
 
             return vertexOffset;
-        }
-
-        private static float elevation(int x, int y, Vector3 axisA, Vector3 axisB, Vector3 axisAOffset, Vector3 axisBOffset, Vector3 center)
-        {
-            var middlePointOnCube = axisA * ((y + 0.5f) * BLOCK_HEIGHT) + axisB * ((x + 0.5f) * BLOCK_HEIGHT) + center - axisAOffset - axisBOffset;
-            var middlePointOnSphere = Vector3.Normalize(middlePointOnCube) * PLANET_RADIUS;
-            var elevatedMiddlePointOnSphere = MeshGenerator.elevation(middlePointOnSphere);
-            int numBlocks = (int) (elevatedMiddlePointOnSphere / BLOCK_HEIGHT) + 1;
-            return BLOCK_HEIGHT * numBlocks;
         }
     }
 }

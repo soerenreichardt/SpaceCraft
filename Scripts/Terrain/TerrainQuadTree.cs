@@ -8,7 +8,8 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
     public GameObject terrain;
     
     private readonly Material material;
-
+    private readonly MeshGenerator meshGenerator;
+    
     private Vector3 planetPosition;
     private TerrainChunk terrainComponent;
 
@@ -24,11 +25,11 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         Vector3 face,
         float viewDistance,
         int maxLevel,
-        Material material
-    ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, 0)
+        Material material,
+        MeshGenerator meshGenerator
+    ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, 0, meshGenerator)
     {
-        MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, isBlockLevel());
-        MeshGenerator.pushData(data);
+        computeTerrain();
     }
 
     private TerrainQuadTree(
@@ -41,12 +42,14 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         int level,
         TerrainQuadTree parent,
         Material material,
-        long treeLocation
+        long treeLocation,
+        MeshGenerator meshGenerator
     ) : base(center, chunkLength, viewDistance, maxLevel, level, parent, face, treeLocation)
     {
         this.material = material;
         this.planetPosition = planetPosition;
         this.terrain = new GameObject(level.ToString());
+        this.meshGenerator = meshGenerator;
 
         if (!hasChildren)
         {
@@ -95,7 +98,8 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
             nextLevel,
             this,
             material,
-            TreeLocationHelper.childTreeLocation(treeLocation, quadrant, nextLevel)
+            TreeLocationHelper.childTreeLocation(treeLocation, quadrant, nextLevel),
+            meshGenerator
         );
     }
 
@@ -138,8 +142,8 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
 
     private void computeTerrain()
     {
-        MeshGenerator.Data childData = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, level == maxLevel);
-        MeshGenerator.pushData(childData);
+        MeshGenerator.Data childData = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, isBlockLevel());
+        meshGenerator.pushData(childData);
     }
     
     private void updateMeshIndices()

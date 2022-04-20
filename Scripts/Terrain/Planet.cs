@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Noise;
+using Terrain;
+using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
@@ -6,18 +8,21 @@ public class Planet : MonoBehaviour
     public static int PLANET_SIZE = 8;
     public static float SCALE = 0.1f;
 
-    public Material material;
-
-    public bool recomputeTerrain;
-    
-    TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
-    
     private static string[] directionNames = { "up", "down", "left", "right", "front", "back" };
     private static Vector3[] directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
+    
+    public Material material;
+    public NoiseSettings noiseSettings;
+    
+    public bool recomputeTerrain;
+
+    private MeshGenerator meshGenerator;
+    private TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
 
     // Start is called before the first frame update
     void Start()
     {
+        meshGenerator = new MeshGenerator(NoiseFilterFactory.CreateNoiseFilter(noiseSettings));
         for (int i=0; i<6; i++) 
         {
             var planetSide = new TerrainQuadTree(
@@ -26,7 +31,8 @@ public class Planet : MonoBehaviour
                 directions[i],
                 3.0f,
                 PLANET_SIZE, 
-                material
+                material,
+                meshGenerator
             );
             planetSide.terrain.transform.parent = transform;
             planetSide.terrain.name = directionNames[i];
@@ -57,5 +63,9 @@ public class Planet : MonoBehaviour
         {
             planetSides[i].update();
         }
+    }
+    
+    private void LateUpdate() {
+        meshGenerator.consume();
     }
 }

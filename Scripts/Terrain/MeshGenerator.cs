@@ -5,18 +5,16 @@ using UnityEngine;
 
 namespace Terrain
 {
-    public class MeshGenerator : MonoBehaviour {
+    public class MeshGenerator {
         public const int CHUNK_SIZE = 16;
         private const int BATCH_SIZE = 64;
 
-        private static int dataSize;
+        private readonly SmoothTerrainMeshGenerator smoothTerrainMeshGenerator;
+        private readonly BlockTerrainMeshGenerator blockTerrainMeshGenerator;
 
-        private static readonly SmoothTerrainMeshGenerator SmoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator();
-        private static readonly BlockTerrainMeshGenerator BlockTerrainMeshGenerator = new BlockTerrainMeshGenerator();
-
-        private static INoiseFilter noiseFilter;
+        private readonly ConcurrentQueue<Data> queue = new ConcurrentQueue<Data>();
         
-        public NoiseSettings noiseSettings;
+        private int dataSize;
         
         public struct Data {
             public readonly TerrainChunk terrainChunk;
@@ -34,38 +32,37 @@ namespace Terrain
             }
         }
 
-        private static readonly ConcurrentQueue<Data> Queue = new ConcurrentQueue<Data>();
-
-        void Start()
+        public MeshGenerator(INoiseFilter noiseFilter)
         {
+            this.smoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator(noiseFilter);
+            this.blockTerrainMeshGenerator = new BlockTerrainMeshGenerator(noiseFilter);
             ThreadPool.SetMaxThreads(4, 4);
-            noiseFilter = NoiseFilterFactory.CreateNoiseFilter(noiseSettings);
         }
 
-        public static void pushData(Data data) {
-            Queue.Enqueue(data);
+        public void pushData(Data data) {
+            queue.Enqueue(data);
             Interlocked.Increment(ref dataSize);
         }
 
-        private static void consume() {
+        public void consume() {
             int batchCounter = 0;
-            while(batchCounter < BATCH_SIZE || !Queue.IsEmpty) {
+            while(batchCounter < BATCH_SIZE || !queue.IsEmpty) {
                 ThreadPool.QueueUserWorkItem(computeMesh);
                 batchCounter++;
             }
         }
 
-        static void computeMesh(object stateInfo)
+        private void computeMesh(object stateInfo)
         {
-            if (Queue.TryDequeue(out var data)) {
+            if (queue.TryDequeue(out var data)) {
                 Interlocked.Decrement(ref dataSize);
 
                 var (axisA, axisB) = AxisLookup.getAxisForFace(data.face);
 
                 MeshGeneratorStrategy meshGeneratorStrategy =
                     data.blockLevel 
-                        ? (MeshGeneratorStrategy) BlockTerrainMeshGenerator 
-                        : SmoothTerrainMeshGenerator;
+                        ? (MeshGeneratorStrategy) blockTerrainMeshGenerator 
+                        : smoothTerrainMeshGenerator;
 
 
                 var mesh = meshGeneratorStrategy.meshComputer()(data, axisA, axisB);
@@ -76,12 +73,7 @@ namespace Terrain
             }
         }
 
-        public static float elevation(Vector3 pointOnSphere)
-        {
-            return noiseFilter.Evaluate(pointOnSphere);
-        }
-
-        private static Vector3 computePointOnSphere(Vector3 vertex) {
+        private Vector3 computePointOnSphere(Vector3 vertex) {
             // spherify
             float x = vertex.x * vertex.x;
             float y = vertex.y * vertex.y;
@@ -92,10 +84,6 @@ namespace Terrain
             sphereVertex.y = vertex.y * Mathf.Sqrt( 1.0f - ( z * 0.5f ) - ( x * 0.5f ) + ( ( z * x ) / 3.0f ) );
             sphereVertex.z = vertex.z * Mathf.Sqrt( 1.0f - ( x * 0.5f ) - ( y * 0.5f ) + ( ( x * y ) / 3.0f ) );
             return sphereVertex;
-        }
-
-        private void LateUpdate() {
-            consume();
         }
     }
 }
