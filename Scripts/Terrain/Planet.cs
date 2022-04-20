@@ -8,6 +8,8 @@ public class Planet : MonoBehaviour
 
     public Material material;
 
+    public bool recomputeTerrain;
+    
     TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
     
     private static string[] directionNames = { "up", "down", "left", "right", "front", "back" };
@@ -24,8 +26,7 @@ public class Planet : MonoBehaviour
                 directions[i],
                 3.0f,
                 PLANET_SIZE, 
-                material,
-                0
+                material
             );
             planetSide.terrain.transform.parent = transform;
             planetSide.terrain.name = directionNames[i];
@@ -43,6 +44,15 @@ public class Planet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (recomputeTerrain)
+        {
+            foreach (var planetSide in planetSides)
+            {
+                planetSide.recomputeTerrain();
+            }
+
+            recomputeTerrain = false;
+        }
         for (int i=0; i<6; i++) 
         {
             planetSides[i].update();

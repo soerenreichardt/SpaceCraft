@@ -24,9 +24,8 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         Vector3 face,
         float viewDistance,
         int maxLevel,
-        Material material,
-        long treeLocation
-    ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, treeLocation)
+        Material material
+    ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, 0)
     {
         MeshGenerator.Data data = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, isBlockLevel());
         MeshGenerator.pushData(data);
@@ -66,6 +65,21 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         }
     }
 
+    public void recomputeTerrain()
+    {
+        if (hasChildren)
+        {
+            foreach (var child in children)
+            {
+                child.recomputeTerrain();
+            }            
+        }
+        else
+        {
+            computeTerrain();
+        }
+    }
+    
     protected override TerrainQuadTree initialize(int quadrant)
     {
         var nextLevel = level + 1;
