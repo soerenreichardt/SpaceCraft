@@ -48,7 +48,7 @@ namespace Noise
             if (EditorApplication.isPlaying)
             {
                 var currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                if (currentTime - lastUpdate > 1000)
+                if (currentTime - lastUpdate > 300)
                 {
                     if (settingsUpdated != null) settingsUpdated();
                     lastUpdate = currentTime;

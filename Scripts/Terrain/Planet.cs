@@ -14,8 +14,6 @@ public class Planet : MonoBehaviour
     public Material material;
     public NoiseSettings noiseSettings;
     
-    public bool recomputeTerrain;
-
     private MeshGenerator meshGenerator;
     private TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
 
@@ -23,6 +21,7 @@ public class Planet : MonoBehaviour
     void Start()
     {
         meshGenerator = new MeshGenerator(NoiseFilterFactory.CreateNoiseFilter(noiseSettings));
+        noiseSettings.settingsUpdated += recomputeTerrain;
         for (int i=0; i<6; i++) 
         {
             var planetSide = new TerrainQuadTree(
@@ -50,21 +49,20 @@ public class Planet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (recomputeTerrain)
-        {
-            foreach (var planetSide in planetSides)
-            {
-                planetSide.recomputeTerrain();
-            }
-
-            recomputeTerrain = false;
-        }
         for (int i=0; i<6; i++) 
         {
             planetSides[i].update();
         }
     }
-    
+
+    private void recomputeTerrain()
+    {
+        foreach (var planetSide in planetSides)
+        {
+            planetSide.recomputeTerrain();
+        }
+    }
+
     private void LateUpdate() {
         meshGenerator.consume();
     }
