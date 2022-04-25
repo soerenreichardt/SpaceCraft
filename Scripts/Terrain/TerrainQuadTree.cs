@@ -65,6 +65,7 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
         {
             this.terrain.transform.parent = parent.terrain.transform;
             this.terrain.transform.localPosition = Vector3.zero;
+            this.terrain.transform.localRotation = Quaternion.identity;
         }
     }
 
@@ -110,7 +111,8 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
             return float.MaxValue;
         }
         // TODO: consider Vector3.SqrtMagnitude to avoid sqrt computation
-        return Mathf.Abs(Vector3.Distance(camera.transform.position, terrainComponent.vertices[8 * (MeshGenerator.CHUNK_SIZE+1) + 8] + terrainComponent.transform.position));
+        var terrainCenter = terrainComponent.transform.TransformPoint(terrainComponent.vertices[8 * (MeshGenerator.CHUNK_SIZE + 1) + 8]);
+        return Mathf.Abs(Vector3.Distance(camera.transform.position, terrainCenter));
     }
 
     protected override void adaptiveTreeOnSplit()
