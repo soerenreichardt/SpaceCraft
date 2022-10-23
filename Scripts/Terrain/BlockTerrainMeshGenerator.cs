@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Noise;
 using UnityEngine;
 
 namespace Terrain
@@ -10,11 +9,11 @@ namespace Terrain
         private static readonly float PLANET_RADIUS = (float) (Math.Pow(2, Planet.PLANET_SIZE) * Planet.SCALE);
         private static readonly float BLOCK_HEIGHT = Planet.SCALE * (2.0f / MeshGenerator.CHUNK_SIZE);
 
-        private readonly INoiseFilter noiseFilter;
+        private readonly TerrainNoiseEvaluator terrainNoiseEvaluator;
 
-        public BlockTerrainMeshGenerator(INoiseFilter noiseFilter)
+        public BlockTerrainMeshGenerator(TerrainNoiseEvaluator terrainNoiseEvaluator)
         {
-            this.noiseFilter = noiseFilter;
+            this.terrainNoiseEvaluator = terrainNoiseEvaluator;
         }
 
         public MeshComputer meshComputer()
@@ -132,7 +131,7 @@ namespace Terrain
         {
             var middlePointOnCube = axisA * ((y + 0.5f) * BLOCK_HEIGHT) + axisB * ((x + 0.5f) * BLOCK_HEIGHT) + center - axisAOffset - axisBOffset;
             var middlePointOnSphere = Vector3.Normalize(middlePointOnCube) * PLANET_RADIUS;
-            var elevatedMiddlePointOnSphere = noiseFilter.Evaluate(middlePointOnSphere);
+            var elevatedMiddlePointOnSphere = terrainNoiseEvaluator.CalculateUnscaledElevation(middlePointOnSphere);
             int numBlocks = (int) (elevatedMiddlePointOnSphere / BLOCK_HEIGHT) + 1;
             return BLOCK_HEIGHT * numBlocks;
         }

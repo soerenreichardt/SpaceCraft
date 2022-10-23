@@ -1,5 +1,4 @@
 using System;
-using Noise;
 using UnityEngine;
 
 namespace Terrain
@@ -7,11 +6,11 @@ namespace Terrain
     public class SmoothTerrainMeshGenerator : MeshGeneratorStrategy
     {
 
-        private readonly INoiseFilter noiseFilter;
+        private readonly TerrainNoiseEvaluator terrainNoiseEvaluator;
 
-        public SmoothTerrainMeshGenerator(INoiseFilter noiseFilter)
+        public SmoothTerrainMeshGenerator(TerrainNoiseEvaluator terrainNoiseEvaluator)
         {
-            this.noiseFilter = noiseFilter;
+            this.terrainNoiseEvaluator = terrainNoiseEvaluator;
         }
 
         public MeshComputer meshComputer()
@@ -47,7 +46,7 @@ namespace Terrain
                     var pointOnCube = computePointOnCube(x, y);
                     var pointOnUnitSphere = Vector3.Normalize(pointOnCube);
                     var pointOnSphere = pointOnUnitSphere * planetRadius;
-                    var elevatedPointOnSphere = pointOnSphere * (1.0f + noiseFilter.Evaluate(pointOnSphere) * Planet.SCALE);
+                    var elevatedPointOnSphere = pointOnSphere * (1.0f + terrainNoiseEvaluator.CalculateUnscaledElevation(pointOnSphere) * Planet.SCALE);
                     vertices[y * (MeshGenerator.CHUNK_SIZE + 1) + x] = elevatedPointOnSphere;
 
                     Vector3 leftNeighbor;
@@ -60,18 +59,18 @@ namespace Terrain
                     else
                     {
                         var leftNeighborOnSphere = Vector3.Normalize(computePointOnCube(x - 1, y)) * planetRadius;
-                        leftNeighbor = leftNeighborOnSphere * (1.0f + noiseFilter.Evaluate(leftNeighborOnSphere) * Planet.SCALE);
+                        leftNeighbor = leftNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateUnscaledElevation(leftNeighborOnSphere) * Planet.SCALE);
                         
                         var topNeighborOnSphere = Vector3.Normalize(computePointOnCube(x, y - 1)) * planetRadius;
-                        topNeighbor = topNeighborOnSphere * (1.0f + noiseFilter.Evaluate(topNeighborOnSphere) * Planet.SCALE);
+                        topNeighbor = topNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateUnscaledElevation(topNeighborOnSphere) * Planet.SCALE);
                     }
                     normals[y * (MeshGenerator.CHUNK_SIZE + 1) + x] += Vector3.Cross(topNeighbor - elevatedPointOnSphere, leftNeighbor - elevatedPointOnSphere);
                     
                     var rightNeighborOnSphere = Vector3.Normalize(computePointOnCube(x + 1, y)) * planetRadius;
-                    var rightNeighbor = rightNeighborOnSphere * (1.0f + noiseFilter.Evaluate(rightNeighborOnSphere) * Planet.SCALE);
+                    var rightNeighbor = rightNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateUnscaledElevation(rightNeighborOnSphere) * Planet.SCALE);
                     
                     var bottomNeighborOnSphere = Vector3.Normalize(computePointOnCube(x, y + 1)) * planetRadius;
-                    var bottomNeighbor = bottomNeighborOnSphere * (1.0f + noiseFilter.Evaluate(bottomNeighborOnSphere) * Planet.SCALE);
+                    var bottomNeighbor = bottomNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateUnscaledElevation(bottomNeighborOnSphere) * Planet.SCALE);
                     normals[y * (MeshGenerator.CHUNK_SIZE + 1) + x] += Vector3.Cross(bottomNeighbor - elevatedPointOnSphere, rightNeighbor - elevatedPointOnSphere);
                 }
             }

@@ -293,7 +293,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -26.78}
+  m_LocalPosition: {x: 0, y: 1, z: -261.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -329,8 +329,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: e4a51a13fe7e3fe459c143e2cf003e45, type: 2}
-  noiseSettings: {fileID: 11400000, guid: ffde9bdf32d5bf7488daca96be6cdd6d, type: 2}
-  recomputeTerrain: 0
+  terrainSettings: {fileID: 11400000, guid: 9e3457b4a2dc8234595375ae0f0a0637, type: 2}
+  terrainSettingsFoldout: 1
 --- !u!4 &1422644690
 Transform:
   m_ObjectHideFlags: 0

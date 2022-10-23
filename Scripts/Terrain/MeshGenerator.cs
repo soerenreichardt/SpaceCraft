@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using System.Threading;
-using Noise;
 using UnityEngine;
 
 namespace Terrain
@@ -32,10 +31,11 @@ namespace Terrain
             }
         }
 
-        public MeshGenerator(INoiseFilter noiseFilter)
+        public MeshGenerator(TerrainSettings terrainSettings)
         {
-            this.smoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator(noiseFilter);
-            this.blockTerrainMeshGenerator = new BlockTerrainMeshGenerator(noiseFilter);
+            var terrainNoiseEvaluator = new TerrainNoiseEvaluator(terrainSettings);
+            this.smoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator(terrainNoiseEvaluator);
+            this.blockTerrainMeshGenerator = new BlockTerrainMeshGenerator(terrainNoiseEvaluator);
             ThreadPool.SetMaxThreads(4, 4);
         }
 
@@ -59,11 +59,10 @@ namespace Terrain
 
                 var (axisA, axisB) = AxisLookup.getAxisForFace(data.face);
 
-                MeshGeneratorStrategy meshGeneratorStrategy =
-                    data.blockLevel 
-                        ? (MeshGeneratorStrategy) blockTerrainMeshGenerator 
-                        : smoothTerrainMeshGenerator;
-
+                MeshGeneratorStrategy meshGeneratorStrategy = smoothTerrainMeshGenerator;
+                    // data.blockLevel 
+                        // ? (MeshGeneratorStrategy) blockTerrainMeshGenerator 
+                        // : smoothTerrainMeshGenerator;
 
                 var mesh = meshGeneratorStrategy.meshComputer()(data, axisA, axisB);
                 data.terrainChunk.vertices = mesh.vertices;

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Noise
 {
-    [CreateAssetMenu()]
+    [CreateAssetMenu, Serializable]
     public class NoiseSettings : ScriptableObject {
 
         public delegate void SettingsUpdateHandler();
@@ -19,9 +19,9 @@ namespace Noise
         public enum FilterType { Simple, Ridgid };
         public FilterType filterType;
 
-        [ConditionalHide("filterType", 0)]
+        [ConditionalHide("filterType", 0), SerializeField]
         public SimpleNoiseSettings simpleNoiseSettings;
-        [ConditionalHide("filterType", 1)]
+        [ConditionalHide("filterType", 1), SerializeField]
         public RidgidNoiseSettings ridgidNoiseSettings;
 
         [System.Serializable]

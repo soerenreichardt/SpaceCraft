@@ -8,8 +8,6 @@ namespace Noise
 {
     public class RidgidNoiseFilter : INoiseFilter
     {
-        
-
         NoiseSettings.RidgidNoiseSettings settings;
         SimplexNoise noise = new SimplexNoise();
 
