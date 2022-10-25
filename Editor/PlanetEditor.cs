@@ -1,34 +1,43 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Planet))]
-public class PlanetEditor : UnityEditor.Editor
+namespace Editor
 {
-    private Planet planet;
-    private UnityEditor.Editor terrainEditor;
-
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(Planet))]
+    public class PlanetEditor : UnityEditor.Editor
     {
-        base.OnInspectorGUI();
+        private Planet planet;
+        private UnityEditor.Editor terrainEditor;
 
-        DrawSettingsEditor(planet.terrainSettings, ref planet.terrainSettingsFoldout, ref terrainEditor);
-    }
-
-    void DrawSettingsEditor(Object settings, ref bool foldout, ref UnityEditor.Editor editor)
-    {
-        if (settings != null)
+        public override void OnInspectorGUI()
         {
-            foldout = EditorGUILayout.InspectorTitlebar(foldout, settings);
-            if (foldout)
+            base.OnInspectorGUI();
+
+            DrawSettingsEditor(planet.terrainSettings, planet.OnTerrainSettingsUpdated,  ref planet.terrainSettingsFoldout, ref terrainEditor);
+        }
+
+        private static void DrawSettingsEditor(Object settings, System.Action onSettingsUpdated, ref bool foldout, ref UnityEditor.Editor editor)
+        {
+            if (settings != null)
             {
+                foldout = EditorGUILayout.InspectorTitlebar(foldout, settings);
+                if (!foldout) return;
+            
+                using var check = new EditorGUI.ChangeCheckScope();
+
                 CreateCachedEditor(settings, null, ref editor);
                 editor.OnInspectorGUI();
+
+                if (check.changed)
+                {
+                    onSettingsUpdated?.Invoke();
+                }
             }
         }
-    }
 
-    private void OnEnable()
-    {
-        planet = (Planet) target;
+        private void OnEnable()
+        {
+            planet = (Planet) target;
+        }
     }
 }

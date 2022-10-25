@@ -7,7 +7,8 @@ namespace Terrain
     public class TerrainSettings : ScriptableObject
     {
         
-        public int planetRadius = 1;
+        [Range(1, 20)]
+        public int planetRadius = 8;
         public NoiseLayer[] noiseLayers;
 
         [System.Serializable]

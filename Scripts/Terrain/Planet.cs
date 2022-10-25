@@ -26,7 +26,7 @@ public class Planet : MonoBehaviour
         
         foreach (var noiseLayer in terrainSettings.noiseLayers)
         {
-            noiseLayer.noiseSettings.settingsUpdated += recomputeTerrain;
+            // noiseLayer.noiseSettings.settingsUpdated += recomputeTerrain;
         }
         
         for (int i=0; i<6; i++) 
@@ -62,7 +62,7 @@ public class Planet : MonoBehaviour
         }
     }
 
-    private void recomputeTerrain()
+    public void OnTerrainSettingsUpdated()
     {
         foreach (var planetSide in planetSides)
         {

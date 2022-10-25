@@ -3,28 +3,27 @@ Copyright (c) 2018 Sebastian Lague
 */
 
 using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace Noise
 {
-    [CreateAssetMenu, Serializable]
-    public class NoiseSettings : ScriptableObject {
+    [Serializable]
+    public class NoiseSettings {
 
-        public delegate void SettingsUpdateHandler();
-        public event SettingsUpdateHandler settingsUpdated;
+        // public delegate void SettingsUpdateHandler();
+        // public event SettingsUpdateHandler settingsUpdated;
 
-        private long lastUpdate = 0;
+        // private long lastUpdate;
         
         public enum FilterType { Simple, Ridgid };
         public FilterType filterType;
 
-        [ConditionalHide("filterType", 0), SerializeField]
+        [ConditionalHide("filterType", 0)]
         public SimpleNoiseSettings simpleNoiseSettings;
-        [ConditionalHide("filterType", 1), SerializeField]
+        [ConditionalHide("filterType", 1)]
         public RidgidNoiseSettings ridgidNoiseSettings;
 
-        [System.Serializable]
+        [Serializable]
         public class SimpleNoiseSettings
         {
             public float strength = 1;
@@ -37,23 +36,23 @@ namespace Noise
             public float minValue;
         }
 
-        [System.Serializable]
+        [Serializable]
         public class RidgidNoiseSettings : SimpleNoiseSettings
         {
             public float weightMultiplier = .8f;
         }
-
-        public void OnValidate()
-        {
-            if (EditorApplication.isPlaying)
-            {
-                var currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                if (currentTime - lastUpdate > 300)
-                {
-                    if (settingsUpdated != null) settingsUpdated();
-                    lastUpdate = currentTime;
-                }
-            }
-        }
+        //
+        // public void OnValidate()
+        // {
+        //     if (EditorApplication.isPlaying)
+        //     {
+        //         var currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //         if (currentTime - lastUpdate > 300)
+        //         {
+        //             if (settingsUpdated != null) settingsUpdated();
+        //             lastUpdate = currentTime;
+        //         }
+        //     }
+        // }
     }
 }

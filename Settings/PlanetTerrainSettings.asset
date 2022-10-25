@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: PlanetTerrainSettings
   m_EditorClassIdentifier: 
   planetRadius: 1
-  noiseLayers: []
+  noiseLayers:
+  - enabled: 1
+    useFirstLayerAsMask: 0
+    noiseSettings: {fileID: 11400000, guid: f486a0c3234ccc248a2d88af2205eb40, type: 2}
