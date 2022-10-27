@@ -4,7 +4,7 @@ using static DataStructures.Directions;
 
 namespace Terrain
 {
-    public class TerrainQuadTreeHelper
+    public static class TerrainQuadTreeHelper
     {
         // TODO: refactor to use axis
         internal static Vector3 computeCenter(Vector3 face, Vector3 center, int quadrant, float chunkLength)

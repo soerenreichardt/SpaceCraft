@@ -8,7 +8,7 @@ namespace Terrain
     {
         
         [Range(1, 20)]
-        public int planetRadius = 8;
+        public int planetSize = 8;
         public NoiseLayer[] noiseLayers;
 
         [System.Serializable]

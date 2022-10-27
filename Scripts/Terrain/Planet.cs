@@ -4,7 +4,6 @@ using UnityEngine;
 public class Planet : MonoBehaviour
 {
 
-    public static int PLANET_SIZE = 8;
     public static float SCALE = 1.0f;
 
     private static string[] directionNames = { "up", "down", "left", "right", "front", "back" };
@@ -23,20 +22,15 @@ public class Planet : MonoBehaviour
     void Start()
     {
         meshGenerator = new MeshGenerator(terrainSettings);
-        
-        foreach (var noiseLayer in terrainSettings.noiseLayers)
-        {
-            // noiseLayer.noiseSettings.settingsUpdated += recomputeTerrain;
-        }
-        
+
         for (int i=0; i<6; i++) 
         {
             var planetSide = new TerrainQuadTree(
                 transform.position, 
-                Mathf.Pow(2, PLANET_SIZE) * SCALE, 
+                Mathf.Pow(2, terrainSettings.planetSize) * SCALE, 
                 directions[i],
                 3.0f,
-                PLANET_SIZE, 
+                terrainSettings.planetSize, 
                 material,
                 meshGenerator
             );

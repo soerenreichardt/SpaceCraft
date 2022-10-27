@@ -6,14 +6,15 @@ namespace Terrain
 {
     public class BlockTerrainMeshGenerator : MeshGeneratorStrategy
     {
-        private static readonly float PLANET_RADIUS = (float) (Math.Pow(2, Planet.PLANET_SIZE) * Planet.SCALE);
         private static readonly float BLOCK_HEIGHT = Planet.SCALE * (2.0f / MeshGenerator.CHUNK_SIZE);
 
         private readonly TerrainNoiseEvaluator terrainNoiseEvaluator;
+        private readonly float planetRadius;
 
-        public BlockTerrainMeshGenerator(TerrainNoiseEvaluator terrainNoiseEvaluator)
+        public BlockTerrainMeshGenerator(TerrainNoiseEvaluator terrainNoiseEvaluator, int planetSize)
         {
             this.terrainNoiseEvaluator = terrainNoiseEvaluator;
+            this.planetRadius = (float) (Math.Pow(2, planetSize) * Planet.SCALE);
         }
 
         public MeshComputer meshComputer()
@@ -48,10 +49,10 @@ namespace Terrain
                     var bottomLeftPointOnSphere = Vector3.Normalize(bottomLeftPointOnCube);
                     var bottomRightPointOnSphere = Vector3.Normalize(bottomRightPointOnCube);
 
-                    var scaledTopLeftPointOnSphere = topLeftPointOnSphere * PLANET_RADIUS;
-                    var scaledTopRightPointOnSphere = topRightPointOnSphere * PLANET_RADIUS;
-                    var scaledBottomLeftPointOnSphere = bottomLeftPointOnSphere * PLANET_RADIUS;
-                    var scaledBottomRightPointOnSphere = bottomRightPointOnSphere * PLANET_RADIUS;
+                    var scaledTopLeftPointOnSphere = topLeftPointOnSphere * planetRadius;
+                    var scaledTopRightPointOnSphere = topRightPointOnSphere * planetRadius;
+                    var scaledBottomLeftPointOnSphere = bottomLeftPointOnSphere * planetRadius;
+                    var scaledBottomRightPointOnSphere = bottomRightPointOnSphere * planetRadius;
 
                     var elevation = 1.0f + this.elevation(x, y, axisA, axisB, axisAOffset, axisBOffset, data.center) * Planet.SCALE;
                     var elevatedTopLeft = scaledTopLeftPointOnSphere * elevation;
@@ -130,7 +131,7 @@ namespace Terrain
         private float elevation(int x, int y, Vector3 axisA, Vector3 axisB, Vector3 axisAOffset, Vector3 axisBOffset, Vector3 center)
         {
             var middlePointOnCube = axisA * ((y + 0.5f) * BLOCK_HEIGHT) + axisB * ((x + 0.5f) * BLOCK_HEIGHT) + center - axisAOffset - axisBOffset;
-            var middlePointOnSphere = Vector3.Normalize(middlePointOnCube) * PLANET_RADIUS;
+            var middlePointOnSphere = Vector3.Normalize(middlePointOnCube) * planetRadius;
             var elevatedMiddlePointOnSphere = terrainNoiseEvaluator.CalculateUnscaledElevation(middlePointOnSphere);
             int numBlocks = (int) (elevatedMiddlePointOnSphere / BLOCK_HEIGHT) + 1;
             return BLOCK_HEIGHT * numBlocks;

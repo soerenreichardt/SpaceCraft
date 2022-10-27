@@ -46,7 +46,7 @@ namespace Terrain
 
         public float GetScaledElevation(float unscaledElevation) {
             float elevation = Mathf.Max(0,unscaledElevation);
-            elevation = settings.planetRadius * (1+elevation);
+            elevation = settings.planetSize * (1+elevation);
             return elevation;
         }
     }
