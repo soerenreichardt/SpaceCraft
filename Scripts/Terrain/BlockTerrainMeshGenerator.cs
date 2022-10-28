@@ -131,8 +131,9 @@ namespace Terrain
         private float elevation(int x, int y, Vector3 axisA, Vector3 axisB, Vector3 axisAOffset, Vector3 axisBOffset, Vector3 center)
         {
             var middlePointOnCube = axisA * ((y + 0.5f) * BLOCK_HEIGHT) + axisB * ((x + 0.5f) * BLOCK_HEIGHT) + center - axisAOffset - axisBOffset;
-            var middlePointOnSphere = Vector3.Normalize(middlePointOnCube) * planetRadius;
-            var elevatedMiddlePointOnSphere = terrainNoiseEvaluator.CalculateUnscaledElevation(middlePointOnSphere);
+            var middlePointOnUnitSphere = Vector3.Normalize(middlePointOnCube);
+            var middlePointOnSphere = middlePointOnUnitSphere * planetRadius;
+            var elevatedMiddlePointOnSphere = terrainNoiseEvaluator.CalculateElevation(middlePointOnUnitSphere, middlePointOnSphere);
             int numBlocks = (int) (elevatedMiddlePointOnSphere / BLOCK_HEIGHT) + 1;
             return BLOCK_HEIGHT * numBlocks;
         }

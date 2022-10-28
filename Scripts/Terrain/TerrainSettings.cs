@@ -16,6 +16,7 @@ namespace Terrain
         {
             public bool enabled = true;
             public bool useFirstLayerAsMask;
+            public bool scaled;
             public NoiseSettings noiseSettings;
         }
     }
