@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 334bccf989a6744478086bd48bbe6f49, type: 3}
   m_Name: PlanetTerrainSettings
   m_EditorClassIdentifier: 
-  planetSize: 8
+  planetSize: 11
   noiseLayers:
   - enabled: 1
     useFirstLayerAsMask: 0
+    scaled: 0
     noiseSettings:
       filterType: 0
       simpleNoiseSettings:
@@ -37,27 +38,29 @@ MonoBehaviour:
         weightMultiplier: 0.8
   - enabled: 1
     useFirstLayerAsMask: 1
+    scaled: 1
     noiseSettings:
-      filterType: 0
+      filterType: 1
       simpleNoiseSettings:
-        strength: 0.25
-        numLayers: 2
-        baseRoughness: 5.41
-        roughness: 3.61
-        persistence: 1.6
+        strength: 0.02
+        numLayers: 4
+        baseRoughness: 4.05
+        roughness: 5.2
+        persistence: 3.28
         centre: {x: 0, y: 0, z: 0}
-        minValue: 0.64
+        minValue: 1.01
       ridgidNoiseSettings:
         strength: 0.55
-        numLayers: 3
-        baseRoughness: 2.1
-        roughness: 2.83
-        persistence: 0.37
+        numLayers: 5
+        baseRoughness: 4.87
+        roughness: 3.23
+        persistence: 0.86
         centre: {x: 0, y: 0, z: 0}
         minValue: 0
         weightMultiplier: 1.97
   - enabled: 1
     useFirstLayerAsMask: 1
+    scaled: 0
     noiseSettings:
       filterType: 1
       simpleNoiseSettings:
@@ -77,24 +80,3 @@ MonoBehaviour:
         centre: {x: 0, y: 0, z: 0}
         minValue: 0
         weightMultiplier: 1.49
-  - enabled: 0
-    useFirstLayerAsMask: 1
-    noiseSettings:
-      filterType: 1
-      simpleNoiseSettings:
-        strength: 0.52
-        numLayers: 2
-        baseRoughness: 8.21
-        roughness: 11.25
-        persistence: 0.47
-        centre: {x: 0, y: 0, z: 0}
-        minValue: 0.66
-      ridgidNoiseSettings:
-        strength: 0.19
-        numLayers: 3
-        baseRoughness: 6.47
-        roughness: 3.16
-        persistence: 0.52
-        centre: {x: 0, y: 0, z: 0}
-        minValue: 0
-        weightMultiplier: 1.76

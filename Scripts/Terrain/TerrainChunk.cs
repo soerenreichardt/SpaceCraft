@@ -9,6 +9,7 @@ public class TerrainChunk : MonoBehaviour
     public MeshRenderer meshRenderer;
     public MeshRenderer parentMeshRenderer;
     public Material material;
+    public MeshCollider meshCollider;
     
     public Vector3[] vertices { get; set; }
     public Vector3[] normals { get; set; }
@@ -40,7 +41,12 @@ public class TerrainChunk : MonoBehaviour
             mesh.normals = normals;
             if (parentMeshRenderer != null) {
                 parentMeshRenderer.enabled = false;
-            } 
+            }
+
+            if (meshCollider != null)
+            {
+                meshCollider.sharedMesh = mesh;
+            }
         }
     }
 }
