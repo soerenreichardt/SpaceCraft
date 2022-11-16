@@ -27,7 +27,8 @@ namespace Terrain
             {
                 vertices = vertices,
                 indices = IndicesLookup.Indices,
-                normals = normals
+                normals = normals,
+                uvs = UVLookup.chunkUVs()
             };
         }
 

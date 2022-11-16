@@ -21,6 +21,7 @@ public class Planet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        UVLookup.chunkUVs();
         meshGenerator = new MeshGenerator(terrainSettings);
 
         for (int i=0; i<6; i++) 

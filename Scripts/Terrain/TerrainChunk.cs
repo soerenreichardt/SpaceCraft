@@ -13,6 +13,9 @@ public class TerrainChunk : MonoBehaviour
     
     public Vector3[] vertices { get; set; }
     public Vector3[] normals { get; set; }
+    
+    public Vector2[] uvs { get; set; }
+    
     public int[] indices { get; set; }
     public IndicesFunction indicesFunction { get; set; }
 
@@ -39,6 +42,7 @@ public class TerrainChunk : MonoBehaviour
             mesh.vertices = vertices;
             mesh.triangles = indicesFunction(indices);
             mesh.normals = normals;
+            mesh.uv = uvs;
             if (parentMeshRenderer != null) {
                 parentMeshRenderer.enabled = false;
             }
