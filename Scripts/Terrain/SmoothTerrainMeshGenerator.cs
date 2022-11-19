@@ -36,6 +36,7 @@ namespace Terrain
         {
             Vector3[] vertices = new Vector3[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
             Vector3[] normals = new Vector3[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
+            Vector2[] uvs = new Vector2[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
             
             float stepSize = (data.chunkLength + data.chunkLength) / MeshGenerator.CHUNK_SIZE;
             var axisAOffset = (axisA * data.chunkLength);
@@ -46,12 +47,15 @@ namespace Terrain
             {
                 for (int x = 0; x < MeshGenerator.CHUNK_SIZE + 1; x++)
                 {
-                    var pointOnUnitSphere = Vector3.Normalize(computePointOnCube(x, y));
+                    // vertex position
+                    var pointOnCube = ComputePointOnCube(x, y);
+                    var pointOnUnitSphere = Vector3.Normalize(pointOnCube);
                     var pointOnSphere = pointOnUnitSphere * planetRadius;
                     var elevationOnUnitSphere = terrainNoiseEvaluator.CalculateElevation(pointOnUnitSphere, pointOnSphere);
                     var elevatedPointOnSphere = pointOnSphere * (1.0f + elevationOnUnitSphere);
                     vertices[y * (MeshGenerator.CHUNK_SIZE + 1) + x] = elevatedPointOnSphere;
 
+                    // normals
                     Vector3 leftNeighbor;
                     Vector3 topNeighbor;
                     if (x > 0 && y > 0)
@@ -61,28 +65,28 @@ namespace Terrain
                     }
                     else
                     {
-                        var leftNeighborOnUnitSphere = Vector3.Normalize(computePointOnCube(x - 1, y));
+                        var leftNeighborOnUnitSphere = Vector3.Normalize(ComputePointOnCube(x - 1, y));
                         var leftNeighborOnSphere = leftNeighborOnUnitSphere * planetRadius;
                         leftNeighbor = leftNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateElevation(leftNeighborOnUnitSphere, leftNeighborOnSphere));
 
-                        var topNeighbotOnUnitSphere = Vector3.Normalize(computePointOnCube(x, y - 1));
+                        var topNeighbotOnUnitSphere = Vector3.Normalize(ComputePointOnCube(x, y - 1));
                         var topNeighborOnSphere = topNeighbotOnUnitSphere * planetRadius;
                         topNeighbor = topNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateElevation(topNeighbotOnUnitSphere, topNeighborOnSphere));
                     }
                     normals[y * (MeshGenerator.CHUNK_SIZE + 1) + x] += Vector3.Cross(topNeighbor - elevatedPointOnSphere, leftNeighbor - elevatedPointOnSphere);
 
-                    var rightNeighborOnUnitSphere = Vector3.Normalize(computePointOnCube(x + 1, y));
+                    var rightNeighborOnUnitSphere = Vector3.Normalize(ComputePointOnCube(x + 1, y));
                     var rightNeighborOnSphere = rightNeighborOnUnitSphere * planetRadius;
                     var rightNeighbor = rightNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateElevation(rightNeighborOnUnitSphere, rightNeighborOnSphere));
 
-                    var bottomNeighborOnUnitSphere = Vector3.Normalize(computePointOnCube(x, y + 1));
+                    var bottomNeighborOnUnitSphere = Vector3.Normalize(ComputePointOnCube(x, y + 1));
                     var bottomNeighborOnSphere = bottomNeighborOnUnitSphere * planetRadius;
                     var bottomNeighbor = bottomNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateElevation(bottomNeighborOnUnitSphere, bottomNeighborOnSphere));
                     normals[y * (MeshGenerator.CHUNK_SIZE + 1) + x] += Vector3.Cross(bottomNeighbor - elevatedPointOnSphere, rightNeighbor - elevatedPointOnSphere);
                 }
             }
 
-            Vector3 computePointOnCube(int x, int y)
+            Vector3 ComputePointOnCube(int x, int y)
             {
                 return axisA * (y * stepSize) + axisB * (x * stepSize) + data.center - axisAOffset - axisBOffset;
             }

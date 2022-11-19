@@ -17,7 +17,6 @@ namespace Terrain
                         xVal,
                         yVal
                     );
-                    // Debug.Log("new Vector2("+xVal+", "+yVal+")");
                 }
             }
 

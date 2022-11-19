@@ -10,11 +10,6 @@ namespace Noise
     [Serializable]
     public class NoiseSettings {
 
-        // public delegate void SettingsUpdateHandler();
-        // public event SettingsUpdateHandler settingsUpdated;
-
-        // private long lastUpdate;
-        
         public enum FilterType { Simple, Ridgid };
         public FilterType filterType;
 
@@ -41,18 +36,5 @@ namespace Noise
         {
             public float weightMultiplier = .8f;
         }
-        //
-        // public void OnValidate()
-        // {
-        //     if (EditorApplication.isPlaying)
-        //     {
-        //         var currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-        //         if (currentTime - lastUpdate > 300)
-        //         {
-        //             if (settingsUpdated != null) settingsUpdated();
-        //             lastUpdate = currentTime;
-        //         }
-        //     }
-        // }
     }
 }
