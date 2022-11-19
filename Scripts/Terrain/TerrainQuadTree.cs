@@ -56,6 +56,11 @@ public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
             this.terrainComponent = this.terrain.AddComponent<TerrainChunk>();
             this.terrainComponent.material = material;
             this.terrainComponent.indicesFunction = getIndicesFunction();
+            if (isBlockLevel())
+            {
+                var meshCollider = this.terrain.AddComponent<MeshCollider>();
+                this.terrainComponent.meshCollider = meshCollider;
+            }
             if (parent != null) {
                 this.terrainComponent.parentMeshRenderer = parent.terrainComponent.meshRenderer;
             }
