@@ -7,7 +7,7 @@ namespace Terrain
     public class TerrainSettings : ScriptableObject
     {
         
-        [Range(1, 20)]
+        [Range(1, 25)]
         public int planetSize = 8;
         public NoiseLayer[] noiseLayers;
 

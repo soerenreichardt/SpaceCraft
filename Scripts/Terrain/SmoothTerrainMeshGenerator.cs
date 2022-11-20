@@ -36,7 +36,6 @@ namespace Terrain
         {
             Vector3[] vertices = new Vector3[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
             Vector3[] normals = new Vector3[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
-            Vector2[] uvs = new Vector2[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
             
             float stepSize = (data.chunkLength + data.chunkLength) / MeshGenerator.CHUNK_SIZE;
             var axisAOffset = (axisA * data.chunkLength);
@@ -51,8 +50,8 @@ namespace Terrain
                     var pointOnCube = ComputePointOnCube(x, y);
                     var pointOnUnitSphere = Vector3.Normalize(pointOnCube);
                     var pointOnSphere = pointOnUnitSphere * planetRadius;
-                    var elevationOnUnitSphere = terrainNoiseEvaluator.CalculateElevation(pointOnUnitSphere, pointOnSphere);
-                    var elevatedPointOnSphere = pointOnSphere * (1.0f + elevationOnUnitSphere);
+                    var elevation = terrainNoiseEvaluator.CalculateElevation(pointOnUnitSphere, pointOnSphere);
+                    var elevatedPointOnSphere = pointOnSphere * (1.0f + elevation);
                     vertices[y * (MeshGenerator.CHUNK_SIZE + 1) + x] = elevatedPointOnSphere;
 
                     // normals
