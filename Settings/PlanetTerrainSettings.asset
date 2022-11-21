@@ -36,7 +36,7 @@ MonoBehaviour:
         centre: {x: 0, y: 0, z: 0}
         minValue: 0
         weightMultiplier: 0.8
-  - enabled: 1
+  - enabled: 0
     useFirstLayerAsMask: 1
     scaled: 1
     noiseSettings:
@@ -72,7 +72,7 @@ MonoBehaviour:
         centre: {x: 0, y: 0, z: 0}
         minValue: 0.66
       ridgidNoiseSettings:
-        strength: 1.69
+        strength: 0.75
         numLayers: 3
         baseRoughness: 2.37
         roughness: 3.55

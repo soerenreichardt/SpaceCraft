@@ -1,4 +1,5 @@
 ﻿using Terrain;
+using Terrain.Color;
 using UnityEngine;
 
 public class Planet : MonoBehaviour
@@ -9,29 +10,39 @@ public class Planet : MonoBehaviour
     private static string[] directionNames = { "up", "down", "left", "right", "front", "back" };
     private static Vector3[] directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
     
-    public Material material;
     public TerrainSettings terrainSettings;
+    public ColorSettings colorSettings;
     
     private MeshGenerator meshGenerator;
     private TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
 
+    private ColorGenerator colorGenerator;
+    
     [HideInInspector]
     public bool terrainSettingsFoldout;
+    [HideInInspector]
+    public bool colorSettingsFoldout;
     
     // Start is called before the first frame update
     void Start()
     {
+        var planetDiameter = Mathf.Pow(2, terrainSettings.planetSize) * SCALE;
+        
         meshGenerator = new MeshGenerator(terrainSettings);
+        colorSettings.material.SetFloat("_PlanetRadius", planetDiameter);
+        colorSettings.material.SetFloat("_InversePlanetRadius", 1.0f / planetDiameter);
 
+        colorGenerator = new ColorGenerator(colorSettings);
+        
         for (int i=0; i<6; i++) 
         {
             var planetSide = new TerrainQuadTree(
                 transform.position, 
-                Mathf.Pow(2, terrainSettings.planetSize) * SCALE, 
+                planetDiameter, 
                 directions[i],
                 3.0f,
                 terrainSettings.planetSize, 
-                material,
+                colorSettings.material,
                 meshGenerator
             );
             planetSide.terrain.transform.parent = transform;
@@ -64,6 +75,11 @@ public class Planet : MonoBehaviour
         }
     }
 
+    public void OnColorSettingsUpdated()
+    {
+        colorGenerator.UpdateColors();
+    }
+    
     private void LateUpdate() {
         meshGenerator.consume();
     }

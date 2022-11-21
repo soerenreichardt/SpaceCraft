@@ -11,8 +11,8 @@ namespace Terrain
         private readonly SmoothTerrainMeshGenerator smoothTerrainMeshGenerator;
         private readonly BlockTerrainMeshGenerator blockTerrainMeshGenerator;
 
-        private readonly ConcurrentQueue<Data> queue = new ConcurrentQueue<Data>();
-        
+        private readonly ConcurrentQueue<Data> queue;
+
         private int dataSize;
         
         public struct Data {
@@ -36,6 +36,7 @@ namespace Terrain
             var terrainNoiseEvaluator = new TerrainNoiseEvaluator(terrainSettings);
             this.smoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator(terrainNoiseEvaluator, terrainSettings.planetSize);
             this.blockTerrainMeshGenerator = new BlockTerrainMeshGenerator(terrainNoiseEvaluator, terrainSettings.planetSize);
+            this.queue = new ConcurrentQueue<Data>();
             ThreadPool.SetMaxThreads(4, 4);
         }
 

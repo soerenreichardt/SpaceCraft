@@ -328,9 +328,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41e59e3c5d4167468edb9e2c154ae94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: e4a51a13fe7e3fe459c143e2cf003e45, type: 2}
   terrainSettings: {fileID: 11400000, guid: 9e3457b4a2dc8234595375ae0f0a0637, type: 2}
+  colorSettings: {fileID: 11400000, guid: 2ad423c299e600c4ebb53a6b48dbb203, type: 2}
   terrainSettingsFoldout: 1
+  colorSettingsFoldout: 1
 --- !u!4 &1422644690
 Transform:
   m_ObjectHideFlags: 0

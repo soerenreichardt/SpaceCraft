@@ -13,7 +13,7 @@ namespace Terrain
         {
             this.settings = settings;
             noiseFilters = new INoiseFilter[settings.noiseLayers.Length];
-            for (int i = 0; i < noiseFilters.Length; i++)
+            for (var i = 0; i < noiseFilters.Length; i++)
             {
                 noiseFilters[i] = NoiseFilterFactory.CreateNoiseFilter(settings.noiseLayers[i].noiseSettings);
             }
@@ -30,22 +30,22 @@ namespace Terrain
                 firstLayerValue = noiseFilters[0].Evaluate(pointOnSphere);
                 if (settings.noiseLayers[0].enabled)
                 {
-                    float scale = settings.noiseLayers[0].scaled ? Planet.SCALE : 1.0f;
+                    var scale = settings.noiseLayers[0].scaled ? Planet.SCALE : 1.0f;
                     elevation = firstLayerValue * scale;
                 }
             }
 
-            for (int i = 1; i < noiseFilters.Length; i++)
+            for (var i = 1; i < noiseFilters.Length; i++)
             {
                 if (settings.noiseLayers[i].enabled)
                 {
                     var pointOnSphere = settings.noiseLayers[0].scaled ? pointOnScaledSphere : pointOnUnitSphere;
-                    float mask = (settings.noiseLayers[i].useFirstLayerAsMask) ? firstLayerValue : 1;
-                    float scale = settings.noiseLayers[i].scaled ? Planet.SCALE : 1.0f; 
+                    var mask = settings.noiseLayers[i].useFirstLayerAsMask ? firstLayerValue : 1;
+                    var scale = settings.noiseLayers[i].scaled ? Planet.SCALE : 1.0f; 
                     elevation += noiseFilters[i].Evaluate(pointOnSphere) * mask * scale;
                 }
             }
-            return elevation;
+            return elevation - 0.05f;
         }
     }
 }
