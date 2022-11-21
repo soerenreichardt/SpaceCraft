@@ -2,9 +2,6 @@ Shader "Custom/ChunkShader"
 {
     Properties
     {
-        _MainTex ("Albedo (RGB)", 2D) = "white" {}
-        _Glossiness ("Smoothness", Range(0,1)) = 0.5
-        _Metallic ("Metallic", Range(0,1)) = 0.0
         _PlanetRadius ("Planet radius", Float) = 1.0
         _InversePlanetRadius ("Inverse planet radius", Float) = 0.1
         _WaterLevel ("Water level", Range(0,1)) = 0.5
@@ -34,6 +31,7 @@ Shader "Custom/ChunkShader"
         {
             float2 uv_MainTex;
             float3 localPos;
+            float3 normal;
         };
 
         half _Glossiness;
@@ -54,19 +52,17 @@ Shader "Custom/ChunkShader"
         void vert (inout appdata_full v, out Input o) {
            UNITY_INITIALIZE_OUTPUT(Input,o);
            o.localPos = v.vertex.xyz;
+           o.normal = v.normal.xyz;
         }
         
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            // Albedo comes from a texture tinted by color
-            fixed4 c = tex2D (_MainTex, IN.uv_MainTex);
+            float steepness = 1 - dot(IN.normal, normalize(IN.localPos));
+            steepness = saturate(steepness / 0.6);
             float heightPercentage = inverse_lerp(0, 0.1, (length(IN.localPos) - _PlanetRadius) * _InversePlanetRadius);
-            fixed4 heightColor = tex2D (_TerrainColors, float2(heightPercentage, 0.0));
-            // fixed4 heightColor = fixed4(heightPercentage, heightPercentage, heightPercentage, 1.0);
+            // fixed4 heightColor = tex2D (_TerrainColors, float2(steepness, 0.0));
+            fixed4 heightColor = fixed4(heightPercentage, heightPercentage, heightPercentage, 1.0);
             o.Albedo = heightColor.xyz;
-            // Metallic and smoothness come from slider variables
-            o.Metallic = _Metallic;
-            o.Smoothness = _Glossiness;
             o.Alpha = heightColor.a;
             
         }

@@ -18,25 +18,24 @@ namespace Noise
 
         public float Evaluate(Vector3 point)
         {
-            float noiseValue = 0;
-            float frequency = settings.baseRoughness;
+            float noiseSum = 0.0f;
+            float frequency = settings.scale;
             float amplitude = 1;
-            float weight = 1;
+            float ridgeWeight = 1;
 
             for (int i = 0; i < settings.numLayers; i++)
             {
-                float v = 1-Mathf.Abs(noise.Evaluate(point * frequency + settings.centre));
-                v *= v;
-                v *= weight;
-                weight = Mathf.Clamp01(v * settings.weightMultiplier);
+                float noiseValue = 1-Mathf.Abs(noise.Evaluate(point * frequency + settings.offset));
+                noiseValue = Mathf.Pow(Mathf.Abs(noiseValue), settings.power);
+                noiseValue *= ridgeWeight;
+                ridgeWeight = Mathf.Clamp01(noiseValue * settings.gain);
 
-                noiseValue += v * amplitude;
-                frequency *= settings.roughness;
+                noiseSum += noiseValue * amplitude;
                 amplitude *= settings.persistence;
+                frequency *= settings.lacunarity;
             }
 
-            noiseValue = Mathf.Max(0, noiseValue - settings.minValue);
-            return noiseValue * settings.strength;
+            return noiseSum * settings.multiplier;
         }
     }
 }

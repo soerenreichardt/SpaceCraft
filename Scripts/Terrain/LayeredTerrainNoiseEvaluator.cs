@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Terrain
 {
-    public class TerrainNoiseEvaluator
+    public class LayeredTerrainNoiseEvaluator : INoiseEvaluator
     {
         
-        private readonly TerrainSettings settings;
+        private readonly LayeredTerrainSettings settings;
         private readonly INoiseFilter[] noiseFilters;
 
-        public TerrainNoiseEvaluator(TerrainSettings settings)
+        public LayeredTerrainNoiseEvaluator(LayeredTerrainSettings settings)
         {
             this.settings = settings;
             noiseFilters = new INoiseFilter[settings.noiseLayers.Length];

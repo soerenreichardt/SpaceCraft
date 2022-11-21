@@ -328,10 +328,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41e59e3c5d4167468edb9e2c154ae94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainSettings: {fileID: 11400000, guid: 9e3457b4a2dc8234595375ae0f0a0637, type: 2}
+  layeredTerrainSettings: {fileID: 0}
+  earthTerrainSettings: {fileID: 11400000, guid: e4ac25176c1912341be70cf362af57b0, type: 2}
   colorSettings: {fileID: 11400000, guid: 2ad423c299e600c4ebb53a6b48dbb203, type: 2}
-  terrainSettingsFoldout: 1
-  colorSettingsFoldout: 1
+  terrainSettingsFoldout: 0
+  colorSettingsFoldout: 0
+  earthTerrainSettingsFoldout: 1
 --- !u!4 &1422644690
 Transform:
   m_ObjectHideFlags: 0

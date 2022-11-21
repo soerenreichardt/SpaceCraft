@@ -1,23 +1,10 @@
-﻿using Noise;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Terrain
 {
-    [CreateAssetMenu]
-    public class TerrainSettings : ScriptableObject
+    public abstract class TerrainSettings : ScriptableObject
     {
-        
         [Range(1, 25)]
         public int planetSize = 8;
-        public NoiseLayer[] noiseLayers;
-
-        [System.Serializable]
-        public class NoiseLayer
-        {
-            public bool enabled = true;
-            public bool useFirstLayerAsMask;
-            public bool scaled;
-            public NoiseSettings noiseSettings;
-        }
     }
 }

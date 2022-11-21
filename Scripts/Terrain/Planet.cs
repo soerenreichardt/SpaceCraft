@@ -10,7 +10,8 @@ public class Planet : MonoBehaviour
     private static string[] directionNames = { "up", "down", "left", "right", "front", "back" };
     private static Vector3[] directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
     
-    public TerrainSettings terrainSettings;
+    public LayeredTerrainSettings layeredTerrainSettings;
+    public EarthTerrainSettings earthTerrainSettings;
     public ColorSettings colorSettings;
     
     private MeshGenerator meshGenerator;
@@ -22,13 +23,15 @@ public class Planet : MonoBehaviour
     public bool terrainSettingsFoldout;
     [HideInInspector]
     public bool colorSettingsFoldout;
+
+    [HideInInspector] public bool earthTerrainSettingsFoldout;
     
     // Start is called before the first frame update
     void Start()
     {
-        var planetDiameter = Mathf.Pow(2, terrainSettings.planetSize) * SCALE;
+        var planetDiameter = Mathf.Pow(2, earthTerrainSettings.planetSize) * SCALE;
         
-        meshGenerator = new MeshGenerator(terrainSettings);
+        meshGenerator = new MeshGenerator(new EarthTerrainNoiseEvaluator(earthTerrainSettings), earthTerrainSettings);
         colorSettings.material.SetFloat("_PlanetRadius", planetDiameter);
         colorSettings.material.SetFloat("_InversePlanetRadius", 1.0f / planetDiameter);
 
@@ -36,16 +39,17 @@ public class Planet : MonoBehaviour
         
         for (int i=0; i<6; i++) 
         {
+            var transformCache = transform;
             var planetSide = new TerrainQuadTree(
-                transform.position, 
+                transformCache.position, 
                 planetDiameter, 
                 directions[i],
                 3.0f,
-                terrainSettings.planetSize, 
+                earthTerrainSettings.planetSize, 
                 colorSettings.material,
                 meshGenerator
             );
-            planetSide.terrain.transform.parent = transform;
+            planetSide.terrain.transform.parent = transformCache;
             planetSide.terrain.name = directionNames[i];
             planetSides[i] = planetSide;
         }

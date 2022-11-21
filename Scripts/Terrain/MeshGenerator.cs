@@ -31,9 +31,9 @@ namespace Terrain
             }
         }
 
-        public MeshGenerator(TerrainSettings terrainSettings)
+        public MeshGenerator(INoiseEvaluator noiseEvaluator, TerrainSettings terrainSettings)
         {
-            var terrainNoiseEvaluator = new TerrainNoiseEvaluator(terrainSettings);
+            var terrainNoiseEvaluator = noiseEvaluator;
             this.smoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator(terrainNoiseEvaluator, terrainSettings.planetSize);
             this.blockTerrainMeshGenerator = new BlockTerrainMeshGenerator(terrainNoiseEvaluator, terrainSettings.planetSize);
             this.queue = new ConcurrentQueue<Data>();

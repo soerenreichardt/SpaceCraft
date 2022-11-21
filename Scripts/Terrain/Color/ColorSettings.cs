@@ -1,3 +1,7 @@
+/*
+Copyright (c) 2020 Sebastian Lague
+*/
+
 using UnityEngine;
 
 namespace Terrain.Color

@@ -8,10 +8,10 @@ namespace Terrain
     {
         private static readonly float BLOCK_HEIGHT = Planet.SCALE * (2.0f / MeshGenerator.CHUNK_SIZE);
 
-        private readonly TerrainNoiseEvaluator terrainNoiseEvaluator;
+        private readonly INoiseEvaluator terrainNoiseEvaluator;
         private readonly float planetRadius;
 
-        public BlockTerrainMeshGenerator(TerrainNoiseEvaluator terrainNoiseEvaluator, int planetSize)
+        public BlockTerrainMeshGenerator(INoiseEvaluator terrainNoiseEvaluator, int planetSize)
         {
             this.terrainNoiseEvaluator = terrainNoiseEvaluator;
             this.planetRadius = (float) (Math.Pow(2, planetSize) * Planet.SCALE);

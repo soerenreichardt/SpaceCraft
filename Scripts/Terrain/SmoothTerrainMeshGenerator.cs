@@ -6,10 +6,10 @@ namespace Terrain
     public class SmoothTerrainMeshGenerator : MeshGeneratorStrategy
     {
 
-        private readonly TerrainNoiseEvaluator terrainNoiseEvaluator;
+        private readonly INoiseEvaluator terrainNoiseEvaluator;
         private readonly int planetSize;
 
-        public SmoothTerrainMeshGenerator(TerrainNoiseEvaluator terrainNoiseEvaluator, int planetSize)
+        public SmoothTerrainMeshGenerator(INoiseEvaluator terrainNoiseEvaluator, int planetSize)
         {
             this.terrainNoiseEvaluator = terrainNoiseEvaluator;
             this.planetSize = planetSize;
@@ -68,9 +68,9 @@ namespace Terrain
                         var leftNeighborOnSphere = leftNeighborOnUnitSphere * planetRadius;
                         leftNeighbor = leftNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateElevation(leftNeighborOnUnitSphere, leftNeighborOnSphere));
 
-                        var topNeighbotOnUnitSphere = Vector3.Normalize(ComputePointOnCube(x, y - 1));
-                        var topNeighborOnSphere = topNeighbotOnUnitSphere * planetRadius;
-                        topNeighbor = topNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateElevation(topNeighbotOnUnitSphere, topNeighborOnSphere));
+                        var topNeighborOnUnitSphere = Vector3.Normalize(ComputePointOnCube(x, y - 1));
+                        var topNeighborOnSphere = topNeighborOnUnitSphere * planetRadius;
+                        topNeighbor = topNeighborOnSphere * (1.0f + terrainNoiseEvaluator.CalculateElevation(topNeighborOnUnitSphere, topNeighborOnSphere));
                     }
                     normals[y * (MeshGenerator.CHUNK_SIZE + 1) + x] += Vector3.Cross(topNeighbor - elevatedPointOnSphere, leftNeighbor - elevatedPointOnSphere);
 

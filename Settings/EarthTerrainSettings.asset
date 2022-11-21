@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d140b62777744147951ed1bd460e682, type: 3}
+  m_Name: EarthTerrainSettings
+  m_EditorClassIdentifier: 
+  planetSize: 11
+  oceanDepthMultiplier: 1.37
+  oceanFloorDepth: 2.1
+  oceanFloorSmoothing: 1.94
+  mountainBlend: 0.34
+  continentNoiseSettings:
+    filterType: 2
+    simpleNoiseSettings:
+      scaled: 0
+      multiplier: 2.43
+      numLayers: 3
+      scale: 0.44
+      lacunarity: 1.2
+      persistence: 0.5
+      offset: {x: 0, y: 0, z: 0}
+    ridgidNoiseSettings:
+      scaled: 0
+      multiplier: 2.77
+      numLayers: 4
+      scale: 2.23
+      lacunarity: 3.14
+      persistence: 3.16
+      offset: {x: 0, y: 0, z: 0}
+      gain: 0.5
+      power: 0.8
+    continentNoiseSettings:
+      scaled: 0
+      multiplier: 2.39
+      numLayers: 4
+      scale: 1.63
+      lacunarity: 3.93
+      persistence: 0.5
+      offset: {x: 0, y: 0, z: 0}
+    smoothRidgidNoiseSettings:
+      scaled: 0
+      multiplier: 2.23
+      numLayers: 3
+      scale: 2.45
+      lacunarity: 3.26
+      persistence: 0.5
+      offset: {x: 0, y: 0, z: 0}
+      gain: 0.5
+      power: 0.8
+  ridgeNoiseSettings:
+    filterType: 3
+    simpleNoiseSettings:
+      scaled: 0
+      multiplier: 1
+      numLayers: 1
+      scale: 1
+      lacunarity: 2
+      persistence: 0.5
+      offset: {x: 0, y: 0, z: 0}
+    ridgidNoiseSettings:
+      scaled: 0
+      multiplier: 2.58
+      numLayers: 3
+      scale: 1.24
+      lacunarity: 2.66
+      persistence: 0.71
+      offset: {x: 0, y: 0, z: 0}
+      gain: 5.58
+      power: 4.62
+    continentNoiseSettings:
+      scaled: 0
+      multiplier: 1
+      numLayers: 1
+      scale: 1
+      lacunarity: 2
+      persistence: 0.5
+      offset: {x: 0, y: 0, z: 0}
+    smoothRidgidNoiseSettings:
+      scaled: 0
+      multiplier: 1.93
+      numLayers: 2
+      scale: 0.62
+      lacunarity: 0.67
+      persistence: 0.5
+      offset: {x: 0, y: 0, z: 0}
+      gain: 3.27
+      power: 0.51
+  maskNoiseSettings:
+    filterType: 0
+    simpleNoiseSettings:
+      scaled: 0
+      multiplier: 2.85
+      numLayers: 3
+      scale: 0.65
+      lacunarity: 2.37
+      persistence: 0.52
+      offset: {x: 0, y: 0, z: 0}
+    ridgidNoiseSettings:
+      scaled: 0
+      multiplier: 1
+      numLayers: 1
+      scale: 1
+      lacunarity: 2
+      persistence: 0.5
+      offset: {x: 0, y: 0, z: 0}
+      gain: 0.5
+      power: 0.8
+    continentNoiseSettings:
+      scaled: 0
+      multiplier: 1
+      numLayers: 1
+      scale: 1
+      lacunarity: 2
+      persistence: 0.5
+      offset: {x: 0, y: 0, z: 0}
+    smoothRidgidNoiseSettings:
+      scaled: 0
+      multiplier: 1
+      numLayers: 1
+      scale: 1
+      lacunarity: 2
+      persistence: 0.5
+      offset: {x: 0, y: 0, z: 0}
+      gain: 0.5
+      power: 0.8
