@@ -2,6 +2,7 @@ Shader "Custom/ChunkShader"
 {
     Properties
     {
+        _Color ("Color", Color) = (0,0,0,0)
         _PlanetRadius ("Planet radius", Float) = 1.0
         _InversePlanetRadius ("Inverse planet radius", Float) = 0.1
         _WaterLevel ("Water level", Range(0,1)) = 0.5
@@ -26,6 +27,8 @@ Shader "Custom/ChunkShader"
 
         sampler2D _MainTex;
         sampler2D _TerrainColors;
+
+        float4 _Color;
 
         struct Input
         {
@@ -61,7 +64,8 @@ Shader "Custom/ChunkShader"
             steepness = saturate(steepness / 0.6);
             float heightPercentage = inverse_lerp(0, 0.1, (length(IN.localPos) - _PlanetRadius) * _InversePlanetRadius);
             // fixed4 heightColor = tex2D (_TerrainColors, float2(steepness, 0.0));
-            fixed4 heightColor = fixed4(heightPercentage, heightPercentage, heightPercentage, 1.0);
+            //fixed4 heightColor = fixed4(heightPercentage, heightPercentage, heightPercentage, 1.0);
+            fixed4 heightColor = _Color;
             o.Albedo = heightColor.xyz;
             o.Alpha = heightColor.a;
             

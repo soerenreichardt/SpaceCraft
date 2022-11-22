@@ -13,6 +13,8 @@ public class Planet : MonoBehaviour
     public LayeredTerrainSettings layeredTerrainSettings;
     public EarthTerrainSettings earthTerrainSettings;
     public ColorSettings colorSettings;
+
+    public Material oceanEffect;
     
     private MeshGenerator meshGenerator;
     private TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
@@ -23,8 +25,10 @@ public class Planet : MonoBehaviour
     public bool terrainSettingsFoldout;
     [HideInInspector]
     public bool colorSettingsFoldout;
+    [HideInInspector] 
+    public bool earthTerrainSettingsFoldout;
 
-    [HideInInspector] public bool earthTerrainSettingsFoldout;
+    private Light directionalLight;
     
     // Start is called before the first frame update
     void Start()
@@ -32,10 +36,9 @@ public class Planet : MonoBehaviour
         var planetDiameter = Mathf.Pow(2, earthTerrainSettings.planetSize) * SCALE;
         
         meshGenerator = new MeshGenerator(new EarthTerrainNoiseEvaluator(earthTerrainSettings), earthTerrainSettings);
-        colorSettings.material.SetFloat("_PlanetRadius", planetDiameter);
-        colorSettings.material.SetFloat("_InversePlanetRadius", 1.0f / planetDiameter);
-
         colorGenerator = new ColorGenerator(colorSettings);
+        directionalLight = GameObject.Find("Directional Light").GetComponent<Light>();
+        setFixedShaderProperties(planetDiameter);
         
         for (int i=0; i<6; i++) 
         {
@@ -65,6 +68,7 @@ public class Planet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        setVaryingShaderProperties();
         for (int i=0; i<6; i++) 
         {
             planetSides[i].update();
@@ -86,5 +90,20 @@ public class Planet : MonoBehaviour
     
     private void LateUpdate() {
         meshGenerator.consume();
+    }
+
+    private void setFixedShaderProperties(float planetDiameter)
+    {
+        colorSettings.material.SetFloat("_PlanetRadius", planetDiameter);
+        colorSettings.material.SetFloat("_InversePlanetRadius", 1.0f / planetDiameter);
+        
+        oceanEffect.SetFloat("oceanRadius", planetDiameter);
+        oceanEffect.SetFloat("planetScale", planetDiameter / 2.0f);
+    }
+
+    private void setVaryingShaderProperties()
+    {
+        oceanEffect.SetVector("oceanCentre", transform.position);
+        oceanEffect.SetVector("dirToSun", -directionalLight.transform.forward);
     }
 }
