@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ChunkMat
-  m_Shader: {fileID: 4800000, guid: e5d5d937497fbb342bf2550552341921, type: 3}
+  m_Name: OceanEffect
+  m_Shader: {fileID: 4800000, guid: d228ef65b91df7f4d844eb04bf3560b5, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,10 +19,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BaseMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -59,65 +55,37 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _TerrainColors:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _TerrainHolesTexture:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AlphaClip: 0
-    - _Blend: 0
     - _BumpScale: 1
-    - _ClearCoatMask: 0
-    - _ClearCoatSmoothness: 0
-    - _Cull: 2
     - _Cutoff: 0.5
-    - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _EnvironmentReflections: 1
     - _GlossMapScale: 1
-    - _Glossiness: 0.086
+    - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _InversePlanetRadius: 0.0048828125
-    - _Metallic: 0.215
+    - _InversePlanetRadius: 0.1
+    - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PlanetRadius: 204.8
-    - _QueueOffset: 0
-    - _ReceiveShadows: 1
-    - _Smoothness: 0.5
+    - _PlanetRadius: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Surface: 0
     - _UVSec: 0
     - _WaterLevel: 0.5
-    - _WorkflowMode: 1
     - _ZWrite: 1
+    - alphaMultiplier: 0.03
+    - depthMultiplier: 0.35
+    - oceanRadius: 204.8
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.5254902, g: 0.102127105, b: 0.102127105, a: 0}
-    - _EmissionColor: {r: 0.15292618, g: 0.15292618, b: 0.15292618, a: 1}
-    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - colA: {r: 0.17221431, g: 0.84235805, b: 0.8490566, a: 0}
+    - colB: {r: 0, g: 0.09171252, b: 0.2264151, a: 0}
+    - oceanCentre: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

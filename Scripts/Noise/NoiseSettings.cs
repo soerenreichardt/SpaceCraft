@@ -10,31 +10,36 @@ namespace Noise
     [Serializable]
     public class NoiseSettings {
 
-        public enum FilterType { Simple, Ridgid };
+        public enum FilterType { Simple, Ridgid, Continent, SmoothRidgid };
         public FilterType filterType;
 
         [ConditionalHide("filterType", 0)]
         public SimpleNoiseSettings simpleNoiseSettings;
         [ConditionalHide("filterType", 1)]
         public RidgidNoiseSettings ridgidNoiseSettings;
-
+        [ConditionalHide("filterType", 2)] 
+        public SimpleNoiseSettings continentNoiseSettings;
+        [ConditionalHide("filterType", 3)] 
+        public RidgidNoiseSettings smoothRidgidNoiseSettings;
+        
         [Serializable]
         public class SimpleNoiseSettings
         {
-            public float strength = 1;
+            public bool scaled = false;
+            public float multiplier = 1;
             [Range(1, 8)]
             public int numLayers = 1;
-            public float baseRoughness = 1;
-            public float roughness = 2;
+            public float scale = 1;
+            public float lacunarity = 2;
             public float persistence = .5f;
-            public Vector3 centre;
-            public float minValue;
+            public Vector3 offset;
         }
 
         [Serializable]
         public class RidgidNoiseSettings : SimpleNoiseSettings
         {
-            public float weightMultiplier = .8f;
+            public float gain = 0.5f;
+            public float power = .8f;
         }
     }
 }

@@ -1,14 +1,11 @@
-﻿using Noise;
+using Noise;
 using UnityEngine;
 
 namespace Terrain
 {
     [CreateAssetMenu]
-    public class TerrainSettings : ScriptableObject
+    public class LayeredTerrainSettings : TerrainSettings
     {
-        
-        [Range(1, 20)]
-        public int planetSize = 8;
         public NoiseLayer[] noiseLayers;
 
         [System.Serializable]

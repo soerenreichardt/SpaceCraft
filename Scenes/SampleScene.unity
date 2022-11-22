@@ -227,6 +227,8 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -299,6 +301,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62dd1a5aa12ea75479033ae46a9b3f1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oceanEffect: {fileID: 2100000, guid: a57eaa58c6f3a4844a95aa32bb453828, type: 2}
 --- !u!1 &1422644688
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,9 +376,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41e59e3c5d4167468edb9e2c154ae94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: e4a51a13fe7e3fe459c143e2cf003e45, type: 2}
-  terrainSettings: {fileID: 11400000, guid: 9e3457b4a2dc8234595375ae0f0a0637, type: 2}
-  terrainSettingsFoldout: 1
+  layeredTerrainSettings: {fileID: 0}
+  earthTerrainSettings: {fileID: 11400000, guid: e4ac25176c1912341be70cf362af57b0, type: 2}
+  colorSettings: {fileID: 11400000, guid: 2ad423c299e600c4ebb53a6b48dbb203, type: 2}
+  oceanEffect: {fileID: 2100000, guid: a57eaa58c6f3a4844a95aa32bb453828, type: 2}
+  terrainSettingsFoldout: 0
+  colorSettingsFoldout: 0
+  earthTerrainSettingsFoldout: 1
 --- !u!4 &1422644690
 Transform:
   m_ObjectHideFlags: 0

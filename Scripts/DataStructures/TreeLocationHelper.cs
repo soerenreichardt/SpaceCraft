@@ -5,7 +5,7 @@ namespace DataStructures
     public static class TreeLocationHelper
     {
         public const long SWITCH_PLANET_FACE_MASK = 1L << 63;
-        private const byte LEVEL_MASK = 0b11;
+        private const long LEVEL_MASK = 0b11;
         
         public static long childTreeLocation(long currentTreeLocation, int quadrant, int level)
         {
@@ -69,7 +69,7 @@ namespace DataStructures
                 // Set the neighbor search direction as first 2 bits.
                 // The direction code differs from the quadrant locations
                 // hence this conversion is necessary.
-                // Also the first bit is flipped as an indicator that we
+                // Also the highest bit is flipped as an indicator that we
                 // need to traverse another planet face.
                 var planetFaceNeighborInformation = neighborDirection | SWITCH_PLANET_FACE_MASK;
                 return (currentTreeLocation & ~LEVEL_MASK) | planetFaceNeighborInformation;
