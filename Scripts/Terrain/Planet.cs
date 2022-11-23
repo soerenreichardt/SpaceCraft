@@ -18,10 +18,10 @@ namespace Terrain
         public OceanEffectSettings oceanEffectSettings;
 
         private MeshGenerator meshGenerator;
-        private readonly TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
-
         private ColorGenerator colorGenerator;
         
+        private readonly TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
+
         [HideInInspector]
         public bool colorSettingsFoldout;
         [HideInInspector] 

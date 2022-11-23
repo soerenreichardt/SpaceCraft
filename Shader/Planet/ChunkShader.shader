@@ -7,6 +7,7 @@ Shader "Custom/ChunkShader"
         _InversePlanetRadius ("Inverse planet radius", Float) = 0.1
         _WaterLevel ("Water level", Range(0,1)) = 0.5
         _TerrainColors ("Terrain colors", 2D) = "white" {}
+        _PoleCaps ("Pole caps", Range(0,1)) = 1.0
     }
     SubShader
     {
@@ -24,6 +25,7 @@ Shader "Custom/ChunkShader"
         #pragma target 3.0
 
         #include "UnityCG.cginc"
+        #include "../Math.cginc"
 
         sampler2D _MainTex;
         sampler2D _TerrainColors;
@@ -42,6 +44,7 @@ Shader "Custom/ChunkShader"
         half _PlanetRadius;
         half _InversePlanetRadius;
         half _WaterLevel;
+        half _PoleCaps;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -61,18 +64,16 @@ Shader "Custom/ChunkShader"
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             float steepness = 1 - dot(IN.normal, normalize(IN.localPos));
-            steepness = saturate(steepness / 0.6);
-            float heightPercentage = inverse_lerp(0, 0.1, (length(IN.localPos) - _PlanetRadius) * _InversePlanetRadius);
-            // fixed4 heightColor = tex2D (_TerrainColors, float2(steepness, 0.0));
-            //fixed4 heightColor = fixed4(heightPercentage, heightPercentage, heightPercentage, 1.0);
-            fixed4 heightColor = _Color;
+            float heightPercentage = inverse_lerp(-0.1, 0.1, (length(IN.localPos) - _PlanetRadius) * _InversePlanetRadius);
+            float steepnessWithHeight = saturate((heightPercentage + steepness) * 0.5);
+            // steepness += 1 - heightPercentage;
+            fixed4 heightColor = tex2D (_TerrainColors, float2(steepnessWithHeight, 0.0));
+            heightColor += max(0.0, heightPercentage - _PoleCaps);
+            // fixed4 heightColor = fixed4(steepness, steepness, steepness, 1.0);
+            // fixed4 heightColor = _Color;
             o.Albedo = heightColor.xyz;
             o.Alpha = heightColor.a;
             
-        }
-
-        float inverse_lerp(float min, float max, float val) {
-            return (val - min) / (max - min);
         }
         ENDCG
     }
