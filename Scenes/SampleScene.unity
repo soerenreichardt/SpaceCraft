@@ -346,7 +346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62dd1a5aa12ea75479033ae46a9b3f1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oceanEffect: {fileID: 2100000, guid: a57eaa58c6f3a4844a95aa32bb453828, type: 2}
+  oceanEffect: {fileID: 0}
 --- !u!1 &1422644688
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,13 +376,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41e59e3c5d4167468edb9e2c154ae94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layeredTerrainSettings: {fileID: 0}
   earthTerrainSettings: {fileID: 11400000, guid: e4ac25176c1912341be70cf362af57b0, type: 2}
   colorSettings: {fileID: 11400000, guid: 2ad423c299e600c4ebb53a6b48dbb203, type: 2}
-  oceanEffect: {fileID: 2100000, guid: a57eaa58c6f3a4844a95aa32bb453828, type: 2}
-  terrainSettingsFoldout: 0
+  oceanEffectSettings: {fileID: 11400000, guid: b3ca963c8d7e1244eb117c5478133491, type: 2}
   colorSettingsFoldout: 0
-  earthTerrainSettingsFoldout: 1
+  earthTerrainSettingsFoldout: 0
+  oceanEffectSettingsFoldout: 1
 --- !u!4 &1422644690
 Transform:
   m_ObjectHideFlags: 0

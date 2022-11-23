@@ -14,9 +14,9 @@ namespace Editor
         {
             base.OnInspectorGUI();
 
-            DrawSettingsEditor(planet.layeredTerrainSettings, planet.OnTerrainSettingsUpdated,  ref planet.terrainSettingsFoldout, ref terrainEditor);
             DrawSettingsEditor(planet.earthTerrainSettings, planet.OnTerrainSettingsUpdated,  ref planet.earthTerrainSettingsFoldout, ref terrainEditor);
             DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated,  ref planet.colorSettingsFoldout, ref terrainEditor);
+            DrawSettingsEditor(planet.oceanEffectSettings, planet.OnOceanEffectSettingsUpdated,  ref planet.oceanEffectSettingsFoldout, ref terrainEditor);
         }
 
         private static void DrawSettingsEditor(Object settings, System.Action onSettingsUpdated, ref bool foldout, ref UnityEditor.Editor editor)

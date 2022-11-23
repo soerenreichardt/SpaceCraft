@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad1a97b59264681873cac7ef6f4bd76, type: 3}
+  m_Name: OceanEffectSettings
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: a57eaa58c6f3a4844a95aa32bb453828, type: 2}
+  colorA: {r: 0.17254902, g: 0.84313726, b: 0.8509804, a: 0}
+  colorB: {r: 0.016420428, g: 0.12263003, b: 0.38679248, a: 0}
+  depthMultiplier: 0.88
+  alphaMultiplier: 7
+  waveNormalA: {fileID: 2800000, guid: c2c93083a6b08fb43b257aa410b6c685, type: 3}
+  waveNormalB: {fileID: 2800000, guid: fd52c4f5d6325564faa54250708ed138, type: 3}
+  specularColor: {r: 1, g: 1, b: 1, a: 0}
+  smoothness: 0.886
+  waveStrength: 0.729
+  waveSpeed: 0.63
+  waveScale: 1.3

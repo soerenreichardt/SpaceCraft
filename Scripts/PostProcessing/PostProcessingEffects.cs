@@ -4,6 +4,7 @@ namespace PostProcessing
 {
     public class PostProcessingEffects : MonoBehaviour
     {
+        [HideInInspector]
         public Material oceanEffect;
 
         private void OnRenderImage(RenderTexture src, RenderTexture dest)

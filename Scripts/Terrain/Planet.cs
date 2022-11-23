@@ -1,4 +1,5 @@
-﻿using Terrain.Color;
+﻿using PostProcessing;
+using Terrain.Color;
 using Terrain.Height;
 using Terrain.Mesh;
 using UnityEngine;
@@ -12,45 +13,46 @@ namespace Terrain
         private static readonly string[] DirectionNames = { "up", "down", "left", "right", "front", "back" };
         private static readonly Vector3[] Directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
     
-        public LayeredTerrainSettings layeredTerrainSettings;
         public EarthTerrainSettings earthTerrainSettings;
         public ColorSettings colorSettings;
+        public OceanEffectSettings oceanEffectSettings;
 
-        public Material oceanEffect;
-    
         private MeshGenerator meshGenerator;
         private readonly TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
 
         private ColorGenerator colorGenerator;
-    
-        [HideInInspector]
-        public bool terrainSettingsFoldout;
+        
         [HideInInspector]
         public bool colorSettingsFoldout;
         [HideInInspector] 
         public bool earthTerrainSettingsFoldout;
+        [HideInInspector]
+        public bool oceanEffectSettingsFoldout;
 
         private Light directionalLight;
-    
+        
         // Start is called before the first frame update
         void Start()
         {
-            var planetDiameter = Mathf.Pow(2, earthTerrainSettings.planetSize) * SCALE;
-        
             meshGenerator = new MeshGenerator(new EarthTerrainNoiseEvaluator(earthTerrainSettings), earthTerrainSettings);
-            colorGenerator = new ColorGenerator(colorSettings);
-            directionalLight = GameObject.Find("Directional Light").GetComponent<Light>();
-            SetFixedShaderProperties(planetDiameter);
-        
-            for (int i=0; i<6; i++) 
+            
+            var planetDiameter = Mathf.Pow(2, earthTerrainSettings.planetSize) * SCALE;
+            InitializeColorGenerator(planetDiameter);
+            InitializeOceanEffect(planetDiameter);
+            InitializePlanetSides(planetDiameter);
+        }
+
+        private void InitializePlanetSides(float planetDiameter)
+        {
+            for (int i = 0; i < 6; i++)
             {
                 var transformCache = transform;
                 var planetSide = new TerrainQuadTree(
-                    transformCache.position, 
-                    planetDiameter, 
+                    transformCache.position,
+                    planetDiameter,
                     Directions[i],
                     3.0f,
-                    earthTerrainSettings.planetSize, 
+                    earthTerrainSettings.planetSize,
                     colorSettings.material,
                     meshGenerator
                 );
@@ -58,7 +60,7 @@ namespace Terrain
                 planetSide.terrain.name = DirectionNames[i];
                 planetSides[i] = planetSide;
             }
-        
+
             planetSides[0].neighbors = new[] {planetSides[2], planetSides[4], planetSides[3], planetSides[5]};
             planetSides[1].neighbors = new[] {planetSides[3], planetSides[4], planetSides[2], planetSides[5]};
             planetSides[2].neighbors = new[] {planetSides[4], planetSides[0], planetSides[5], planetSides[1]};
@@ -67,11 +69,18 @@ namespace Terrain
             planetSides[5].neighbors = new[] {planetSides[2], planetSides[0], planetSides[3], planetSides[1]};
         }
 
+        private void InitializeColorGenerator(float planetDiameter)
+        {
+            colorGenerator = new ColorGenerator(colorSettings);
+            colorSettings.material.SetFloat("_PlanetRadius", planetDiameter);
+            colorSettings.material.SetFloat("_InversePlanetRadius", 1.0f / planetDiameter);
+        }
+
         // Update is called once per frame
         void Update()
         {
-            SetVaryingShaderProperties();
-            for (int i=0; i<6; i++) 
+            SetVaryingOceanEffectProperties();
+            for (var i=0; i<6; i++) 
             {
                 planetSides[i].Update();
             }
@@ -89,24 +98,36 @@ namespace Terrain
         {
             colorGenerator.UpdateColors();
         }
-    
+
+        public void OnOceanEffectSettingsUpdated()
+        {
+            oceanEffectSettings.SetProperties();
+        }
+        
         private void LateUpdate() {
             meshGenerator.Consume();
         }
 
-        private void SetFixedShaderProperties(float planetDiameter)
+        private void InitializeOceanEffect(float planetDiameter)
         {
-            colorSettings.material.SetFloat("_PlanetRadius", planetDiameter);
-            colorSettings.material.SetFloat("_InversePlanetRadius", 1.0f / planetDiameter);
-        
-            oceanEffect.SetFloat("oceanRadius", planetDiameter);
-            oceanEffect.SetFloat("planetScale", planetDiameter / 2.0f);
+            if (Camera.main != null)
+                Camera.main.gameObject.GetComponent<PostProcessingEffects>().oceanEffect = oceanEffectSettings.material;
+
+            oceanEffectSettings.SetProperties();
+            
+            directionalLight = GameObject.Find("Directional Light").GetComponent<Light>();
+            OceanEffectSettings.FixedData data;
+            data.oceanRadius = planetDiameter;
+            data.planetScale = 1 / SCALE;
+            oceanEffectSettings.SetFixedData(data);
         }
 
-        private void SetVaryingShaderProperties()
+        private void SetVaryingOceanEffectProperties()
         {
-            oceanEffect.SetVector("oceanCentre", transform.position);
-            oceanEffect.SetVector("dirToSun", -directionalLight.transform.forward);
+            OceanEffectSettings.UpdatableData data;
+            data.planetPosition = transform.position;
+            data.directionToSun = -directionalLight.transform.forward;
+            oceanEffectSettings.SetUpdatableData(data);
         }
     }
 }

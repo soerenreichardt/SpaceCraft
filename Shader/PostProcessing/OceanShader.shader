@@ -3,18 +3,6 @@ Shader "Unlit/OceanShader"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        colA ("Color 1", Color) = (0,0,0,0)
-        colB ("Color 2", Color) = (0,0,0,0)
-        depthMultiplier ("Depth multiplier", Float) = 0.1
-        alphaMultiplier ("Alpha multiplier", Float) = 0.1
-        waveNormalA ("Wave normal A", 2D) = "white" {}
-        waveNormalB ("Wave normal B", 2D) = "white" {}
-        smoothness ("Smoothness", Range(0,1)) = 0.5
-        waveStrength ("Wave strength", Range(0,1)) = 0.5
-        waveSpeed ("Wave speed", Range(0,1)) = 0.5
-        planetScale ("Planet scale", Float) = 0.1
-        specularCol ("Specular color", Color) = (1,1,1,1)
-        waveNormalScale ("Wave scale", Float) = 15
     }
     SubShader
     {
