@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Height
 {
     public abstract class TerrainSettings : ScriptableObject
     {

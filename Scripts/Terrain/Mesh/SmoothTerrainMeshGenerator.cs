@@ -1,9 +1,10 @@
 using System;
+using Terrain.Height;
 using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Mesh
 {
-    public class SmoothTerrainMeshGenerator : MeshGeneratorStrategy
+    public class SmoothTerrainMeshGenerator : IMeshGeneratorStrategy
     {
 
         private readonly INoiseEvaluator terrainNoiseEvaluator;
@@ -15,36 +16,36 @@ namespace Terrain
             this.planetSize = planetSize;
         }
 
-        public MeshComputer meshComputer()
+        public MeshComputer MeshComputer()
         {
-            return smoothTerrainMesh;
+            return SmoothTerrainMesh;
         }
 
-        private Mesh smoothTerrainMesh(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
+        private Mesh SmoothTerrainMesh(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
         {
-            var (vertices, normals) = smoothTerrainVerticesAndNormals(data, axisA, axisB);
+            var (vertices, normals) = SmoothTerrainVerticesAndNormals(data, axisA, axisB);
             return new Mesh()
             {
                 vertices = vertices,
                 indices = IndicesLookup.Indices,
                 normals = normals,
-                uvs = UVLookup.chunkUVs()
+                uvs = UVLookup.ChunkUVs()
             };
         }
 
-        private (Vector3[], Vector3[]) smoothTerrainVerticesAndNormals(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
+        private (Vector3[], Vector3[]) SmoothTerrainVerticesAndNormals(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
         {
-            Vector3[] vertices = new Vector3[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
-            Vector3[] normals = new Vector3[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
+            var vertices = new Vector3[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
+            var normals = new Vector3[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
             
-            float stepSize = (data.chunkLength + data.chunkLength) / MeshGenerator.CHUNK_SIZE;
+            var stepSize = (data.chunkLength + data.chunkLength) / MeshGenerator.CHUNK_SIZE;
             var axisAOffset = (axisA * data.chunkLength);
             var axisBOffset = (axisB * data.chunkLength);
             var planetRadius = (float) (Math.Pow(2, planetSize) * Planet.SCALE);
         
-            for (int y = 0; y < MeshGenerator.CHUNK_SIZE + 1; y++)
+            for (var y = 0; y < MeshGenerator.CHUNK_SIZE + 1; y++)
             {
-                for (int x = 0; x < MeshGenerator.CHUNK_SIZE + 1; x++)
+                for (var x = 0; x < MeshGenerator.CHUNK_SIZE + 1; x++)
                 {
                     // vertex position
                     var pointOnCube = ComputePointOnCube(x, y);

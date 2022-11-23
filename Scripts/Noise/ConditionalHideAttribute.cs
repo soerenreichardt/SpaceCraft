@@ -8,12 +8,11 @@ using UnityEngine;
 namespace Noise
 {
     [AttributeUsage(
-        AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct,
-        Inherited = true)]
+        AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
     public class ConditionalHideAttribute : PropertyAttribute
     {
-        public string conditionalSourceField;
-        public int enumIndex;
+        public readonly string conditionalSourceField;
+        public readonly int enumIndex;
 
         public ConditionalHideAttribute(string boolVariableName)
         {

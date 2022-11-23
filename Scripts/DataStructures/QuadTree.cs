@@ -1,16 +1,16 @@
-﻿namespace SpaceCraft
+﻿namespace DataStructures
 {
 
     public abstract class QuadTree<T> where T : QuadTree<T>
     {
-        public T parent { get; }
-        public T[] children { get; }
+        public readonly T parent;
+        public readonly T[] children;
 
         public readonly long treeLocation;
-        public readonly int maxLevel;
         public readonly int level;
+        protected readonly int maxLevel;
 
-        public bool hasChildren { get; private set; }
+        public bool HasChildren { get; private set; }
 
         protected QuadTree(int level, int maxLevel, T parent, long treeLocation)
         {
@@ -19,41 +19,41 @@
             this.level = level;
             this.maxLevel = maxLevel;
             this.treeLocation = treeLocation;
-            this.hasChildren = false;
+            this.HasChildren = false;
         }
 
-        protected abstract T initialize(int quadrant);
+        protected abstract T Initialize(int quadrant);
 
-        protected void split()
+        protected void Split()
         {
-            if (cannotSplit()) return;
+            if (CannotSplit()) return;
 
-            this.hasChildren = true;
+            this.HasChildren = true;
             for (int quadrant = 0; quadrant < this.children.Length; quadrant++)
             {
-                this.children[quadrant] = initialize(quadrant);
+                this.children[quadrant] = Initialize(quadrant);
             }
-            onSplit();
+            OnSplit();
         }
 
-        protected void merge()
+        protected void Merge()
         {
-            if (!hasChildren) return;
+            if (!HasChildren) return;
 
-            onMerge();
+            OnMerge();
             for (int i = 0; i < this.children.Length; i++)
             {
-                this.children[i].merge();
+                this.children[i].Merge();
                 this.children[i] = null;
             }
-            this.hasChildren = false;
+            this.HasChildren = false;
         }
 
-        protected abstract void onSplit();
-        protected abstract void onMerge();
+        protected abstract void OnSplit();
+        protected abstract void OnMerge();
         
-        private bool cannotSplit() {
-            return this.level >= this.maxLevel || hasChildren;
+        private bool CannotSplit() {
+            return this.level >= this.maxLevel || HasChildren;
         }
     }
 }

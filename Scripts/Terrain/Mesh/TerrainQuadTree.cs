@@ -1,178 +1,180 @@
 using DataStructures;
-using Terrain;
 using UnityEngine;
 
-public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
+namespace Terrain.Mesh
 {
+    public class TerrainQuadTree : AdaptiveSpatialQuadTree<TerrainQuadTree>
+    {
 
-    public GameObject terrain;
+        public readonly GameObject terrain;
     
-    private readonly Material material;
-    private readonly MeshGenerator meshGenerator;
+        private readonly Material material;
+        private readonly MeshGenerator meshGenerator;
     
-    private Vector3 planetPosition;
-    private TerrainChunk terrainComponent;
+        private readonly Vector3 planetPosition;
+        private readonly TerrainChunk terrainComponent;
 
-    private static readonly Camera camera = Camera.main;
-    static TerrainQuadTree()
-    {
-        camera.nearClipPlane *= Planet.SCALE;
-    }
-
-    public TerrainQuadTree(
-        Vector3 planetPosition,
-        float chunkLength,
-        Vector3 face,
-        float viewDistance,
-        int maxLevel,
-        Material material,
-        MeshGenerator meshGenerator
-    ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, 0, meshGenerator)
-    {
-        computeTerrain();
-    }
-
-    private TerrainQuadTree(
-        Vector3 center, 
-        Vector3 planetPosition,
-        float chunkLength, 
-        Vector3 face, 
-        float viewDistance, 
-        int maxLevel,
-        int level,
-        TerrainQuadTree parent,
-        Material material,
-        long treeLocation,
-        MeshGenerator meshGenerator
-    ) : base(center, chunkLength, viewDistance, maxLevel, level, parent, face, treeLocation)
-    {
-        this.material = material;
-        this.planetPosition = planetPosition;
-        this.terrain = new GameObject(level.ToString());
-        this.meshGenerator = meshGenerator;
-
-        if (!hasChildren)
+        private static readonly Camera Camera = Camera.main;
+        static TerrainQuadTree()
         {
-            this.terrainComponent = this.terrain.AddComponent<TerrainChunk>();
-            this.terrainComponent.material = material;
-            this.terrainComponent.indicesFunction = getIndicesFunction();
-            if (isBlockLevel())
+            Camera.nearClipPlane *= Planet.SCALE;
+        }
+
+        public TerrainQuadTree(
+            Vector3 planetPosition,
+            float chunkLength,
+            Vector3 face,
+            float viewDistance,
+            int maxLevel,
+            Material material,
+            MeshGenerator meshGenerator
+        ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, 0, meshGenerator)
+        {
+            ComputeTerrain();
+        }
+
+        private TerrainQuadTree(
+            Vector3 center, 
+            Vector3 planetPosition,
+            float chunkLength, 
+            Vector3 face, 
+            float viewDistance, 
+            int maxLevel,
+            int level,
+            TerrainQuadTree parent,
+            Material material,
+            long treeLocation,
+            MeshGenerator meshGenerator
+        ) : base(center, chunkLength, viewDistance, maxLevel, level, parent, face, treeLocation)
+        {
+            this.material = material;
+            this.planetPosition = planetPosition;
+            this.terrain = new GameObject(level.ToString());
+            this.meshGenerator = meshGenerator;
+
+            if (!HasChildren)
             {
-                var meshCollider = this.terrain.AddComponent<MeshCollider>();
-                this.terrainComponent.meshCollider = meshCollider;
+                this.terrainComponent = this.terrain.AddComponent<TerrainChunk>();
+                this.terrainComponent.material = material;
+                this.terrainComponent.indicesFunction = GetIndicesFunction();
+                if (IsBlockLevel())
+                {
+                    var meshCollider = this.terrain.AddComponent<MeshCollider>();
+                    this.terrainComponent.meshCollider = meshCollider;
+                }
+                if (parent != null) {
+                    this.terrainComponent.parentMeshRenderer = parent.terrainComponent.meshRenderer;
+                }
             }
-            if (parent != null) {
-                this.terrainComponent.parentMeshRenderer = parent.terrainComponent.meshRenderer;
-            }
-        }
 
-        if (parent != null)
-        {
-            this.terrain.transform.parent = parent.terrain.transform;
-            this.terrain.transform.localPosition = Vector3.zero;
-            this.terrain.transform.localRotation = Quaternion.identity;
-        }
-    }
-
-    public void recomputeTerrain()
-    {
-        if (hasChildren)
-        {
-            foreach (var child in children)
+            if (parent != null)
             {
-                child.recomputeTerrain();
-            }            
+                this.terrain.transform.parent = parent.terrain.transform;
+                this.terrain.transform.localPosition = Vector3.zero;
+                this.terrain.transform.localRotation = Quaternion.identity;
+            }
         }
-        else
+
+        public void RecomputeTerrain()
         {
-            computeTerrain();
+            if (HasChildren)
+            {
+                foreach (var child in children)
+                {
+                    child.RecomputeTerrain();
+                }            
+            }
+            else
+            {
+                ComputeTerrain();
+            }
         }
-    }
     
-    protected override TerrainQuadTree initialize(int quadrant)
-    {
-        var nextLevel = level + 1;
-        var newChunkLength = chunkLength / 2;
-        var newCenter = TerrainQuadTreeHelper.computeCenter(face, center, quadrant, newChunkLength);
-        return new TerrainQuadTree(
-            newCenter, 
-            planetPosition, 
-            newChunkLength, 
-            face, 
-            viewDistance, 
-            maxLevel, 
-            nextLevel,
-            this,
-            material,
-            TreeLocationHelper.childTreeLocation(treeLocation, quadrant, nextLevel),
-            meshGenerator
-        );
-    }
-
-    protected override float distance()
-    {
-        if (terrainComponent.vertices == null)
+        protected override TerrainQuadTree Initialize(int quadrant)
         {
-            return float.MaxValue;
+            var nextLevel = level + 1;
+            var newChunkLength = chunkLength / 2;
+            var newCenter = TerrainQuadTreeHelper.ComputeCenter(face, center, quadrant, newChunkLength);
+            return new TerrainQuadTree(
+                newCenter, 
+                planetPosition, 
+                newChunkLength, 
+                face, 
+                viewDistance, 
+                maxLevel, 
+                nextLevel,
+                this,
+                material,
+                TreeLocationHelper.ChildTreeLocation(treeLocation, quadrant, nextLevel),
+                meshGenerator
+            );
         }
-        // TODO: consider Vector3.SqrtMagnitude to avoid sqrt computation
-        var terrainCenter = terrainComponent.transform.TransformPoint(terrainComponent.vertices[8 * (MeshGenerator.CHUNK_SIZE + 1) + 8]);
-        return Mathf.Abs(Vector3.Distance(camera.transform.position, terrainCenter));
-    }
 
-    protected override void adaptiveTreeOnSplit()
-    {
-        foreach (TerrainQuadTree child in children) {
-            child.computeTerrain();
-            child.computeNeighbors();
+        protected override float Distance()
+        {
+            if (terrainComponent.vertices == null)
+            {
+                return float.MaxValue;
+            }
+            // TODO: consider Vector3.SqrtMagnitude to avoid sqrt computation
+            var terrainCenter = terrainComponent.transform.TransformPoint(terrainComponent.vertices[8 * (MeshGenerator.CHUNK_SIZE + 1) + 8]);
+            return Mathf.Abs(Vector3.Distance(Camera.transform.position, terrainCenter));
         }
-    }
 
-    protected override void adaptiveTreeOnMerge()
-    {
-        terrainComponent.meshRenderer.enabled = true;
-        foreach (TerrainQuadTree child in children) {
-            child.terrainComponent.destroy();
-            child.removeNeighbors();
+        protected override void AdaptiveTreeOnSplit()
+        {
+            foreach (TerrainQuadTree child in children) {
+                child.ComputeTerrain();
+                child.ComputeNeighbors();
+            }
         }
-    }
 
-    protected override void onNeighborSet()
-    {
-        updateMeshIndices();
-    }
+        protected override void AdaptiveTreeOnMerge()
+        {
+            terrainComponent.meshRenderer.enabled = true;
+            foreach (TerrainQuadTree child in children) {
+                child.terrainComponent.Destroy();
+                child.RemoveNeighbors();
+            }
+        }
 
-    protected override void onNeighborRemoved()
-    {
-        updateMeshIndices();
-    }
+        protected override void OnNeighborSet()
+        {
+            UpdateMeshIndices();
+        }
 
-    private void computeTerrain()
-    {
-        MeshGenerator.Data childData = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, isBlockLevel());
-        meshGenerator.pushData(childData);
-    }
+        protected override void OnNeighborRemoved()
+        {
+            UpdateMeshIndices();
+        }
+
+        private void ComputeTerrain()
+        {
+            MeshGenerator.Data childData = new MeshGenerator.Data(terrainComponent, center, face, chunkLength, IsBlockLevel());
+            meshGenerator.PushData(childData);
+        }
     
-    private void updateMeshIndices()
-    {
-        if (!isBlockLevel())
+        private void UpdateMeshIndices()
         {
-            terrainComponent.updatedMesh = true;
+            if (!IsBlockLevel())
+            {
+                terrainComponent.updatedMesh = true;
+            }
         }
-    }
 
-    private bool isBlockLevel()
-    {
-        return level == maxLevel;
-    }
+        private bool IsBlockLevel()
+        {
+            return level == maxLevel;
+        }
     
-    private TerrainChunk.IndicesFunction getIndicesFunction()
-    {
-        if (isBlockLevel())
+        private TerrainChunk.IndicesFunction GetIndicesFunction()
         {
-            return indices => indices;
-        }
+            if (IsBlockLevel())
+            {
+                return indices => indices;
+            }
 
-        return _ => IndicesLookup.get(neighbors);
+            return _ => IndicesLookup.Get(neighbors);
+        }
     }
 }

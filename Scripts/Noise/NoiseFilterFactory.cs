@@ -7,19 +7,15 @@ namespace Noise
     {
         public static INoiseFilter CreateNoiseFilter(NoiseSettings settings)
         {
-            switch (settings.filterType)
+            return settings.filterType switch
             {
-                case NoiseSettings.FilterType.Simple:
-                    return new SimpleNoiseFilter(settings.simpleNoiseSettings);
-                case NoiseSettings.FilterType.Ridgid:
-                    return new RidgidNoiseFilter(settings.ridgidNoiseSettings);
-                case NoiseSettings.FilterType.Continent:
-                    return new ContinentNoiseFilter(settings.continentNoiseSettings);
-                case NoiseSettings.FilterType.SmoothRidgid:
-                    return new SmoothRidgidNoiseFilter(settings.smoothRidgidNoiseSettings);
-            }
-
-            return null;
+                NoiseSettings.FilterType.Simple => new SimpleNoiseFilter(settings.simpleNoiseSettings),
+                NoiseSettings.FilterType.Ridgid => new RidgidNoiseFilter(settings.ridgidNoiseSettings),
+                NoiseSettings.FilterType.Continent => new ContinentNoiseFilter(settings.continentNoiseSettings),
+                NoiseSettings.FilterType.SmoothRidgid =>
+                    new SmoothRidgidNoiseFilter(settings.smoothRidgidNoiseSettings),
+                _ => null
+            };
         }
     }
 }

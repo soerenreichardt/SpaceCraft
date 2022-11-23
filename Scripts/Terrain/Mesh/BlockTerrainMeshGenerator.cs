@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Terrain.Height;
 using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Mesh
 {
-    public class BlockTerrainMeshGenerator : MeshGeneratorStrategy
+    public class BlockTerrainMeshGenerator : IMeshGeneratorStrategy
     {
-        private static readonly float BLOCK_HEIGHT = Planet.SCALE * (2.0f / MeshGenerator.CHUNK_SIZE);
+        private const float BLOCK_HEIGHT = Planet.SCALE * (2.0f / MeshGenerator.CHUNK_SIZE);
 
         private readonly INoiseEvaluator terrainNoiseEvaluator;
         private readonly float planetRadius;
@@ -17,12 +18,12 @@ namespace Terrain
             this.planetRadius = (float) (Math.Pow(2, planetSize) * Planet.SCALE);
         }
 
-        public MeshComputer meshComputer()
+        public MeshComputer MeshComputer()
         {
-            return blockTerrainMesh;
+            return BlockTerrainMesh;
         }
 
-        private Mesh blockTerrainMesh(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
+        private Mesh BlockTerrainMesh(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
         {
             List<Vector3> vertices = new List<Vector3>();
             List<int> indices = new List<int>();
@@ -54,7 +55,7 @@ namespace Terrain
                     var scaledBottomLeftPointOnSphere = bottomLeftPointOnSphere * planetRadius;
                     var scaledBottomRightPointOnSphere = bottomRightPointOnSphere * planetRadius;
 
-                    var elevation = 1.0f + this.elevation(x, y, axisA, axisB, axisAOffset, axisBOffset, data.center) * Planet.SCALE;
+                    var elevation = 1.0f + this.Elevation(x, y, axisA, axisB, axisAOffset, axisBOffset, data.center) * Planet.SCALE;
                     var elevatedTopLeft = scaledTopLeftPointOnSphere * elevation;
                     var elevatedTopRight = scaledTopRightPointOnSphere * elevation;
                     var elevatedBottomLeft = scaledBottomLeftPointOnSphere * elevation;
@@ -78,9 +79,9 @@ namespace Terrain
                     if (y > 0)
                     {
                         var topElevation = lastRowElevations[x];
-                        computeVerticalCubeFaces(
+                        ComputeVerticalCubeFaces(
                             vertexBlockStart,
-                            computeVertexBlockStart(x, y - 1),
+                            ComputeVertexBlockStart(x, y - 1),
                             elevation,
                             topElevation,
                             2,
@@ -96,7 +97,7 @@ namespace Terrain
                     if (x > 0)
                     {
                         var leftElevation = lastColumnElevation;
-                        computeVerticalCubeFaces(
+                        ComputeVerticalCubeFaces(
                             vertexBlockStart,
                             vertices.Count - 8,
                             elevation,
@@ -116,7 +117,7 @@ namespace Terrain
                 }
             }
 
-            int computeVertexBlockStart(int x, int y)
+            int ComputeVertexBlockStart(int x, int y)
             {
                 return (x + MeshGenerator.CHUNK_SIZE * y) * 4;
             }
@@ -128,7 +129,7 @@ namespace Terrain
             };
         }
 
-        private float elevation(int x, int y, Vector3 axisA, Vector3 axisB, Vector3 axisAOffset, Vector3 axisBOffset, Vector3 center)
+        private float Elevation(int x, int y, Vector3 axisA, Vector3 axisB, Vector3 axisAOffset, Vector3 axisBOffset, Vector3 center)
         {
             var middlePointOnCube = axisA * ((y + 0.5f) * BLOCK_HEIGHT) + axisB * ((x + 0.5f) * BLOCK_HEIGHT) + center - axisAOffset - axisBOffset;
             var middlePointOnUnitSphere = Vector3.Normalize(middlePointOnCube);
@@ -138,7 +139,7 @@ namespace Terrain
             return BLOCK_HEIGHT * numBlocks;
         }
         
-        private static int computeVerticalCubeFaces(
+        private static int ComputeVerticalCubeFaces(
             int vertexIdBlockStart, 
             int neighborVertexIdBlockStart,
             float elevation, 

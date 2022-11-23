@@ -5,25 +5,25 @@ namespace DataStructures
         
         public static (T, int) findLeftNeighbor<T>(T currentNode) where T : AdaptiveSpatialQuadTree<T>
         {
-            var leftNeighborLocation = TreeLocationHelper.leftNeighborLocation(currentNode.treeLocation, currentNode.level);
+            var leftNeighborLocation = TreeLocationHelper.LeftNeighborLocation(currentNode.treeLocation, currentNode.level);
             return findNode(currentNode, leftNeighborLocation, Directions.LEFT);
         }
         
         public static (T, int) findRightNeighbor<T>(T currentNode) where T : AdaptiveSpatialQuadTree<T>
         {
-            var rightNeighborLocation = TreeLocationHelper.rightNeighborLocation(currentNode.treeLocation, currentNode.level);
+            var rightNeighborLocation = TreeLocationHelper.RightNeighborLocation(currentNode.treeLocation, currentNode.level);
             return findNode(currentNode, rightNeighborLocation, Directions.RIGHT);
         }
         
         public static (T, int) findTopNeighbor<T>(T currentNode) where T : AdaptiveSpatialQuadTree<T>
         {
-            var topNeighborLocation = TreeLocationHelper.topNeighborLocation(currentNode.treeLocation, currentNode.level);
+            var topNeighborLocation = TreeLocationHelper.TopNeighborLocation(currentNode.treeLocation, currentNode.level);
             return findNode(currentNode, topNeighborLocation, Directions.TOP);
         }
         
         public static (T, int) findBottomNeighbor<T>(T currentNode) where T : AdaptiveSpatialQuadTree<T>
         {
-            var bottomNeighborLocation = TreeLocationHelper.bottomNeighborLocation(currentNode.treeLocation, currentNode.level);
+            var bottomNeighborLocation = TreeLocationHelper.BottomNeighborLocation(currentNode.treeLocation, currentNode.level);
             return findNode(currentNode, bottomNeighborLocation, Directions.BOTTOM);
         }
 
@@ -31,10 +31,10 @@ namespace DataStructures
         {
             T ancestorNode;
             int rotation;
-            if (TreeLocationHelper.switchPlanetFace(targetTreeLocation))
+            if (TreeLocationHelper.SwitchPlanetFace(targetTreeLocation))
             {
                 ancestorNode = findTreeRootNeighbor(currentNode, targetTreeLocation);
-                rotation = PlanetFaceSwitchLookup.rotationForNeighborOfFace(currentNode.face, targetDirection);
+                rotation = PlanetFaceSwitchLookup.RotationForNeighborOfFace(currentNode.face, targetDirection);
             }
             else
             {
@@ -48,8 +48,8 @@ namespace DataStructures
             {
                 // This code can get executed while unity is in the process of deleting
                 // the `node` object. This is why I need to check for null here.
-                if (node == null || !node.hasChildren) return (null, 0);
-                var quadrantForNextLevel = Directions.rotateQuadrant(TreeLocationHelper.quadrantForLevel(targetTreeLocation, level + 1), rotation);
+                if (node == null || !node.HasChildren) return (null, 0);
+                var quadrantForNextLevel = Directions.rotateQuadrant(TreeLocationHelper.QuadrantForLevel(targetTreeLocation, level + 1), rotation);
                 node = node.children[quadrantForNextLevel];
             }
 
@@ -65,7 +65,7 @@ namespace DataStructures
                 rootNode = rootNode.parent;
             }
          
-            var neighborPosition = TreeLocationHelper.quadrantForLevel(targetTreeLocation, 0);
+            var neighborPosition = TreeLocationHelper.QuadrantForLevel(targetTreeLocation, 0);
             return rootNode.neighbors[neighborPosition];
         }
 
@@ -73,7 +73,7 @@ namespace DataStructures
         {
             var currentNodeTreeLocation = currentNode.treeLocation;
             var currentNodeLevel = currentNode.level;
-            var commonPathLength = TreeLocationHelper.commonPathLength(
+            var commonPathLength = TreeLocationHelper.CommonPathLength(
                 currentNodeTreeLocation,
                 targetTreeLocation,
                 currentNodeLevel

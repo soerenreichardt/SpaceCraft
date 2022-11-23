@@ -1,12 +1,12 @@
 using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Mesh
 {
     public delegate Mesh MeshComputer(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB);
     
-    public interface MeshGeneratorStrategy
+    public interface IMeshGeneratorStrategy
     {
-        MeshComputer meshComputer();
+        MeshComputer MeshComputer();
     }
 
     public struct Mesh

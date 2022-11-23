@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Mesh
 {
-    public class AxisLookup
+    public static class AxisLookup
     {
-        public static (Vector3, Vector3) getAxisForFace(Vector3 face)
+        public static (Vector3, Vector3) GetAxisForFace(Vector3 face)
         {
             return AxisPerFace[face];
         }

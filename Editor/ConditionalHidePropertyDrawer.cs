@@ -9,8 +9,8 @@ namespace Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            ConditionalHideAttribute condHAtt = (ConditionalHideAttribute) attribute;
-            bool enabled = GetConditionalHideAttributeResult(condHAtt, property);
+            var condHAtt = (ConditionalHideAttribute) attribute;
+            var enabled = GetConditionalHideAttributeResult(condHAtt, property);
 
             if (enabled)
             {
@@ -20,8 +20,8 @@ namespace Editor
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            ConditionalHideAttribute condHAtt = (ConditionalHideAttribute) attribute;
-            bool enabled = GetConditionalHideAttributeResult(condHAtt, property);
+            var condHAtt = (ConditionalHideAttribute) attribute;
+            var enabled = GetConditionalHideAttributeResult(condHAtt, property);
 
             if (enabled)
             {
@@ -32,7 +32,7 @@ namespace Editor
             return -EditorGUIUtility.standardVerticalSpacing;
         }
 
-        bool GetConditionalHideAttributeResult(ConditionalHideAttribute condHAtt, SerializedProperty property)
+        private static bool GetConditionalHideAttributeResult(ConditionalHideAttribute condHAtt, SerializedProperty property)
         {
             SerializedProperty sourcePropertyValue = null;
 
@@ -62,15 +62,10 @@ namespace Editor
             }
 
 
-            if (sourcePropertyValue != null)
-            {
-                return CheckPropertyType(condHAtt, sourcePropertyValue);
-            }
-
-            return true;
+            return sourcePropertyValue == null || CheckPropertyType(condHAtt, sourcePropertyValue);
         }
 
-        bool CheckPropertyType(ConditionalHideAttribute condHAtt, SerializedProperty sourcePropertyValue)
+        private static bool CheckPropertyType(ConditionalHideAttribute condHAtt, SerializedProperty sourcePropertyValue)
         {
             //Note: add others for custom handling if desired
             switch (sourcePropertyValue.propertyType)

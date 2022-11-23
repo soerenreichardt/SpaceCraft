@@ -15,7 +15,7 @@ namespace Noise
 
         public float Evaluate(Vector3 point)
         {
-            Vector3 sphereNormal = Vector3.Normalize(point);
+            var sphereNormal = Vector3.Normalize(point);
             var axisA = Vector3.Cross(sphereNormal, new Vector3(0, 1, 0));
             var axisB = Vector3.Cross(sphereNormal, axisA);
 

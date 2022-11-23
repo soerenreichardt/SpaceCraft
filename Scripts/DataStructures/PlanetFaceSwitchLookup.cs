@@ -6,7 +6,7 @@ namespace DataStructures
     public static class PlanetFaceSwitchLookup
     {
 
-        public static int rotationForNeighborOfFace(Vector3 face, int neighborDirection)
+        public static int RotationForNeighborOfFace(Vector3 face, int neighborDirection)
         {
             return RootNeighborRotationLookup[face][neighborDirection];
         }

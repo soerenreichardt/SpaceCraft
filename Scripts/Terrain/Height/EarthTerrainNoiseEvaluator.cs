@@ -1,7 +1,7 @@
 using Noise;
 using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Height
 {
     public class EarthTerrainNoiseEvaluator : INoiseEvaluator
     {
@@ -30,16 +30,12 @@ namespace Terrain
             var mask = Mathf.SmoothStep(0, terrainSettings.mountainBlend, maskNoiseFilter.Evaluate(pointOnUnitSphere));
             
             return continentShape * Planet.SCALE + mountainShape * Planet.SCALE * mask;
-
-            // var continentShape = continentNoiseFilter.Evaluate(pointOnUnitSphere);
-            // var mountainShape = ridgeNoiseFilter.Evaluate(pointOnUnitSphere);
-            // return continentShape * Planet.SCALE + mountainShape * Planet.SCALE * continentShape;
         }
 
         private static float SmoothMax(float a, float b, float k)
         {
             k = Mathf.Min(0, -k);
-            float h = Mathf.Max(0, Mathf.Min(1, (b - a + k) / (2 * k)));
+            var h = Mathf.Max(0, Mathf.Min(1, (b - a + k) / (2 * k)));
             return a * h + b * (1 - h) - k * h * (1 - h);
         }
     }

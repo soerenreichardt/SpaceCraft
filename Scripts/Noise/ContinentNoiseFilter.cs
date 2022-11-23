@@ -29,7 +29,7 @@ namespace Noise
             var amplitude = 1.0f;
             var weight = 1.0f;
 
-            for (int i = 0; i < continentNoiseSettings.numLayers; i++)
+            for (var i = 0; i < continentNoiseSettings.numLayers; i++)
             {
                 var noiseValue = noise.Evaluate(point * frequency + offset) * 0.5f + 0.5f;
                 noiseValue *= weight;

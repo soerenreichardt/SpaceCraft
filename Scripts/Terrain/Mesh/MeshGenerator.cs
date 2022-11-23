@@ -1,8 +1,9 @@
 using System.Collections.Concurrent;
 using System.Threading;
+using Terrain.Height;
 using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Mesh
 {
     public class MeshGenerator {
         public const int CHUNK_SIZE = 16;
@@ -33,39 +34,38 @@ namespace Terrain
 
         public MeshGenerator(INoiseEvaluator noiseEvaluator, TerrainSettings terrainSettings)
         {
-            var terrainNoiseEvaluator = noiseEvaluator;
-            this.smoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator(terrainNoiseEvaluator, terrainSettings.planetSize);
-            this.blockTerrainMeshGenerator = new BlockTerrainMeshGenerator(terrainNoiseEvaluator, terrainSettings.planetSize);
+            this.smoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator(noiseEvaluator, terrainSettings.planetSize);
+            this.blockTerrainMeshGenerator = new BlockTerrainMeshGenerator(noiseEvaluator, terrainSettings.planetSize);
             this.queue = new ConcurrentQueue<Data>();
             ThreadPool.SetMaxThreads(4, 4);
         }
 
-        public void pushData(Data data) {
+        public void PushData(Data data) {
             queue.Enqueue(data);
             Interlocked.Increment(ref dataSize);
         }
 
-        public void consume() {
+        public void Consume() {
             int batchCounter = 0;
             while(batchCounter < BATCH_SIZE || !queue.IsEmpty) {
-                ThreadPool.QueueUserWorkItem(computeMesh);
+                ThreadPool.QueueUserWorkItem(ComputeMesh);
                 batchCounter++;
             }
         }
 
-        private void computeMesh(object stateInfo)
+        private void ComputeMesh(object stateInfo)
         {
             if (queue.TryDequeue(out var data)) {
                 Interlocked.Decrement(ref dataSize);
 
-                var (axisA, axisB) = AxisLookup.getAxisForFace(data.face);
+                var (axisA, axisB) = AxisLookup.GetAxisForFace(data.face);
 
-                MeshGeneratorStrategy meshGeneratorStrategy = smoothTerrainMeshGenerator;
+                IMeshGeneratorStrategy meshGeneratorStrategy = smoothTerrainMeshGenerator;
                     // data.blockLevel 
                         // ? (MeshGeneratorStrategy) blockTerrainMeshGenerator 
                         // : smoothTerrainMeshGenerator;
 
-                var mesh = meshGeneratorStrategy.meshComputer()(data, axisA, axisB);
+                var mesh = meshGeneratorStrategy.MeshComputer()(data, axisA, axisB);
                 data.terrainChunk.vertices = mesh.vertices;
                 data.terrainChunk.normals = mesh.normals;
                 data.terrainChunk.uvs = mesh.uvs;

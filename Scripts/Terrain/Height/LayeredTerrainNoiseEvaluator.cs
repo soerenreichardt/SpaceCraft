@@ -1,4 +1,5 @@
 ﻿using Noise;
+using Terrain.Height;
 using UnityEngine;
 
 namespace Terrain

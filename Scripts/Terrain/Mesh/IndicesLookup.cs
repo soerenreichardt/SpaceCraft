@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using DataStructures;
 
-namespace Terrain
+namespace Terrain.Mesh
 {
-    public class IndicesLookup
+    public static class IndicesLookup
     {
-        public static int[] get<T>(T[] neighbors) where T : AdaptiveSpatialQuadTree<T>
+        public static int[] Get<T>(T[] neighbors) where T : AdaptiveSpatialQuadTree<T>
         {
             var lookupKey = 0;
             lookupKey |= neighbors[Directions.LEFT] == null ? 1 : 0;
@@ -13,7 +13,7 @@ namespace Terrain
             lookupKey |= neighbors[Directions.TOP] == null ? 4 : 0;
             lookupKey |= neighbors[Directions.BOTTOM] == null ? 8 : 0;
 
-            return stitchIndicesLookup[lookupKey];
+            return StitchIndicesLookup[lookupKey];
         }
 
         public static readonly int[] Indices =
@@ -1136,7 +1136,7 @@ namespace Terrain
             286, 269, 286, 270, 270, 286, 288
         };
 
-        private static readonly Dictionary<int, int[]> stitchIndicesLookup = new Dictionary<int, int[]>
+        private static readonly Dictionary<int, int[]> StitchIndicesLookup = new Dictionary<int, int[]>
         {
             {0, Indices},
             {1, Top},
@@ -1156,7 +1156,7 @@ namespace Terrain
             {1 | 2 | 4 | 8, All}
         };
 
-        public static int[] generateIndices()
+        public static int[] GenerateIndices()
         {
             var indices = new List<int>();
             for (int y = 0; y < MeshGenerator.CHUNK_SIZE; y++)
@@ -1264,14 +1264,14 @@ namespace Terrain
                     }
 
                     if (y != 0 && y != MeshGenerator.CHUNK_SIZE - 1 && x != MeshGenerator.CHUNK_SIZE - 1 && x != 0)
-                        addStandardTileIndices(indices, y, x);
+                        AddStandardTileIndices(indices, y, x);
                 }
             }
 
             return indices.ToArray();
         }
 
-        private static void addStandardTileIndices(List<int> indices, int y, int x)
+        private static void AddStandardTileIndices(List<int> indices, int y, int x)
         {
             indices.Add((y + 0) * (MeshGenerator.CHUNK_SIZE + 1) + x + 0);
             indices.Add((y + 1) * (MeshGenerator.CHUNK_SIZE + 1) + x + 0);

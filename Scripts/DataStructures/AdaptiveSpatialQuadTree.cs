@@ -1,117 +1,118 @@
-using DataStructures;
-using SpaceCraft;
 using UnityEngine;
 
-public abstract class AdaptiveSpatialQuadTree<T> : QuadTree<T> 
-where T : AdaptiveSpatialQuadTree<T>
+namespace DataStructures
 {
-    protected Vector3 center { get; }
-    protected float chunkLength { get; }
-    protected float viewDistance { get; }
-
-    public readonly Vector3 face;
-
-    public T[] neighbors;
-
-    protected AdaptiveSpatialQuadTree(
-        Vector3 center, 
-        float chunkLength, 
-        float viewDistance, 
-        int maxLevel,
-        int level,
-        T parent,
-        Vector3 face,
-        long treeLocation
-    ) : base(level, maxLevel, parent, treeLocation)
+    public abstract class AdaptiveSpatialQuadTree<T> : QuadTree<T> 
+        where T : AdaptiveSpatialQuadTree<T>
     {
-        this.center = center;
-        this.chunkLength = chunkLength;
-        this.viewDistance = viewDistance * Mathf.Pow(2, -level) + (4 * chunkLength);
-        this.face = face;
-        this.neighbors = new T[4];
-    }
+        protected readonly Vector3 center;
+        protected readonly float chunkLength;
+        protected readonly float viewDistance;
 
-    protected abstract float distance();
+        public readonly Vector3 face;
 
-    public void update()
-    {
-        if (hasChildren) {
-            if (distance() > viewDistance) {
-                merge();
-                return;
-            }
-            foreach (T child in children)
-            {
-                child.update();
-            }
-        } else {
-            if (distance() <= viewDistance) {
-                split();
+        public T[] neighbors;
+
+        protected AdaptiveSpatialQuadTree(
+            Vector3 center, 
+            float chunkLength, 
+            float viewDistance, 
+            int maxLevel,
+            int level,
+            T parent,
+            Vector3 face,
+            long treeLocation
+        ) : base(level, maxLevel, parent, treeLocation)
+        {
+            this.center = center;
+            this.chunkLength = chunkLength;
+            this.viewDistance = viewDistance * Mathf.Pow(2, -level) + (4 * chunkLength);
+            this.face = face;
+            this.neighbors = new T[4];
+        }
+
+        protected abstract float Distance();
+
+        public void Update()
+        {
+            if (HasChildren) {
+                if (Distance() > viewDistance) {
+                    Merge();
+                    return;
+                }
+                foreach (T child in children)
+                {
+                    child.Update();
+                }
+            } else {
+                if (Distance() <= viewDistance) {
+                    Split();
+                }
             }
         }
-    }
 
-    private void setNeighbor(int direction, T neighbor)
-    {
-        neighbors[direction] = neighbor;
-        onNeighborSet();
-    }
+        private void SetNeighbor(int direction, T neighbor)
+        {
+            neighbors[direction] = neighbor;
+            OnNeighborSet();
+        }
 
-    private void removeNeighbor(int direction)
-    {
-        neighbors[direction] = null;
-        onNeighborRemoved();
-    }
+        private void RemoveNeighbor(int direction)
+        {
+            neighbors[direction] = null;
+            OnNeighborRemoved();
+        }
     
-    protected override void onSplit()
-    {
-        adaptiveTreeOnSplit();
-    }
+        protected override void OnSplit()
+        {
+            AdaptiveTreeOnSplit();
+        }
 
-    protected override void onMerge()
-    {
-        adaptiveTreeOnMerge();
-    }
+        protected override void OnMerge()
+        {
+            AdaptiveTreeOnMerge();
+        }
 
-    protected abstract void adaptiveTreeOnSplit();
+        protected abstract void AdaptiveTreeOnSplit();
     
-    protected abstract void adaptiveTreeOnMerge();
+        protected abstract void AdaptiveTreeOnMerge();
 
-    protected abstract void onNeighborSet();
+        protected abstract void OnNeighborSet();
 
-    protected abstract void onNeighborRemoved();
+        protected abstract void OnNeighborRemoved();
     
-    protected void computeNeighbors()
-    {
-        var (leftNeighbor, rotationLN) = TreeLocationNodeLookup.findLeftNeighbor((T) this);
-        setNeighbor(Directions.LEFT, leftNeighbor);
-        leftNeighbor?.setNeighbor(Directions.rotateDirection(Directions.RIGHT, rotationLN), (T) this);
+        protected void ComputeNeighbors()
+        {
+            var (leftNeighbor, rotationLN) = TreeLocationNodeLookup.findLeftNeighbor((T) this);
+            SetNeighbor(Directions.LEFT, leftNeighbor);
+            leftNeighbor?.SetNeighbor(Directions.rotateDirection(Directions.RIGHT, rotationLN), (T) this);
         
-        var (rightNeighbor, rotationRN) = TreeLocationNodeLookup.findRightNeighbor((T) this);
-        setNeighbor(Directions.RIGHT, rightNeighbor);
-        rightNeighbor?.setNeighbor(Directions.rotateDirection(Directions.LEFT, rotationRN), (T) this);
+            var (rightNeighbor, rotationRN) = TreeLocationNodeLookup.findRightNeighbor((T) this);
+            SetNeighbor(Directions.RIGHT, rightNeighbor);
+            rightNeighbor?.SetNeighbor(Directions.rotateDirection(Directions.LEFT, rotationRN), (T) this);
         
-        var (topNeighbor, rotationTN) = TreeLocationNodeLookup.findTopNeighbor((T) this);
-        setNeighbor(Directions.TOP, topNeighbor);
-        topNeighbor?.setNeighbor(Directions.rotateDirection(Directions.BOTTOM, rotationTN), (T) this);
+            var (topNeighbor, rotationTN) = TreeLocationNodeLookup.findTopNeighbor((T) this);
+            SetNeighbor(Directions.TOP, topNeighbor);
+            topNeighbor?.SetNeighbor(Directions.rotateDirection(Directions.BOTTOM, rotationTN), (T) this);
         
-        var (bottomNeighbor, rotationBN) = TreeLocationNodeLookup.findBottomNeighbor((T) this);
-        setNeighbor(Directions.BOTTOM, bottomNeighbor);
-        bottomNeighbor?.setNeighbor(Directions.rotateDirection(Directions.TOP, rotationBN), (T) this);
-    }
+            var (bottomNeighbor, rotationBN) = TreeLocationNodeLookup.findBottomNeighbor((T) this);
+            SetNeighbor(Directions.BOTTOM, bottomNeighbor);
+            bottomNeighbor?.SetNeighbor(Directions.rotateDirection(Directions.TOP, rotationBN), (T) this);
+        }
 
-    protected void removeNeighbors()
-    {
-        var (leftNeighbor, rotationLN) = TreeLocationNodeLookup.findLeftNeighbor((T) this);
-        leftNeighbor?.removeNeighbor(Directions.rotateDirection(Directions.RIGHT, rotationLN));
+        protected void RemoveNeighbors()
+        {
+            var (leftNeighbor, rotationLN) = TreeLocationNodeLookup.findLeftNeighbor((T) this);
+            leftNeighbor?.RemoveNeighbor(Directions.rotateDirection(Directions.RIGHT, rotationLN));
         
-        var (rightNeighbor, rotationRN) = TreeLocationNodeLookup.findRightNeighbor((T) this);
-        rightNeighbor?.removeNeighbor(Directions.rotateDirection(Directions.LEFT, rotationRN));
+            var (rightNeighbor, rotationRN) = TreeLocationNodeLookup.findRightNeighbor((T) this);
+            rightNeighbor?.RemoveNeighbor(Directions.rotateDirection(Directions.LEFT, rotationRN));
         
-        var (topNeighbor, rotationTN) = TreeLocationNodeLookup.findTopNeighbor((T) this);
-        topNeighbor?.removeNeighbor(Directions.rotateDirection(Directions.BOTTOM, rotationTN));
+            var (topNeighbor, rotationTN) = TreeLocationNodeLookup.findTopNeighbor((T) this);
+            topNeighbor?.RemoveNeighbor(Directions.rotateDirection(Directions.BOTTOM, rotationTN));
         
-        var (bottomNeighbor, rotationBN) = TreeLocationNodeLookup.findBottomNeighbor((T) this);
-        bottomNeighbor?.removeNeighbor(Directions.rotateDirection(Directions.TOP, rotationBN));
+            var (bottomNeighbor, rotationBN) = TreeLocationNodeLookup.findBottomNeighbor((T) this);
+            bottomNeighbor?.RemoveNeighbor(Directions.rotateDirection(Directions.TOP, rotationBN));
+        }
     }
 }

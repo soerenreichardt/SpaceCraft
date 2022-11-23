@@ -1,7 +1,7 @@
 using Noise;
 using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Height
 {
     [CreateAssetMenu]
     public class EarthTerrainSettings : TerrainSettings

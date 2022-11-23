@@ -8,12 +8,13 @@ namespace Noise
 {
     public class RidgidNoiseFilter : INoiseFilter
     {
-        NoiseSettings.RidgidNoiseSettings settings;
-        SimplexNoise noise = new SimplexNoise();
+        private readonly NoiseSettings.RidgidNoiseSettings settings;
+        private readonly SimplexNoise noise;
 
         public RidgidNoiseFilter(NoiseSettings.RidgidNoiseSettings settings)
         {
             this.settings = settings;
+            this.noise = new SimplexNoise();
         }
 
         public float Evaluate(Vector3 point)

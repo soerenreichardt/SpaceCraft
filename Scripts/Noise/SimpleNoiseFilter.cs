@@ -8,12 +8,13 @@ namespace Noise
 {
     public class SimpleNoiseFilter : INoiseFilter
     {
-        private NoiseSettings.SimpleNoiseSettings settings;
-        private SimplexNoise noise = new SimplexNoise();
+        private readonly NoiseSettings.SimpleNoiseSettings settings;
+        private readonly SimplexNoise noise;
 
         public SimpleNoiseFilter(NoiseSettings.SimpleNoiseSettings settings)
         {
             this.settings = settings;
+            this.noise = new SimplexNoise();
         }
 
         public float Evaluate(Vector3 point)

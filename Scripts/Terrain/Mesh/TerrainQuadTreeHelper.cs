@@ -2,28 +2,28 @@
 using UnityEngine;
 using static DataStructures.Directions;
 
-namespace Terrain
+namespace Terrain.Mesh
 {
     public static class TerrainQuadTreeHelper
     {
         // TODO: refactor to use axis
-        internal static Vector3 computeCenter(Vector3 face, Vector3 center, int quadrant, float chunkLength)
+        internal static Vector3 ComputeCenter(Vector3 face, Vector3 center, int quadrant, float chunkLength)
         {
             Vector3 result;
             Vector2 centerOnPlane;
             if (face == Vector3.up || face == Vector3.down)
             {
-                centerOnPlane = compute2DCenter(center.x, center.z, quadrant, face.y, chunkLength);
+                centerOnPlane = Compute2DCenter(center.x, center.z, quadrant, face.y, chunkLength);
                 result = new Vector3(centerOnPlane.x, center.y, centerOnPlane.y);
             }
             else if (face == Vector3.left || face == Vector3.right)
             {
-                centerOnPlane = compute2DCenter(center.z, center.y, quadrant, face.x, chunkLength);
+                centerOnPlane = Compute2DCenter(center.z, center.y, quadrant, face.x, chunkLength);
                 result = new Vector3(center.x, centerOnPlane.y, centerOnPlane.x);
             }
             else if (face == Vector3.forward || face == Vector3.back)
             {
-                centerOnPlane = compute2DCenter(center.x, center.y, quadrant, -face.z, chunkLength);
+                centerOnPlane = Compute2DCenter(center.x, center.y, quadrant, -face.z, chunkLength);
                 result = new Vector3(centerOnPlane.x, centerOnPlane.y, center.z);
             }
             else
@@ -33,7 +33,7 @@ namespace Terrain
             return result;
         }
 
-        private static Vector2 compute2DCenter(float anchorX, float anchorY, int quadrant, float sign, float chunkLength)
+        private static Vector2 Compute2DCenter(float anchorX, float anchorY, int quadrant, float sign, float chunkLength)
         {
             Vector2 result;
             switch (quadrant)

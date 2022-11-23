@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Mesh
 {
-    public class UVLookup
+    public static class UVLookup
     {
-        public static Vector2[] chunkUVs()
+        public static Vector2[] ChunkUVs()
         {
             var uvs = new Vector2[(MeshGenerator.CHUNK_SIZE + 1) * (MeshGenerator.CHUNK_SIZE + 1)];
             for (int y = 0; y < MeshGenerator.CHUNK_SIZE + 1; y++)
