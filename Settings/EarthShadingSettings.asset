@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 906524e3d3a4421e81cc1ee5c4815073, type: 3}
+  m_Name: EarthShadingSettings
+  m_EditorClassIdentifier: 
+  shader: {fileID: 4800000, guid: 425f54c76d7b498ab0a7386e62c1b3c0, type: 3}
+  material: {fileID: 0}
+  shoreLow: {r: 0.9803922, g: 1, b: 0.60784316, a: 0}
+  shoreHigh: {r: 0.9490197, g: 0.8941177, b: 0.31764707, a: 0}
+  flatLowA: {r: 0.5372549, g: 0.8352942, b: 0, a: 0}
+  flatHighA: {r: 0.16470589, g: 0.4156863, b: 0, a: 0}
+  flatLowB: {r: 0.21960786, g: 0.627451, b: 0.078431375, a: 0}
+  flatHighB: {r: 0.050980397, g: 0.37647063, b: 0.2392157, a: 0}
+  colorBlend: 1.71
+  blendNoise: 0.491
+  shoreHeight: 0.0858
+  shoreBlend: 0.195
+  maxFlatHeight: 0.921
+  steepLow: {r: 0.48627454, g: 0.4431373, b: 0.16078432, a: 0}
+  steepHeight: {r: 0.13333334, g: 0.07058824, b: 0, a: 0}
+  steepBands: 7.8
+  bandStrength: 0.191
+  steepnessThreshold: 0.303
+  flatToSteepBlend: 0.219
+  flatToSteepNoise: 0.0802
+  usePoles: 0
+  snowColor: {r: 1, g: 1, b: 1, a: 1}
+  snowLongitude: 1
+  snowBlend: 0.0978
+  snowSpecular: 0.701
+  snowHighlight: 1.244
+  snowNoiseA: 5.17
+  snowNoiseB: 4
+  noiseTexture: {fileID: 2800000, guid: 7581241037904e947b08c49c5bf36836, type: 3}
+  noiseScale: 0.01
+  noiseScale2: 0.1
+  fresnelColor: {r: 0.6313726, g: 0.5446511, b: 0.25490198, a: 0}
+  fresnelStrengthMin: 0.92
+  fresnelStrengthMax: 2.6
+  fresnelPower: 0.87
+  smoothness: 0
+  metallic: 0
+  testParams: {x: 1.3, y: 1.92, z: 112.5}
+  heightMin: 0
+  heightMax: 225.28
+  oceanLevel: 204.8
+  bodyScale: 1

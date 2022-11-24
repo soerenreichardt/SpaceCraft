@@ -5,7 +5,7 @@ namespace PostProcessing
     [CreateAssetMenu]
     public class OceanEffectSettings : 
         ScriptableObject,
-        IPostProcessingEffectSettings<OceanEffectSettings.FixedData, OceanEffectSettings.UpdatableData>
+        IShaderSettings<OceanEffectSettings.FixedData, OceanEffectSettings.UpdatableData>
     {
         private static readonly int OceanCentrePropertyLocation = Shader.PropertyToID("oceanCentre");
         private static readonly int DirToSunPropertyLocation = Shader.PropertyToID("dirToSun");

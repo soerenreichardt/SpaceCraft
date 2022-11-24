@@ -1,6 +1,6 @@
 ﻿namespace PostProcessing
 {
-    public interface IPostProcessingEffectSettings<in TFixedData, in TUpdatableData>
+    public interface IShaderSettings<in TFixedData, in TUpdatableData>
     {
         void SetProperties();
         void SetFixedData(TFixedData data);

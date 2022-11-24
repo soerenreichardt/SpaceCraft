@@ -2,65 +2,6 @@ Shader "Custom/EarthShader"
 {
 	Properties
 	{
-//		_PlanetRadius ("Planet radius", Float) = 1.0
-//        _InversePlanetRadius ("Inverse planet radius", Float) = 0.1
-		heightMinMax ("Height min/max", Vector) = (0,0,0)
-		oceanLevel ("Ocean level", Float) = 0
-		
-		[Header(Flat Terrain)]
-		_ShoreLow("Shore Low", Color) = (0,0,0,1)
-		_ShoreHigh("Shore High", Color) = (0,0,0,1)
-		_FlatLowA("Flat Low A", Color) = (0,0,0,1)
-		_FlatHighA("Flat High A", Color) = (0,0,0,1)
-
-		_FlatLowB("Flat Low B", Color) = (0,0,0,1)
-		_FlatHighB("Flat High B", Color) = (0,0,0,1)
-
-		_FlatColBlend("Colour Blend", Range(0,3)) = 1.5
-		_FlatColBlendNoise("Blend Noise", Range(0,1)) = 0.3
-		_ShoreHeight("Shore Height", Range(0,0.2)) = 0.05
-		_ShoreBlend("Shore Blend", Range(0,0.2)) = 0.03
-		_MaxFlatHeight("Max Flat Height", Range(0,1)) = 0.5
-
-		[Header(Steep Terrain)]
-		_SteepLow("Steep Colour Low", Color) = (0,0,0,1)
-		_SteepHigh("Steep Colour High", Color) = (0,0,0,1)
-		_SteepBands("Steep Bands", Range(1, 20)) = 8
-		_SteepBandStrength("Band Strength", Range(-1,1)) = 0.5
-
-		[Header(Flat to Steep Transition)]
-		_SteepnessThreshold("Steep Threshold", Range(0,1)) = 0.5
-		_FlatToSteepBlend("Flat to Steep Blend", Range(0,0.3)) = 0.1
-		_FlatToSteepNoise("Flat to Steep Noise", Range(0,0.2)) = 0.1
-
-		[Header(Snowy Poles)]
-		[Toggle()]
-      _UseSnowyPoles("Use Poles", float) = 0
-		_SnowCol("Snow Colour", Color) = (1,1,1,1)
-		_SnowLongitude("Snow Longitude", Range(0,1)) = 0.8
-		_SnowBlend("Snow Blend", Range(0, 0.2)) = 0.1
-		_SnowSpecular("Snow Specular", Range(0,1)) = 1
-		_SnowHighlight("Snow Highlight", Range(1,2)) = 1.2
-		_SnowNoiseA("Snow Noise A", Range(0,10)) = 5
-		_SnowNoiseB("Snow Noise B", Range(0,10)) = 4
-
-		[Header(Noise)]
-		[NoScaleOffset] _NoiseTex ("Noise Texture", 2D) = "white" {}
-		_NoiseScale("Noise Scale", Float) = 1
-		_NoiseScale2("Noise Scale2", Float) = 1
-
-		[Header(Other)]
-		_FresnelCol("Fresnel Colour", Color) = (1,1,1,1)
-		_FresnelStrengthNear("Fresnel Strength Min", float) = 2
-		_FresnelStrengthFar("Fresnel Strength Max", float) = 5
-		_FresnelPow("Fresnel Power", float) = 2
-		_Glossiness ("Smoothness", Range(0,1)) = 0.5
-		_Metallic ("Metallic", Range(0,1)) = 0.0
-
-	
-
-		_TestParams ("Test Params", Vector) = (0,0,0,0)
-	
 	}
 	SubShader
 	{
@@ -160,11 +101,9 @@ Shader "Custom/EarthShader"
 	
 
 		// Height data:
-		float3 heightMinMax;
+        float heightMin;
+        float heightMax;
 		float oceanLevel;
-
-		float _PlanetRadius;
-		float _InversePlanetRadius;
 
 		fixed4 LightingNoLighting(SurfaceOutput s, fixed3 lightDir, fixed atten)
 		{
@@ -184,8 +123,8 @@ Shader "Custom/EarthShader"
 
 			// Calculate heights
 			float terrainHeight = length(IN.vertPos);
-			float shoreHeight = lerp(heightMinMax.x, 1, oceanLevel);
-			float aboveShoreHeight01 = remap01(terrainHeight, shoreHeight, heightMinMax.y);
+			float shoreHeight = lerp(heightMin, 1, oceanLevel);
+			float aboveShoreHeight01 = remap01(terrainHeight, shoreHeight, heightMax);
 			float flatHeight01 = remap01(aboveShoreHeight01, 0, _MaxFlatHeight);
 
 			// Sample noise texture at two different scales

@@ -377,11 +377,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   earthTerrainSettings: {fileID: 11400000, guid: e4ac25176c1912341be70cf362af57b0, type: 2}
-  colorSettings: {fileID: 11400000, guid: 2ad423c299e600c4ebb53a6b48dbb203, type: 2}
+  shadingSettings: {fileID: 11400000, guid: 4c1e6f9c2c81ece4a8080359905197a4, type: 2}
   oceanEffectSettings: {fileID: 11400000, guid: b3ca963c8d7e1244eb117c5478133491, type: 2}
-  colorSettingsFoldout: 0
+  shadingSettingsFoldout: 1
   earthTerrainSettingsFoldout: 0
-  oceanEffectSettingsFoldout: 1
+  oceanEffectSettingsFoldout: 0
 --- !u!4 &1422644690
 Transform:
   m_ObjectHideFlags: 0

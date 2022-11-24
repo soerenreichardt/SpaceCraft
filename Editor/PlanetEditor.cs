@@ -15,7 +15,7 @@ namespace Editor
             base.OnInspectorGUI();
 
             DrawSettingsEditor(planet.earthTerrainSettings, planet.OnTerrainSettingsUpdated,  ref planet.earthTerrainSettingsFoldout, ref terrainEditor);
-            DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated,  ref planet.colorSettingsFoldout, ref terrainEditor);
+            DrawSettingsEditor(planet.shadingSettings, planet.OnShadingSettingsUpdated,  ref planet.shadingSettingsFoldout, ref terrainEditor);
             DrawSettingsEditor(planet.oceanEffectSettings, planet.OnOceanEffectSettingsUpdated,  ref planet.oceanEffectSettingsFoldout, ref terrainEditor);
         }
 

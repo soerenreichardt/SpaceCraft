@@ -14,35 +14,35 @@ namespace Terrain
         private static readonly Vector3[] Directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
     
         public EarthTerrainSettings earthTerrainSettings;
-        public ColorSettings colorSettings;
+        public EarthShadingSettings shadingSettings;
         public OceanEffectSettings oceanEffectSettings;
 
         private MeshGenerator meshGenerator;
-        private ColorGenerator colorGenerator;
         
         private readonly TerrainQuadTree[] planetSides = new TerrainQuadTree[6];
 
         [HideInInspector]
-        public bool colorSettingsFoldout;
+        public bool shadingSettingsFoldout;
         [HideInInspector] 
         public bool earthTerrainSettingsFoldout;
         [HideInInspector]
         public bool oceanEffectSettingsFoldout;
 
         private Light directionalLight;
+        private float planetDiameter;
         
         // Start is called before the first frame update
         void Start()
         {
             meshGenerator = new MeshGenerator(new EarthTerrainNoiseEvaluator(earthTerrainSettings), earthTerrainSettings);
             
-            var planetDiameter = Mathf.Pow(2, earthTerrainSettings.planetSize) * SCALE;
-            InitializeColorGenerator(planetDiameter);
-            InitializeOceanEffect(planetDiameter);
-            InitializePlanetSides(planetDiameter);
+            planetDiameter = Mathf.Pow(2, earthTerrainSettings.planetSize) * SCALE;
+            InitializeEarthShader();
+            InitializeOceanEffect();
+            InitializePlanetSides();
         }
 
-        private void InitializePlanetSides(float planetDiameter)
+        private void InitializePlanetSides()
         {
             for (int i = 0; i < 6; i++)
             {
@@ -53,7 +53,7 @@ namespace Terrain
                     Directions[i],
                     3.0f,
                     earthTerrainSettings.planetSize,
-                    colorSettings.material,
+                    shadingSettings.material,
                     meshGenerator
                 );
                 planetSide.terrain.transform.parent = transformCache;
@@ -67,13 +67,6 @@ namespace Terrain
             planetSides[3].neighbors = new[] {planetSides[5], planetSides[0], planetSides[4], planetSides[1]};
             planetSides[4].neighbors = new[] {planetSides[3], planetSides[0], planetSides[2], planetSides[1]};
             planetSides[5].neighbors = new[] {planetSides[2], planetSides[0], planetSides[3], planetSides[1]};
-        }
-
-        private void InitializeColorGenerator(float planetDiameter)
-        {
-            colorGenerator = new ColorGenerator(colorSettings);
-            colorSettings.material.SetFloat("_PlanetRadius", planetDiameter);
-            colorSettings.material.SetFloat("_InversePlanetRadius", 1.0f / planetDiameter);
         }
 
         // Update is called once per frame
@@ -94,9 +87,9 @@ namespace Terrain
             }
         }
 
-        public void OnColorSettingsUpdated()
+        public void OnShadingSettingsUpdated()
         {
-            colorGenerator.UpdateColors();
+            shadingSettings.SetProperties();
         }
 
         public void OnOceanEffectSettingsUpdated()
@@ -108,7 +101,17 @@ namespace Terrain
             meshGenerator.Consume();
         }
 
-        private void InitializeOceanEffect(float planetDiameter)
+        private void InitializeEarthShader()
+        {
+            EarthShadingSettings.FixedData data;
+            data.heightMin = 0.0f;
+            data.heightMax = planetDiameter + planetDiameter * SCALE;
+            data.oceanLevel = planetDiameter;
+            shadingSettings.SetFixedData(data);
+            shadingSettings.SetProperties();
+        }
+        
+        private void InitializeOceanEffect()
         {
             if (Camera.main != null)
                 Camera.main.gameObject.GetComponent<PostProcessingEffects>().oceanEffect = oceanEffectSettings.material;
