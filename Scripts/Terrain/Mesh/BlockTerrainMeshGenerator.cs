@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Terrain.Height;
+using Noise.Api;
 using UnityEngine;
 
 namespace Terrain.Mesh

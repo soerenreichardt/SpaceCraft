@@ -2,6 +2,7 @@
 Copyright (c) 2020 Sebastian Lague
 */
 
+using Noise.Api;
 using UnityEngine;
 
 namespace Noise

@@ -1,6 +1,6 @@
 ﻿using PostProcessing;
 using Terrain.Color;
-using Terrain.Height;
+using Terrain.Height.SebastianLague;
 using Terrain.Mesh;
 using UnityEngine;
 

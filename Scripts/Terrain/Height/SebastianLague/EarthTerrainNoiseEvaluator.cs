@@ -1,7 +1,7 @@
-using Noise;
+using Noise.Api;
 using UnityEngine;
 
-namespace Terrain.Height
+namespace Terrain.Height.SebastianLague
 {
     public class EarthTerrainNoiseEvaluator : INoiseEvaluator
     {

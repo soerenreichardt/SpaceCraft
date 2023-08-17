@@ -1,8 +1,7 @@
-﻿using Noise;
-using Terrain.Height;
+﻿using Noise.Api;
 using UnityEngine;
 
-namespace Terrain
+namespace Terrain.Height.Layered
 {
     public class LayeredTerrainNoiseEvaluator : INoiseEvaluator
     {
