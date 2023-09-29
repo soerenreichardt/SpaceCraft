@@ -16,7 +16,7 @@ MonoBehaviour:
   oceanDepthMultiplier: 1.37
   oceanFloorDepth: 2.1
   oceanFloorSmoothing: 1.94
-  mountainBlend: 0.34
+  mountainBlend: 0.339
   continentNoiseSettings:
     filterType: 2
     simpleNoiseSettings:

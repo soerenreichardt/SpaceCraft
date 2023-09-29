@@ -1,10 +1,10 @@
 using Noise;
 using UnityEngine;
 
-namespace Terrain.Height
+namespace Terrain.Height.SebastianLague
 {
     [CreateAssetMenu]
-    public class EarthTerrainSettings : TerrainSettings
+    public class EarthTerrainSettings : BaseTerrainSettings
     {
         public float oceanDepthMultiplier;
         public float oceanFloorDepth;
@@ -16,5 +16,10 @@ namespace Terrain.Height
         public NoiseSettings continentNoiseSettings;
         public NoiseSettings ridgeNoiseSettings;
         public NoiseSettings maskNoiseSettings;
+
+        public EarthTerrainSettings Clone()
+        {
+            return (EarthTerrainSettings) this.MemberwiseClone();
+        }
     }
 }

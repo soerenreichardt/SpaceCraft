@@ -5,7 +5,7 @@ Copyright (c) 2018 Sebastian Lague
 using System;
 using UnityEngine;
 
-namespace Noise
+namespace Noise.UI
 {
     [AttributeUsage(
         AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]

@@ -1,10 +1,10 @@
 using Noise;
 using UnityEngine;
 
-namespace Terrain.Height
+namespace Terrain.Height.Layered
 {
     [CreateAssetMenu]
-    public class LayeredTerrainSettings : TerrainSettings
+    public class LayeredTerrainSettings : BaseTerrainSettings
     {
         public NoiseLayer[] noiseLayers;
 
