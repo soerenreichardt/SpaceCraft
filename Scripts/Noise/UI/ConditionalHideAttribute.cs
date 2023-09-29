@@ -14,11 +14,6 @@ namespace Noise.UI
         public readonly string conditionalSourceField;
         public readonly int enumIndex;
 
-        public ConditionalHideAttribute(string boolVariableName)
-        {
-            this.conditionalSourceField = boolVariableName;
-        }
-
         public ConditionalHideAttribute(string enumVariableName, int enumIndex)
         {
             this.conditionalSourceField = enumVariableName;

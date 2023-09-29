@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: EarthTerrainSettings
   m_EditorClassIdentifier: 
   planetSize: 11
-  oceanDepthMultiplier: 1.37
-  oceanFloorDepth: 2.1
-  oceanFloorSmoothing: 1.94
+  oceanDepthMultiplier: 0.64
+  oceanFloorDepth: 1.53
+  oceanFloorSmoothing: 2.1
   mountainBlend: 0.339
   continentNoiseSettings:
     filterType: 2
@@ -39,7 +39,7 @@ MonoBehaviour:
       power: 0.8
     continentNoiseSettings:
       scaled: 0
-      multiplier: 2.39
+      multiplier: 2.21
       numLayers: 4
       scale: 1.63
       lacunarity: 3.93

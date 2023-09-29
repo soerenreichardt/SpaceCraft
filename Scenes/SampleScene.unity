@@ -228,8 +228,6 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
-  - component: {fileID: 963194230}
-  - component: {fileID: 963194231}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -335,31 +333,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!114 &963194230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62dd1a5aa12ea75479033ae46a9b3f1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  oceanEffect: {fileID: 0}
---- !u!114 &963194231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9be6f0002af443aa690be8d91e3e4e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1422644688
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,11 +363,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   earthTerrainSettings: {fileID: 11400000, guid: e4ac25176c1912341be70cf362af57b0, type: 2}
-  shadingSettings: {fileID: 11400000, guid: 4c1e6f9c2c81ece4a8080359905197a4, type: 2}
-  oceanEffectSettings: {fileID: 11400000, guid: b3ca963c8d7e1244eb117c5478133491, type: 2}
-  shadingSettingsFoldout: 0
+  material: {fileID: 2100000, guid: 35aade2c92cad64499f37bb69856faf2, type: 2}
   earthTerrainSettingsFoldout: 1
-  oceanEffectSettingsFoldout: 0
 --- !u!4 &1422644690
 Transform:
   m_ObjectHideFlags: 0
