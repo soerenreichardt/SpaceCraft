@@ -145,5 +145,10 @@ namespace Terrain.Color
         }
         
         public struct UpdatableData {}
+
+        public EarthShadingSettings Clone()
+        {
+            return (EarthShadingSettings) this.MemberwiseClone();
+        }
     }
 }

@@ -74,5 +74,10 @@ namespace PostProcessing
             public Vector3 planetPosition;
             public Vector3 directionToSun;
         }
+
+        public OceanEffectSettings Clone()
+        {
+            return (OceanEffectSettings) this.MemberwiseClone();
+        }
     }
 }

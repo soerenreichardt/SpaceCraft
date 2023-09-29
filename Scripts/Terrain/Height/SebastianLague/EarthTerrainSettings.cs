@@ -16,5 +16,10 @@ namespace Terrain.Height.SebastianLague
         public NoiseSettings continentNoiseSettings;
         public NoiseSettings ridgeNoiseSettings;
         public NoiseSettings maskNoiseSettings;
+
+        public EarthTerrainSettings Clone()
+        {
+            return (EarthTerrainSettings) this.MemberwiseClone();
+        }
     }
 }
