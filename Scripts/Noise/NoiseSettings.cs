@@ -3,6 +3,7 @@ Copyright (c) 2018 Sebastian Lague
 */
 
 using System;
+using Noise.UI;
 using UnityEngine;
 
 namespace Noise

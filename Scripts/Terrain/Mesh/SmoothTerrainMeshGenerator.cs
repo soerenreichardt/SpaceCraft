@@ -1,5 +1,5 @@
 using System;
-using Terrain.Height;
+using Noise.Api;
 using UnityEngine;
 
 namespace Terrain.Mesh

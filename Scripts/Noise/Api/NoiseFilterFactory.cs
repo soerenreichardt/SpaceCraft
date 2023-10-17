@@ -1,7 +1,8 @@
 ﻿/*
 Copyright (c) 2018 Sebastian Lague
 */
-namespace Noise
+
+namespace Noise.Api
 {
     public static class NoiseFilterFactory
     {

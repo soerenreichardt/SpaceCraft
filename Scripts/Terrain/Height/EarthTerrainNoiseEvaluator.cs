@@ -1,4 +1,5 @@
-using Noise;
+using Noise.Api;
+using Terrain.Height.SebastianLague;
 using UnityEngine;
 
 namespace Terrain.Height

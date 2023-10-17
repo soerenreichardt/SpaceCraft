@@ -1,4 +1,4 @@
-﻿using Noise;
+﻿using Noise.UI;
 using UnityEditor;
 using UnityEngine;
 

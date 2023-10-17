@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Threading;
+using Noise.Api;
 using Terrain.Height;
 using UnityEngine;
 
@@ -32,7 +33,7 @@ namespace Terrain.Mesh
             }
         }
 
-        public MeshGenerator(INoiseEvaluator noiseEvaluator, TerrainSettings terrainSettings)
+        public MeshGenerator(INoiseEvaluator noiseEvaluator, BaseTerrainSettings terrainSettings)
         {
             this.smoothTerrainMeshGenerator = new SmoothTerrainMeshGenerator(noiseEvaluator, terrainSettings.planetSize);
             this.blockTerrainMeshGenerator = new BlockTerrainMeshGenerator(noiseEvaluator, terrainSettings.planetSize);

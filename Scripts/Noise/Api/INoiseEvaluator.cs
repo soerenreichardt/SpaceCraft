@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Terrain.Height
+namespace Noise.Api
 {
     public interface INoiseEvaluator
     {
