@@ -42,8 +42,7 @@ namespace Terrain.Mesh
             var axisAOffset = (axisA * data.chunkLength);
             var axisBOffset = (axisB * data.chunkLength);
             var planetRadius = (float) (Math.Pow(2, planetSize) * Planet.SCALE);
-        
-            
+
             // vertices
             for (var y = 0; y < MeshGenerator.CHUNK_SIZE + 1; y++)
             {
