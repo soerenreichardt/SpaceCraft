@@ -1,4 +1,5 @@
-﻿using Terrain.Height;
+﻿using Settings;
+using Terrain.Height;
 using Terrain.Height.SebastianLague;
 using Terrain.Mesh;
 using UnityEngine;
@@ -11,7 +12,8 @@ namespace Terrain
 
         private static readonly string[] DirectionNames = { "up", "down", "left", "right", "front", "back" };
         private static readonly Vector3[] Directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
-    
+
+        public GameSettings gameSettings;
         public EarthTerrainSettings earthTerrainSettings;
         public Material material;
         
@@ -44,7 +46,8 @@ namespace Terrain
                     3.0f,
                     earthTerrainSettings.planetSize,
                     material,
-                    meshGenerator
+                    meshGenerator,
+                    gameSettings
                 );
                 planetSide.terrain.transform.parent = transformCache;
                 planetSide.terrain.name = DirectionNames[i];

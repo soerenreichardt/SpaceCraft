@@ -49,11 +49,6 @@ namespace Terrain.Mesh
                     var bottomLeftPointOnSphere = Vector3.Normalize(bottomLeftPointOnCube);
                     var bottomRightPointOnSphere = Vector3.Normalize(bottomRightPointOnCube);
 
-                    var scaledTopLeftPointOnSphere = topLeftPointOnSphere * planetRadius;
-                    var scaledTopRightPointOnSphere = topRightPointOnSphere * planetRadius;
-                    var scaledBottomLeftPointOnSphere = bottomLeftPointOnSphere * planetRadius;
-                    var scaledBottomRightPointOnSphere = bottomRightPointOnSphere * planetRadius;
-
                     var elevation = this.Elevation(middlePointOnCube);
                     var elevatedTopLeft = topLeftPointOnSphere * elevation;
                     var elevatedTopRight = topRightPointOnSphere * elevation;
@@ -74,7 +69,6 @@ namespace Terrain.Mesh
                     indices.Add(vertexBlockStart + 1);
                     indices.Add(vertexBlockStart + 3);
                     indices.Add(vertexBlockStart + 2);
-
                 }
             }
 

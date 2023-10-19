@@ -1,4 +1,5 @@
 using DataStructures;
+using Settings;
 using UnityEngine;
 
 namespace Terrain.Mesh
@@ -20,32 +21,30 @@ namespace Terrain.Mesh
             Camera.nearClipPlane *= Planet.SCALE;
         }
 
-        public TerrainQuadTree(
-            Vector3 planetPosition,
+        public TerrainQuadTree(Vector3 planetPosition,
             float chunkLength,
             Vector3 face,
             float viewDistance,
             int maxLevel,
             Material material,
-            MeshGenerator meshGenerator
-        ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, 0, meshGenerator)
+            MeshGenerator meshGenerator, 
+            GameSettings gameSettings) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, 0, meshGenerator, gameSettings)
         {
             ComputeTerrain();
         }
 
-        private TerrainQuadTree(
-            Vector3 center, 
+        private TerrainQuadTree(Vector3 center,
             Vector3 planetPosition,
-            float chunkLength, 
-            Vector3 face, 
-            float viewDistance, 
+            float chunkLength,
+            Vector3 face,
+            float viewDistance,
             int maxLevel,
             int level,
             TerrainQuadTree parent,
             Material material,
             long treeLocation,
-            MeshGenerator meshGenerator
-        ) : base(center, chunkLength, viewDistance, maxLevel, level, parent, face, treeLocation)
+            MeshGenerator meshGenerator, 
+            GameSettings gameSettings) : base(center, chunkLength, viewDistance, maxLevel, level, parent, face, treeLocation, gameSettings)
         {
             this.material = material;
             this.planetPosition = planetPosition;
@@ -106,7 +105,8 @@ namespace Terrain.Mesh
                 this,
                 material,
                 TreeLocationHelper.ChildTreeLocation(treeLocation, quadrant, nextLevel),
-                meshGenerator
+                meshGenerator,
+                gameSettings
             );
         }
 
@@ -158,7 +158,7 @@ namespace Terrain.Mesh
         {
             if (!IsBlockLevel())
             {
-                terrainComponent.updatedMesh = true;
+                terrainComponent.UpdateTriangles();
             }
         }
 

@@ -1,3 +1,4 @@
+using Settings;
 using UnityEngine;
 
 namespace DataStructures
@@ -5,6 +6,7 @@ namespace DataStructures
     public abstract class AdaptiveSpatialQuadTree<T> : QuadTree<T> 
         where T : AdaptiveSpatialQuadTree<T>
     {
+        protected GameSettings gameSettings { get; }
         protected readonly Vector3 center;
         protected readonly float chunkLength;
         protected readonly float viewDistance;
@@ -13,20 +15,20 @@ namespace DataStructures
 
         public T[] neighbors;
 
-        protected AdaptiveSpatialQuadTree(
-            Vector3 center, 
-            float chunkLength, 
-            float viewDistance, 
+        protected AdaptiveSpatialQuadTree(Vector3 center,
+            float chunkLength,
+            float viewDistance,
             int maxLevel,
             int level,
             T parent,
             Vector3 face,
-            long treeLocation
-        ) : base(level, maxLevel, parent, treeLocation)
+            long treeLocation, 
+            GameSettings gameSettings) : base(level, maxLevel, parent, treeLocation)
         {
+            this.gameSettings = gameSettings;
             this.center = center;
             this.chunkLength = chunkLength;
-            this.viewDistance = viewDistance * Mathf.Pow(2, -level) + (4 * chunkLength);
+            this.viewDistance = viewDistance * Mathf.Pow(2, -level) + 4 * chunkLength;
             this.face = face;
             this.neighbors = new T[4];
         }
@@ -36,7 +38,7 @@ namespace DataStructures
         public void Update()
         {
             if (HasChildren) {
-                if (Distance() > viewDistance) {
+                if (Distance() > viewDistance * gameSettings.viewDistance) {
                     Merge();
                     return;
                 }
@@ -45,7 +47,7 @@ namespace DataStructures
                     child.Update();
                 }
             } else {
-                if (Distance() <= viewDistance) {
+                if (Distance() <= viewDistance * gameSettings.viewDistance) {
                     Split();
                 }
             }

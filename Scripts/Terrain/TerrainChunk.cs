@@ -22,6 +22,7 @@ namespace Terrain
         public IndicesFunction indicesFunction { get; set; }
 
         public bool updatedMesh { get; set; }
+        private bool updateTriangles { get; set; }
 
         void Start()
         {
@@ -45,6 +46,7 @@ namespace Terrain
                 mesh.triangles = indicesFunction(indices);
                 mesh.normals = normals;
                 mesh.uv = uvs;
+                updateTriangles = true;
                 if (parentMeshRenderer != null) {
                     parentMeshRenderer.enabled = false;
                 }
@@ -53,6 +55,14 @@ namespace Terrain
                 {
                     meshCollider.sharedMesh = mesh;
                 }
+            }
+        }
+
+        public void UpdateTriangles()
+        {
+            if (updateTriangles)
+            {
+                mesh.triangles = indicesFunction(indices);                
             }
         }
     }

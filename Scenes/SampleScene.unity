@@ -362,9 +362,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41e59e3c5d4167468edb9e2c154ae94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameSettings: {fileID: 11400000, guid: 03e63267bef23e34996f9282f91d5d40, type: 2}
   earthTerrainSettings: {fileID: 11400000, guid: e4ac25176c1912341be70cf362af57b0, type: 2}
   material: {fileID: 2100000, guid: 35aade2c92cad64499f37bb69856faf2, type: 2}
-  earthTerrainSettingsFoldout: 1
+  earthTerrainSettingsFoldout: 0
 --- !u!4 &1422644690
 Transform:
   m_ObjectHideFlags: 0
