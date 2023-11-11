@@ -24,7 +24,7 @@ namespace Terrain.Mesh
         private Mesh SmoothTerrainMesh(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
         {
             var (vertices, normals) = SmoothTerrainVerticesAndNormals(data, axisA, axisB);
-            return new Mesh()
+            return new Mesh
             {
                 vertices = vertices,
                 indices = IndicesLookup.Indices,
