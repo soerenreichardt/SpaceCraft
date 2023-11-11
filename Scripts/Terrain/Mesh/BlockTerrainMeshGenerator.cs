@@ -28,6 +28,7 @@ namespace Terrain.Mesh
         {
             List<Vector3> vertices = new List<Vector3>();
             List<int> indices = new List<int>();
+            List<Vector3> normals = new List<Vector3>();
 
             var axisAOffset = axisA * data.chunkLength;
             var axisBOffset = axisB * data.chunkLength;
@@ -60,6 +61,11 @@ namespace Terrain.Mesh
                     vertices.Add(elevatedBottomLeft);
                     vertices.Add(elevatedBottomRight);
 
+                    normals.Add(topLeftPointOnSphere);
+                    normals.Add(topRightPointOnCube);
+                    normals.Add(bottomLeftPointOnSphere);
+                    normals.Add(bottomRightPointOnCube);
+                    
                     int vertexBlockStart = vertices.Count - 4;
 
                     indices.Add(vertexBlockStart + 0);
@@ -72,10 +78,11 @@ namespace Terrain.Mesh
                 }
             }
 
-            return new Mesh()
+            return new Mesh
             {
                 vertices = vertices.ToArray(),
-                indices = indices.ToArray()
+                indices = indices.ToArray(),
+                normals = normals.ToArray()
             };
         }
 
