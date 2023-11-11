@@ -1,4 +1,5 @@
 using DataStructures;
+using Settings;
 using UnityEngine;
 
 namespace Terrain.Mesh
@@ -12,7 +13,7 @@ namespace Terrain.Mesh
         private readonly MeshGenerator meshGenerator;
     
         private readonly Vector3 planetPosition;
-        private readonly TerrainChunk terrainComponent;
+        public readonly TerrainChunk terrainComponent;
 
         private static readonly Camera Camera = Camera.main;
         static TerrainQuadTree()
@@ -20,59 +21,36 @@ namespace Terrain.Mesh
             Camera.nearClipPlane *= Planet.SCALE;
         }
 
-        public TerrainQuadTree(
-            Vector3 planetPosition,
+        public TerrainQuadTree(Vector3 planetPosition,
             float chunkLength,
             Vector3 face,
             float viewDistance,
             int maxLevel,
             Material material,
-            MeshGenerator meshGenerator
-        ) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, 0, meshGenerator)
+            MeshGenerator meshGenerator, 
+            GameSettings gameSettings) : this(face * chunkLength, planetPosition, chunkLength, face, viewDistance, maxLevel, 0, null, material, 0, meshGenerator, gameSettings)
         {
             ComputeTerrain();
         }
 
-        private TerrainQuadTree(
-            Vector3 center, 
+        private TerrainQuadTree(Vector3 center,
             Vector3 planetPosition,
-            float chunkLength, 
-            Vector3 face, 
-            float viewDistance, 
+            float chunkLength,
+            Vector3 face,
+            float viewDistance,
             int maxLevel,
             int level,
             TerrainQuadTree parent,
             Material material,
             long treeLocation,
-            MeshGenerator meshGenerator
-        ) : base(center, chunkLength, viewDistance, maxLevel, level, parent, face, treeLocation)
+            MeshGenerator meshGenerator, 
+            GameSettings gameSettings) : base(center, chunkLength, viewDistance, maxLevel, level, parent, face, treeLocation, gameSettings)
         {
             this.material = material;
             this.planetPosition = planetPosition;
-            this.terrain = new GameObject(level.ToString());
+            (this.terrain, this.terrainComponent) = TerrainChunkCache.GetOrCreate(level.ToString(), parent,
+                GetIndicesFunction(), material, IsBlockLevel());
             this.meshGenerator = meshGenerator;
-
-            if (!HasChildren)
-            {
-                this.terrainComponent = this.terrain.AddComponent<TerrainChunk>();
-                this.terrainComponent.material = material;
-                this.terrainComponent.indicesFunction = GetIndicesFunction();
-                if (IsBlockLevel())
-                {
-                    var meshCollider = this.terrain.AddComponent<MeshCollider>();
-                    this.terrainComponent.meshCollider = meshCollider;
-                }
-                if (parent != null) {
-                    this.terrainComponent.parentMeshRenderer = parent.terrainComponent.meshRenderer;
-                }
-            }
-
-            if (parent != null)
-            {
-                this.terrain.transform.parent = parent.terrain.transform;
-                this.terrain.transform.localPosition = Vector3.zero;
-                this.terrain.transform.localRotation = Quaternion.identity;
-            }
         }
 
         public void RecomputeTerrain()
@@ -106,7 +84,8 @@ namespace Terrain.Mesh
                 this,
                 material,
                 TreeLocationHelper.ChildTreeLocation(treeLocation, quadrant, nextLevel),
-                meshGenerator
+                meshGenerator,
+                gameSettings
             );
         }
 
@@ -124,8 +103,8 @@ namespace Terrain.Mesh
         protected override void AdaptiveTreeOnSplit()
         {
             foreach (TerrainQuadTree child in children) {
-                child.ComputeTerrain();
                 child.ComputeNeighbors();
+                child.ComputeTerrain();
             }
         }
 
@@ -133,7 +112,7 @@ namespace Terrain.Mesh
         {
             terrainComponent.meshRenderer.enabled = true;
             foreach (TerrainQuadTree child in children) {
-                child.terrainComponent.Destroy();
+                TerrainChunkCache.Insert(child.terrain, child.terrainComponent);
                 child.RemoveNeighbors();
             }
         }
@@ -158,7 +137,7 @@ namespace Terrain.Mesh
         {
             if (!IsBlockLevel())
             {
-                terrainComponent.updatedMesh = true;
+                terrainComponent.UpdateTriangles();
             }
         }
 

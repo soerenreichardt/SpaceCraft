@@ -24,7 +24,7 @@ namespace Terrain.Mesh
         private Mesh SmoothTerrainMesh(MeshGenerator.Data data, Vector3 axisA, Vector3 axisB)
         {
             var (vertices, normals) = SmoothTerrainVerticesAndNormals(data, axisA, axisB);
-            return new Mesh()
+            return new Mesh
             {
                 vertices = vertices,
                 indices = IndicesLookup.Indices,
@@ -42,8 +42,7 @@ namespace Terrain.Mesh
             var axisAOffset = (axisA * data.chunkLength);
             var axisBOffset = (axisB * data.chunkLength);
             var planetRadius = (float) (Math.Pow(2, planetSize) * Planet.SCALE);
-        
-            
+
             // vertices
             for (var y = 0; y < MeshGenerator.CHUNK_SIZE + 1; y++)
             {

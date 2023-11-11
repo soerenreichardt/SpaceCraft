@@ -61,10 +61,9 @@ namespace Terrain.Mesh
 
                 var (axisA, axisB) = AxisLookup.GetAxisForFace(data.face);
 
-                IMeshGeneratorStrategy meshGeneratorStrategy = smoothTerrainMeshGenerator;
-                    // data.blockLevel 
-                        // ? (MeshGeneratorStrategy) blockTerrainMeshGenerator 
-                        // : smoothTerrainMeshGenerator;
+                IMeshGeneratorStrategy meshGeneratorStrategy = data.blockLevel 
+                        ? (IMeshGeneratorStrategy) blockTerrainMeshGenerator 
+                        : smoothTerrainMeshGenerator;
 
                 var mesh = meshGeneratorStrategy.MeshComputer()(data, axisA, axisB);
                 data.terrainChunk.vertices = mesh.vertices;
